@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2017, HL7, Inc & The MITRE Corporation
+// Copyright (c) 2011-2015, HL7, Inc & The MITRE Corporation
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -27,12 +27,11 @@
 package models
 
 type Signature struct {
-	Type                []Coding      `bson:"type,omitempty" json:"type,omitempty"`
-	When                *FHIRDateTime `bson:"when,omitempty" json:"when,omitempty"`
-	WhoUri              string        `bson:"whoUri,omitempty" json:"whoUri,omitempty"`
-	WhoReference        *Reference    `bson:"whoReference,omitempty" json:"whoReference,omitempty"`
-	OnBehalfOfUri       string        `bson:"onBehalfOfUri,omitempty" json:"onBehalfOfUri,omitempty"`
-	OnBehalfOfReference *Reference    `bson:"onBehalfOfReference,omitempty" json:"onBehalfOfReference,omitempty"`
-	ContentType         string        `bson:"contentType,omitempty" json:"contentType,omitempty"`
-	Blob                string        `bson:"blob,omitempty" json:"blob,omitempty"`
+	Type         []Coding      `bson:"type,omitempty" json:"type,omitempty"`
+	When         *FHIRDateTime `bson:"when,omitempty" json:"when,omitempty"`
+	Who          *Reference    `bson:"who,omitempty" json:"who,omitempty"`
+	OnBehalfOf   *Reference    `bson:"onBehalfOf,omitempty" json:"onBehalfOf,omitempty"`
+	TargetFormat string        `bson:"targetFormat,omitempty" json:"targetFormat,omitempty"`
+	SigFormat    string        `bson:"sigFormat,omitempty" json:"sigFormat,omitempty"`
+	Data         string        `bson:"data,omitempty" json:"data,omitempty"`
 }

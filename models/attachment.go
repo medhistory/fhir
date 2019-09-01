@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2017, HL7, Inc & The MITRE Corporation
+// Copyright (c) 2011-2015, HL7, Inc & The MITRE Corporation
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -35,4 +35,9 @@ type Attachment struct {
 	Hash        string        `bson:"hash,omitempty" json:"hash,omitempty"`
 	Title       string        `bson:"title,omitempty" json:"title,omitempty"`
 	Creation    *FHIRDateTime `bson:"creation,omitempty" json:"creation,omitempty"`
+	Height      *uint32       `bson:"height,omitempty" json:"height,omitempty"`
+	Width       *uint32       `bson:"width,omitempty" json:"width,omitempty"`
+	Frames      *uint32       `bson:"frames,omitempty" json:"frames,omitempty"`
+	Duration    *float64      `bson:"duration,omitempty" json:"duration,omitempty"`
+	Pages       *uint32       `bson:"pages,omitempty" json:"pages,omitempty"`
 }

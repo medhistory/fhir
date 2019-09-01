@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2017, HL7, Inc & The MITRE Corporation
+// Copyright (c) 2011-2015, HL7, Inc & The MITRE Corporation
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -33,6 +33,7 @@ type Extension struct {
 	ValueAttachment      *Attachment      `bson:"valueAttachment,omitempty" json:"valueAttachment,omitempty"`
 	ValueBase64Binary    string           `bson:"valueBase64Binary,omitempty" json:"valueBase64Binary,omitempty"`
 	ValueBoolean         *bool            `bson:"valueBoolean,omitempty" json:"valueBoolean,omitempty"`
+	ValueCanonical       string           `bson:"valueCanonical,omitempty" json:"valueCanonical,omitempty"`
 	ValueCode            string           `bson:"valueCode,omitempty" json:"valueCode,omitempty"`
 	ValueCodeableConcept *CodeableConcept `bson:"valueCodeableConcept,omitempty" json:"valueCodeableConcept,omitempty"`
 	ValueCoding          *Coding          `bson:"valueCoding,omitempty" json:"valueCoding,omitempty"`
@@ -61,4 +62,5 @@ type Extension struct {
 	ValueTiming          *Timing          `bson:"valueTiming,omitempty" json:"valueTiming,omitempty"`
 	ValueUnsignedInt     *uint32          `bson:"valueUnsignedInt,omitempty" json:"valueUnsignedInt,omitempty"`
 	ValueUri             string           `bson:"valueUri,omitempty" json:"valueUri,omitempty"`
+	ValueUrl             string           `bson:"valueUrl,omitempty" json:"valueUrl,omitempty"`
 }

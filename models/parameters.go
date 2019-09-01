@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2017, HL7, Inc & The MITRE Corporation
+// Copyright (c) 2011-2015, HL7, Inc & The MITRE Corporation
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -30,7 +30,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"gopkg.in/mgo.v2/bson"
 )
 
 type Parameters struct {
@@ -83,6 +82,7 @@ type ParametersParameterComponent struct {
 	ValueAttachment      *Attachment                    `bson:"valueAttachment,omitempty" json:"valueAttachment,omitempty"`
 	ValueBase64Binary    string                         `bson:"valueBase64Binary,omitempty" json:"valueBase64Binary,omitempty"`
 	ValueBoolean         *bool                          `bson:"valueBoolean,omitempty" json:"valueBoolean,omitempty"`
+	ValueCanonical       string                         `bson:"valueCanonical,omitempty" json:"valueCanonical,omitempty"`
 	ValueCode            string                         `bson:"valueCode,omitempty" json:"valueCode,omitempty"`
 	ValueCodeableConcept *CodeableConcept               `bson:"valueCodeableConcept,omitempty" json:"valueCodeableConcept,omitempty"`
 	ValueCoding          *Coding                        `bson:"valueCoding,omitempty" json:"valueCoding,omitempty"`
@@ -111,6 +111,7 @@ type ParametersParameterComponent struct {
 	ValueTiming          *Timing                        `bson:"valueTiming,omitempty" json:"valueTiming,omitempty"`
 	ValueUnsignedInt     *uint32                        `bson:"valueUnsignedInt,omitempty" json:"valueUnsignedInt,omitempty"`
 	ValueUri             string                         `bson:"valueUri,omitempty" json:"valueUri,omitempty"`
+	ValueUrl             string                         `bson:"valueUrl,omitempty" json:"valueUrl,omitempty"`
 	Resource             interface{}                    `bson:"resource,omitempty" json:"resource,omitempty"`
 	Part                 []ParametersParameterComponent `bson:"part,omitempty" json:"part,omitempty"`
 }
@@ -123,27 +124,7 @@ func (x *ParametersParameterComponent) UnmarshalJSON(data []byte) (err error) {
 	x2 := parametersParameterComponent{}
 	if err = json.Unmarshal(data, &x2); err == nil {
 		if x2.Resource != nil {
-			x2.Resource, err = MapToResource(x2.Resource, true)
-			if err != nil {
-				return err
-			}
-		}
-		*x = ParametersParameterComponent(x2)
-	}
-	return
-}
-
-// Custom SetBSON implementation to properly deserialize embedded resources
-// otherwise represented as interface{} into resource-specific structs as they
-// are retrieved from the database.
-func (x *ParametersParameterComponent) SetBSON(raw bson.Raw) (err error) {
-	x2 := parametersParameterComponent{}
-	if err = raw.Unmarshal(&x2); err == nil {
-		if x2.Resource != nil {
-			x2.Resource, err = BSONMapToResource(x2.Resource.(bson.M), true)
-			if err != nil {
-				return err
-			}
+			x2.Resource = MapToResource(x2.Resource, true)
 		}
 		*x = ParametersParameterComponent(x2)
 	}

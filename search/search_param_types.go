@@ -1,12 +1,13 @@
 package search
 
 import (
-	"github.com/eug48/fhir/utils"
 	"fmt"
+	"math/big"
 	"net/url"
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 )
 
 // Constant values for search paramaters and search result parameters
@@ -20,7 +21,6 @@ const (
 	ContentParam       = "_content"
 	ListParam          = "_list"
 	QueryParam         = "_query"
-	HasParam           = "_has"
 	SortParam          = "_sort"
 	CountParam         = "_count"
 	IncludeParam       = "_include"
@@ -35,7 +35,7 @@ const (
 
 var globalSearchParams = map[string]bool{IDParam: true, LastUpdatedParam: true, TagParam: true,
 	ProfileParam: true, SecurityParam: true, TextParam: true, ContentParam: true, ListParam: true,
-	QueryParam: true, HasParam: true}
+	QueryParam: true}
 
 func isGlobalSearchParam(param string) bool {
 	_, found := globalSearchParams[param]
@@ -73,20 +73,7 @@ func (q *Query) Params() []SearchParam {
 			continue
 		}
 
-		var info SearchParamInfo
-		ok := true
-
-		if param == "_has" {
-			// Reverse chained search params are not found in the SearchParameterDictionary.
-			// Instead they are a ReferenceParam of type ReverseChainedQueryReference constructed
-			// from SearchParamInfo found in a different resource than the one being searched.
-			// For example, in the query "Patient?_has:Observation:subject:code" we're looking in
-			// SearchParameterDictionary["Observation"], not SearchParameterDictionary["Patient"]
-			info = createReverseChainedQueryInfo(q.Resource, modifier)
-		} else {
-			info, ok = SearchParameterDictionary[q.Resource][param]
-		}
-
+		info, ok := SearchParameterDictionary[q.Resource][param]
 		if ok {
 			info.Postfix = postfix
 			info.Modifier = modifier
@@ -107,15 +94,6 @@ func (q *Query) Params() []SearchParam {
 func (q *Query) Options() *QueryOptions {
 	options := NewQueryOptions()
 	queryParams, _ := ParseQuery(q.Query)
-
-	if strings.Contains(q.Query, "_include=*") {
-		options.IsIncludeAll = true
-	}
-
-	if strings.Contains(q.Query, "_revinclude=*") {
-		options.IsRevincludeAll = true
-	}
-
 	for _, queryParam := range queryParams.All() {
 		param, modifier, _ := ParseParamNameModifierAndPostFix(queryParam.Key)
 		if !strings.HasPrefix(param, "_") || isGlobalSearchParam(param) {
@@ -159,11 +137,6 @@ func (q *Query) Options() *QueryOptions {
 			}
 
 		case IncludeParam:
-
-			if options.IsIncludeAll {
-				continue
-			}
-
 			incls := strings.Split(queryParam.Value, ":")
 			if len(incls) < 2 || len(incls) > 3 {
 				panic(createInvalidSearchError("MSG_PARAM_INVALID", "Parameter \"_include\" content is invalid"))
@@ -187,11 +160,6 @@ func (q *Query) Options() *QueryOptions {
 			options.Include = append(options.Include, IncludeOption{Resource: incls[0], Parameter: inclParam})
 
 		case RevIncludeParam:
-
-			if options.IsRevincludeAll {
-				continue
-			}
-
 			incls := strings.Split(queryParam.Value, ":")
 			if len(incls) < 2 || len(incls) > 3 {
 				panic(createInvalidSearchError("MSG_PARAM_INVALID", "Parameter \"_revinclude\" content is invalid"))
@@ -219,107 +187,16 @@ func (q *Query) Options() *QueryOptions {
 			options.RevInclude = append(options.RevInclude, RevIncludeOption{Resource: incls[0], Parameter: revInclParam})
 
 		case FormatParam:
-			switch (queryParam.Value) {
-			// Currently we only support JSON and (if enabled) XML
-			// _format is processed closer to the HTTP code rather than here
-			case "json", "application/json", "application/json+fhir", "application/fhir+json":
-			case "xml", "application/xml", "application/xml+fhir", "application/fhir+xml":
-			default:
+			if queryParam.Value != "json" && queryParam.Value != "application/json" && queryParam.Value != "application/json+fhir" {
+				// Currently we only support JSON
 				panic(createUnsupportedSearchError("MSG_PARAM_INVALID", "Parameter \"_format\" content is invalid"))
 			}
-
-		case SummaryParam:
-			if queryParam.Value != "count" && queryParam.Value != "false" {
-				// We only support "count", and the default (implicit) setting is "false".
-				panic(createUnsupportedSearchError("MSG_PARAM_INVALID", "Parameter \"_summary\" content is invalid"))
-			}
-			options.Summary = queryParam.Value
 
 		default:
 			panic(createUnsupportedSearchError("MSG_PARAM_UNKNOWN", fmt.Sprintf("Parameter \"%s\" not understood", param)))
 		}
 	}
-
-	if options.IsIncludeAll {
-		// check if this resource has any includes
-		inclParams := SearchParameterDictionary[q.Resource]
-		for _, inclParam := range inclParams {
-			if inclParam.Type == "reference" {
-				options.Include = append(options.Include, IncludeOption{Resource: q.Resource, Parameter: inclParam})
-			}
-		}
-	}
-
-	if options.IsRevincludeAll {
-		// scan the search parameter dictionary for all revincludes referencing this resource
-		for resource, resourceSearchParams := range SearchParameterDictionary {
-			for _, revInclParam := range resourceSearchParams {
-				if revInclParam.Type == "reference" && contains(revInclParam.Targets, q.Resource) {
-					options.RevInclude = append(options.RevInclude, RevIncludeOption{Resource: resource, Parameter: revInclParam})
-				}
-			}
-		}
-	}
-
 	return options
-}
-
-// UsesIncludes returns true if the query has any _includes options
-func (q *Query) UsesIncludes() bool {
-	return len(q.Options().Include) > 0
-}
-
-// UsesRevIncludes returns true if the query has any _revincludes options
-func (q *Query) UsesRevIncludes() bool {
-	return len(q.Options().RevInclude) > 0
-}
-
-// UsesChainedSearch returns true if the query has any chained search parameters
-func (q *Query) UsesChainedSearch() bool {
-	for _, p := range q.Params() {
-		if usesChainedSearch(p) {
-			return true
-		}
-	}
-	return false
-}
-
-// UsesReverseChainedSearch returns true if the query has any reverse chained search parameters
-func (q *Query) UsesReverseChainedSearch() bool {
-	for _, p := range q.Params() {
-		if usesReverseChainedSearch(p) {
-			return true
-		}
-	}
-	return false
-}
-
-// UsesPipeline returns true if the query requires a pipeline to execute
-func (q *Query) UsesPipeline() bool {
-	return q.UsesIncludes() || q.UsesRevIncludes() || q.UsesChainedSearch() || q.UsesReverseChainedSearch()
-}
-
-// SupportsPaging returns true if the query results can be paginated, false if not.
-// In practice, most queries can be paginated, but queries for $everything or _summary cannot.
-func (q *Query) SupportsPaging() bool {
-	options := q.Options()
-
-	// not for $everything. $everything is defined as _id=<id>&_include=*&_revinclude=*
-	if q.isDollarEverything() {
-		return false
-	}
-
-	// not for _summary=count
-	if options.Summary == "count" {
-		return false
-	}
-
-	return true
-}
-
-func (q *Query) isDollarEverything() bool {
-	de := regexp.MustCompile("_id=[0-9a-f]{24}&_include=\\*&_revinclude=\\*")
-	return de.MatchString(q.Query)
 }
 
 func getSingletonParamValue(param string, values []string) string {
@@ -351,28 +228,9 @@ func (q *Query) URLQueryParameters(withOptions bool) URLQueryParameters {
 	}
 
 	if withOptions {
-		options := q.Options()
-		oQueryParams := options.URLQueryParameters()
+		oQueryParams := q.Options().URLQueryParameters()
 		for _, oQueryParam := range oQueryParams.All() {
-
-			if options.IsIncludeAll && oQueryParam.Key == "_include" {
-				// skip adding any include parameters until the end
-				continue
-			}
-
-			if options.IsRevincludeAll && oQueryParam.Key == "_revinclude" {
-				continue
-			}
-
 			queryParams.Add(oQueryParam.Key, oQueryParam.Value)
-		}
-
-		if options.IsIncludeAll {
-			queryParams.Add("_include", "*")
-		}
-
-		if options.IsRevincludeAll {
-			queryParams.Add("_revinclude", "*")
 		}
 	}
 
@@ -381,15 +239,12 @@ func (q *Query) URLQueryParameters(withOptions bool) URLQueryParameters {
 
 // QueryOptions contains option values such as count and offset.
 type QueryOptions struct {
-	Count           int
-	Offset          int
-	Sort            []SortOption
-	Include         []IncludeOption
-	RevInclude      []RevIncludeOption
-	IsSTU3Sort      bool
-	IsIncludeAll    bool
-	IsRevincludeAll bool
-	Summary         string
+	Count      int
+	Offset     int
+	Sort       []SortOption
+	Include    []IncludeOption
+	RevInclude []RevIncludeOption
+	IsSTU3Sort bool
 }
 
 // NewQueryOptions constructs a new QueryOptions with default values (offset = 0, Count = 100)
@@ -452,49 +307,7 @@ type SortOption struct {
 // the SearchParamInfo.
 type SearchParam interface {
 	getInfo() SearchParamInfo
-	setInfo(SearchParamInfo)
 	getQueryParamAndValue() (string, string)
-}
-
-// usesChainedSearch tests if a SearchParam uses chained search
-func usesChainedSearch(param SearchParam) bool {
-	switch p := param.(type) {
-	case *ReferenceParam:
-		if p.isExternalChainedSearch() {
-			return true
-		}
-	case *OrParam:
-		// Also need to check a chained OR, where the top-level
-		// SearchParam is not a ReferenceParam. For example, in the
-		// query: "Condition?patient.gender=foo,bar"
-		for _, item := range p.Items {
-			if ref, ok := item.(*ReferenceParam); ok {
-				if ref.isExternalChainedSearch() {
-					return true
-				}
-			}
-		}
-	}
-	return false
-}
-
-// usesReverseChainedSearch tests if a SearchParam uses reverse chained search
-func usesReverseChainedSearch(param SearchParam) bool {
-	switch p := param.(type) {
-	case *ReferenceParam:
-		if p.isReverseChainedSearch() {
-			return true
-		}
-	case *OrParam:
-		for _, item := range p.Items {
-			if ref, ok := item.(*ReferenceParam); ok {
-				if ref.isReverseChainedSearch() {
-					return true
-				}
-			}
-		}
-	}
-	return false
 }
 
 // SearchParamData represents the data associated to an instance of a search param
@@ -517,48 +330,6 @@ type SearchParamInfo struct {
 	Prefix     Prefix
 	Postfix    string
 	Modifier   string
-}
-
-// clone deep copies a SearchParamInfo so it can be modified without changing
-// the original copy in the SearchParameterDictionary
-func (s SearchParamInfo) clone() SearchParamInfo {
-	newInfo := SearchParamInfo{
-		Resource:   s.Resource,
-		Name:       s.Name,
-		Type:       s.Type,
-		Paths:      make([]SearchParamPath, len(s.Paths)),
-		Composites: make([]string, len(s.Composites)),
-		Targets:    make([]string, len(s.Targets)),
-		Prefix:     s.Prefix,
-		Postfix:    s.Postfix,
-		Modifier:   s.Modifier,
-	}
-
-	// deep copy the slices
-	copy(newInfo.Paths, s.Paths)
-	copy(newInfo.Composites, s.Composites)
-	copy(newInfo.Targets, s.Targets)
-	return newInfo
-}
-
-func createReverseChainedQueryInfo(resource, modifier string) SearchParamInfo {
-	// First split the modifier (e.g. "Observation:subject:code")
-	// to get the resources being referenced and a SearchParam to search.
-	// the parts are [fromResource, refField, searchField]
-	parts := strings.SplitN(modifier, ":", 3)
-	if len(parts) != 3 {
-		panic(createInternalServerError("MSG_PARAM_INVALID", fmt.Sprintf("Parameter \"%s\" content is invalid", "_has")))
-	}
-	refInfo, ok := SearchParameterDictionary[parts[0]][parts[1]]
-	if !ok {
-		panic(createInvalidSearchError("SEARCH_NONE", fmt.Sprintf("Error: no processable search found for %s search parameters \"%s\"", resource, "_has")))
-	}
-	revChainInfo := refInfo.clone()
-	revChainInfo.Resource = parts[0]
-	revChainInfo.Name = "_has"
-	revChainInfo.Targets = []string{resource} // We already know the target
-	revChainInfo.Modifier = modifier
-	return revChainInfo
 }
 
 // CreateSearchParam converts a singular string query value (e.g. "2012") into
@@ -634,10 +405,6 @@ func (c *CompositeParam) getInfo() SearchParamInfo {
 	return c.SearchParamInfo
 }
 
-func (c *CompositeParam) setInfo(info SearchParamInfo) {
-	c.SearchParamInfo = info
-}
-
 func (c *CompositeParam) getQueryParamAndValue() (string, string) {
 	value := strings.Join(c.CompositeValues, "$")
 	return queryParamAndValue(c.SearchParamInfo, value)
@@ -658,15 +425,11 @@ func ParseCompositeParam(paramString string, info SearchParamInfo) *CompositePar
 // consistent behavior.
 type DateParam struct {
 	SearchParamInfo
-	Date *utils.Date
+	Date *Date
 }
 
 func (d *DateParam) getInfo() SearchParamInfo {
 	return d.SearchParamInfo
-}
-
-func (d *DateParam) setInfo(info SearchParamInfo) {
-	d.SearchParamInfo = info
 }
 
 func (d *DateParam) getQueryParamAndValue() (string, string) {
@@ -680,14 +443,168 @@ func ParseDateParam(paramStr string, info SearchParamInfo) *DateParam {
 
 	var value string
 	date.Prefix, value = ExtractPrefixAndValue(paramStr)
-
-	var err error
-	date.Date, err = utils.ParseDate(value)
-	if err != nil {
-		panic(createInternalServerError("MSG_PARAM_INVALID", fmt.Sprintf("Parameter \"%s\" content is invalid: %v", info.Name, err)))
-	}
+	date.Date = ParseDate(value)
 
 	return date
+}
+
+// Date represents a date in a search query.  FHIR search params may define
+// dates to varying levels of precision, and the amount of precision affects
+// the behavior of the query.  Date's value should only be interpreted in the
+// context of the Precision supplied.
+type Date struct {
+	Value     time.Time
+	Precision DatePrecision
+}
+
+// String returns a string representation of the date, honoring the supplied
+// precision.
+func (d *Date) String() string {
+	s := d.Value.Format(d.Precision.layout())
+	if strings.HasSuffix(s, "+00:00") {
+		s = strings.Replace(s, "+00:00", "Z", 1)
+	}
+	return s
+}
+
+// RangeLowIncl represents the low end of a date range to match against.  As
+// the name suggests, the low end of the range is inclusive.
+func (d *Date) RangeLowIncl() time.Time {
+	return d.Value
+}
+
+// RangeHighExcl represents the high end of a date range to match against.  As
+// the name suggests, the high end of the range is exclusive.
+func (d *Date) RangeHighExcl() time.Time {
+	switch d.Precision {
+	case Year:
+		return d.Value.AddDate(1, 0, 0)
+	case Month:
+		return d.Value.AddDate(0, 1, 0)
+	case Day:
+		return d.Value.AddDate(0, 0, 1)
+	case Minute:
+		return d.Value.Add(time.Minute)
+	case Second:
+		return d.Value.Add(time.Second)
+	case Millisecond:
+		return d.Value.Add(time.Millisecond)
+	default:
+		return d.Value.Add(time.Millisecond)
+	}
+}
+
+// ParseDate parses a FHIR date string (roughly ISO 8601) into a Date object,
+// maintaining the value and the precision supplied.
+func ParseDate(dateStr string) *Date {
+	dt := &Date{}
+
+	dateStr = strings.TrimSpace(dateStr)
+	dtRegex := regexp.MustCompile("([0-9]{4})(-(0[1-9]|1[0-2])(-(0[0-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):([0-5][0-9])(:([0-5][0-9])(\\.([0-9]+))?)?((Z)|(\\+|-)((0[0-9]|1[0-3]):([0-5][0-9])|(14):(00)))?)?)?)?")
+	if m := dtRegex.FindStringSubmatch(dateStr); m != nil {
+		y, mo, d, h, mi, s, ms, tzZu, tzOp, tzh, tzm := m[1], m[3], m[5], m[7], m[8], m[10], m[12], m[14], m[15], m[17], m[18]
+
+		switch {
+		case ms != "":
+			dt.Precision = Millisecond
+
+			// Fix milliseconds (.9 -> .900, .99 -> .990, .999999 -> .999 )
+			switch len(ms) {
+			case 1:
+				ms += "00"
+			case 2:
+				ms += "0"
+			case 3:
+				// do nothing
+			default:
+				ms = ms[:3]
+			}
+		case s != "":
+			dt.Precision = Second
+		case mi != "":
+			dt.Precision = Minute
+		// NOTE: Skip hour precision since FHIR specification disallows it
+		case d != "":
+			dt.Precision = Day
+		case mo != "":
+			dt.Precision = Month
+		case y != "":
+			dt.Precision = Year
+		default:
+			dt.Precision = Millisecond
+		}
+
+		// Get the location (if no time components or no location, use local)
+		loc := time.Local
+		if h != "" {
+			if tzZu == "Z" {
+				loc, _ = time.LoadLocation("UTC")
+			} else if tzOp != "" && tzh != "" && tzm != "" {
+				tzhi, _ := strconv.Atoi(tzh)
+				tzmi, _ := strconv.Atoi(tzm)
+				offset := tzhi*60*60 + tzmi*60
+				if tzOp == "-" {
+					offset *= -1
+				}
+				loc = time.FixedZone(tzOp+tzh+tzm, offset)
+			}
+		}
+
+		// Convert to a time.Time
+		yInt, _ := strconv.Atoi(y)
+		moInt, err := strconv.Atoi(mo)
+		if err != nil {
+			moInt = 1
+		}
+		dInt, err := strconv.Atoi(d)
+		if err != nil {
+			dInt = 1
+		}
+		hInt, _ := strconv.Atoi(h)
+		miInt, _ := strconv.Atoi(mi)
+		sInt, _ := strconv.Atoi(s)
+		msInt, _ := strconv.Atoi(ms)
+
+		dt.Value = time.Date(yInt, time.Month(moInt), dInt, hInt, miInt, sInt, msInt*1000*1000, loc)
+	} else {
+		// TODO: What should we do if the time format is wrong?  Right now, we default to NOW
+		dt.Precision = Millisecond
+		dt.Value = time.Now()
+	}
+
+	return dt
+}
+
+// DatePrecision is an enum representing the precision of a date.
+type DatePrecision int
+
+// Constant values for the DatePrecision enum.
+const (
+	Year DatePrecision = iota
+	Month
+	Day
+	Minute
+	Second
+	Millisecond
+)
+
+func (p DatePrecision) layout() string {
+	switch p {
+	case Year:
+		return "2006"
+	case Month:
+		return "2006-01"
+	case Day:
+		return "2006-01-02"
+	case Minute:
+		return "2006-01-02T15:04-07:00"
+	case Second:
+		return "2006-01-02T15:04:05-07:00"
+	case Millisecond:
+		return "2006-01-02T15:04:05.000-07:00"
+	default:
+		return "2006-01-02T15:04:05.000-07:00"
+	}
 }
 
 // NumberParam represents a number-flavored search parameter.  The following
@@ -696,15 +613,11 @@ func ParseDateParam(paramStr string, info SearchParamInfo) *DateParam {
 // Searching on a simple numerical value in a resource.
 type NumberParam struct {
 	SearchParamInfo
-	Number *utils.Number
+	Number *Number
 }
 
 func (n *NumberParam) getInfo() SearchParamInfo {
 	return n.SearchParamInfo
-}
-
-func (n *NumberParam) setInfo(info SearchParamInfo) {
-	n.SearchParamInfo = info
 }
 
 func (n *NumberParam) getQueryParamAndValue() (string, string) {
@@ -718,11 +631,70 @@ func ParseNumberParam(paramStr string, info SearchParamInfo) *NumberParam {
 
 	var value string
 	n.Prefix, value = ExtractPrefixAndValue(paramStr)
-	n.Number = utils.ParseNumber(value)
+	n.Number = ParseNumber(value)
 
 	return n
 }
 
+// Number represents a number in a search query.  FHIR search params may define
+// numbers to varying levels of precision, and the amount of precision affects
+// the behavior of the query.  Number's value should only be interpreted in the
+// context of the Precision supplied.  The Precision indicates the number of
+// decimal places in the precision.
+type Number struct {
+	Value     *big.Rat
+	Precision int
+}
+
+// String returns a string representation of the number, honoring the supplied
+// precision.
+func (n *Number) String() string {
+	return n.Value.FloatString(n.Precision)
+}
+
+// RangeLowIncl represents the low end of a range to match against.  As
+// the name suggests, the low end of the range is inclusive.
+func (n *Number) RangeLowIncl() *big.Rat {
+	return new(big.Rat).Sub(n.Value, n.rangeDelta())
+}
+
+// RangeHighExcl represents the high end of a range to match against.  As
+// the name suggests, the high end of the range is exclusive.
+func (n *Number) RangeHighExcl() *big.Rat {
+	return new(big.Rat).Add(n.Value, n.rangeDelta())
+}
+
+// The FHIR spec defines equality for 100 to be the range [99.5, 100.5) so we
+// must support min/max using rounding semantics. The basic algorithm for
+// determining low/high is:
+//   low  (inclusive) = n - 5 / 10^p
+//   high (exclusive) = n + 5 / 10^p
+// where n is the number and p is the count of the number's decimal places + 1.
+//
+// This function returns the delta ( 5 / 10^p )
+func (n *Number) rangeDelta() *big.Rat {
+	p := n.Precision + 1
+	denomInt := new(big.Int).Exp(big.NewInt(int64(10)), big.NewInt(int64(p)), nil)
+	denomRat, _ := new(big.Rat).SetString(denomInt.String())
+	return new(big.Rat).Quo(new(big.Rat).SetInt64(5), denomRat)
+}
+
+// ParseNumber parses a numeric string into a Number object, maintaining the
+// value and precision supplied.
+func ParseNumber(numStr string) *Number {
+	n := &Number{}
+
+	numStr = strings.TrimSpace(numStr)
+	n.Value, _ = new(big.Rat).SetString(numStr)
+	i := strings.Index(numStr, ".")
+	if i != -1 {
+		n.Precision = len(numStr) - i - 1
+	} else {
+		n.Precision = 0
+	}
+
+	return n
+}
 
 // QuantityParam represents a quantity-flavored search parameter.  The
 // following description is from the FHIR DSTU2 specification:
@@ -730,17 +702,13 @@ func ParseNumberParam(paramStr string, info SearchParamInfo) *NumberParam {
 // A quantity parameter searches on the Quantity data type.
 type QuantityParam struct {
 	SearchParamInfo
-	Number *utils.Number
+	Number *Number
 	System string
 	Code   string
 }
 
 func (q *QuantityParam) getInfo() SearchParamInfo {
 	return q.SearchParamInfo
-}
-
-func (q *QuantityParam) setInfo(info SearchParamInfo) {
-	q.SearchParamInfo = info
 }
 
 func (q *QuantityParam) getQueryParamAndValue() (string, string) {
@@ -760,7 +728,7 @@ func ParseQuantityParam(paramStr string, info SearchParamInfo) *QuantityParam {
 	q.Prefix, value = ExtractPrefixAndValue(paramStr)
 
 	split := escapeFriendlySplit(value, '|')
-	q.Number = utils.ParseNumber(split[0])
+	q.Number = ParseNumber(split[0])
 	if len(split) == 3 {
 		q.System = unescape(split[1])
 		q.Code = unescape(split[2])
@@ -784,21 +752,8 @@ func (r *ReferenceParam) getInfo() SearchParamInfo {
 	return r.SearchParamInfo
 }
 
-func (r *ReferenceParam) setInfo(info SearchParamInfo) {
-	r.SearchParamInfo = info
-}
-
 func (r *ReferenceParam) getQueryParamAndValue() (string, string) {
 	switch t := r.Reference.(type) {
-	case ReverseChainedQueryReference:
-		searchParams := t.Query.Params()
-		if len(searchParams) != 1 {
-			panic(createInternalServerError("MSG_PARAM_CHAINED", "Unknown chained parameter name \"\""))
-		}
-		// e.g. "code=1234-5"
-		qParam, qValue := searchParams[0].getQueryParamAndValue()
-		// (e.g. "_has:Observation:subject:code", "1234-5")
-		return fmt.Sprintf("_has:%s:%s:%s", t.Type, t.ReferenceName, qParam), qValue
 	case ChainedQueryReference:
 		// This is a weird one, so don't use the general encodedQueryParam function
 		// First get the chained query param (e.g., "gender=male")
@@ -819,51 +774,9 @@ func (r *ReferenceParam) getQueryParamAndValue() (string, string) {
 	panic(createInternalServerError("MSG_PARAM_INVALID", fmt.Sprintf("Parameter \"%s\" content is invalid", r.Name)))
 }
 
-// referenceIsInternal checks if the ReferenceParam refers to an internal reference
-// (embedded in the same Resource) or an external reference (in a different Resource).
-// For more on internal vs. external references see:
-// http://hl7.org/fhir/2016Sep/references.html
-func (r *ReferenceParam) referenceIsInternal() bool {
-	for _, path := range r.getInfo().Paths {
-		if path.Type == "Resource" {
-			return true
-		}
-	}
-	return false
-}
-
-// isExternalChainedSearch checks if this ReferenceParam is used to perform a standard chained search.
-func (r *ReferenceParam) isExternalChainedSearch() bool {
-	switch r.Reference.(type) {
-	case ChainedQueryReference:
-		if !r.referenceIsInternal() {
-			return true
-		}
-	}
-	return false
-}
-
-// isReverseChainedSearch checks if this ReferenceParam is used to perform a reverse chained search.
-func (r *ReferenceParam) isReverseChainedSearch() bool {
-	switch r.Reference.(type) {
-	case ReverseChainedQueryReference:
-		return true
-	}
-	return false
-}
-
 // ParseReferenceParam parses a reference-based query string and returns a
 // pointer to a ReferenceParam based on the query and the parameter definition.
 func ParseReferenceParam(paramStr string, info SearchParamInfo) *ReferenceParam {
-	if info.Name == "_has" {
-		// expected modifier format: "Observation:subject:code"
-		parts := strings.SplitN(info.Modifier, ":", 3)
-		if len(parts) != 3 {
-			panic(createInternalServerError("MSG_PARAM_INVALID", fmt.Sprintf("Parameter \"%s\" content is invalid", info.Name)))
-		}
-		q := Query{Resource: parts[0], Query: parts[2] + "=" + paramStr}
-		return &ReferenceParam{info, ReverseChainedQueryReference{ReferenceName: parts[1], Type: parts[0], Query: q}}
-	}
 	if info.Postfix != "" {
 		typ := findReferencedType("", info)
 		q := Query{Resource: typ, Query: info.Postfix + "=" + paramStr}
@@ -901,9 +814,6 @@ func findReferencedType(typeFromVal string, info SearchParamInfo) string {
 				t = target
 			}
 			valid = (t == target)
-		} else {
-			valid = (t != "")
-			// fmt.Printf("findReferencedType: typeFromVal=%s info=%+v target=%+v valid=%t\n", typeFromVal, info, target, valid)
 		}
 	} else if len(info.Targets) > 1 {
 		for _, target := range info.Targets {
@@ -938,15 +848,8 @@ type ExternalReference struct {
 
 // ChainedQueryReference represents a chained query
 type ChainedQueryReference struct {
-	Type         string // The type of resource being searched
+	Type         string
 	ChainedQuery Query
-}
-
-// ReverseChainedQueryReference represents a reverse chained query
-type ReverseChainedQueryReference struct {
-	ReferenceName string // The name of the reference param
-	Type          string // The type of resource being searched
-	Query         Query
 }
 
 // StringParam represents a string-flavored search parameter.  The
@@ -964,10 +867,6 @@ type StringParam struct {
 
 func (s *StringParam) getInfo() SearchParamInfo {
 	return s.SearchParamInfo
-}
-
-func (s *StringParam) setInfo(info SearchParamInfo) {
-	s.SearchParamInfo = info
 }
 
 func (s *StringParam) getQueryParamAndValue() (string, string) {
@@ -998,10 +897,6 @@ func (t *TokenParam) getInfo() SearchParamInfo {
 	return t.SearchParamInfo
 }
 
-func (t *TokenParam) setInfo(info SearchParamInfo) {
-	t.SearchParamInfo = info
-}
-
 func (t *TokenParam) getQueryParamAndValue() (string, string) {
 	value := escape(t.Code)
 	if !t.AnySystem || t.System != "" {
@@ -1013,24 +908,14 @@ func (t *TokenParam) getQueryParamAndValue() (string, string) {
 // ParseTokenParam parses a token-based query string and returns a pointer to
 // a TokenParam based on the query and the parameter definition.
 func ParseTokenParam(paramString string, info SearchParamInfo) *TokenParam {
-	if paramString == "" {
-		panic(createInternalServerError("MSG_PARAM_INVALID", fmt.Sprintf("Parameter \"%s\" content is invalid", info.Name)))
-	}
-
 	t := &TokenParam{SearchParamInfo: info}
-
 	splitCode := escapeFriendlySplit(paramString, '|')
-	if len(splitCode) == 2 {
+	if len(splitCode) > 1 {
 		t.System = unescape(splitCode[0])
 		t.Code = unescape(splitCode[1])
-		if t.System == "" && t.Code == "" {
-			panic(createInternalServerError("MSG_PARAM_INVALID", fmt.Sprintf("Parameter \"%s\" content is invalid", info.Name)))
-		}
-	} else if len(splitCode) == 1 {
+	} else {
 		t.AnySystem = true
 		t.Code = unescape(splitCode[0])
-	} else {
-		panic(createInternalServerError("MSG_PARAM_INVALID", fmt.Sprintf("Parameter \"%s\" content is invalid", info.Name)))
 	}
 	return t
 }
@@ -1048,10 +933,6 @@ type URIParam struct {
 
 func (u *URIParam) getInfo() SearchParamInfo {
 	return u.SearchParamInfo
-}
-
-func (u *URIParam) setInfo(info SearchParamInfo) {
-	u.SearchParamInfo = info
 }
 
 func (u *URIParam) getQueryParamAndValue() (string, string) {
@@ -1075,10 +956,6 @@ func ParseURIParam(paramStr string, info SearchParamInfo) *URIParam {
 type OrParam struct {
 	SearchParamInfo
 	Items []SearchParam
-}
-
-func (o *OrParam) setInfo(info SearchParamInfo) {
-	o.SearchParamInfo = info
 }
 
 func (o *OrParam) getInfo() SearchParamInfo {
@@ -1236,14 +1113,4 @@ func escape(s string) string {
 	s = strings.Replace(s, "$", "\\$", -1)
 	s = strings.Replace(s, ",", "\\,", -1)
 	return strings.Replace(s, "```ie.bs```", "\\\\", -1)
-}
-
-func contains(values []string, want string) bool {
-	// Tests if a slice of strings contains a certain string element
-	for _, el := range values {
-		if el == want {
-			return true
-		}
-	}
-	return false
 }

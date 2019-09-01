@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2017, HL7, Inc & The MITRE Corporation
+// Copyright (c) 2011-2015, HL7, Inc & The MITRE Corporation
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -27,7 +27,7 @@
 package models
 
 type Quantity struct {
-	Value      *Decimal `bson:"value,omitempty" json:"value,omitempty"`
+	Value      *float64 `bson:"value,omitempty" json:"value,omitempty"`
 	Comparator string   `bson:"comparator,omitempty" json:"comparator,omitempty"`
 	Unit       string   `bson:"unit,omitempty" json:"unit,omitempty"`
 	System     string   `bson:"system,omitempty" json:"system,omitempty"`

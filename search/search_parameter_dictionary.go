@@ -26,9 +26,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Account",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -39,20 +39,20 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "Account",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
 			Resource: "Account",
 			Name:     "_tag",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
-			},
-		},
-		"balance": SearchParamInfo{
-			Resource: "Account",
-			Name:     "balance",
-			Type:     "quantity",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "balance", Type: "Money"},
 			},
 		},
 		"identifier": SearchParamInfo{
@@ -87,7 +87,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "patient",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "subject", Type: "Reference"},
+				SearchParamPath{Path: "[]subject", Type: "Reference"},
 			},
 			Targets: []string{
 				"Patient",
@@ -98,7 +98,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "period",
 			Type:     "date",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "period", Type: "Period"},
+				SearchParamPath{Path: "servicePeriod", Type: "Period"},
 			},
 		},
 		"status": SearchParamInfo{
@@ -114,7 +114,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "subject",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "subject", Type: "Reference"},
+				SearchParamPath{Path: "[]subject", Type: "Reference"},
 			},
 			Targets: []string{
 				"Device",
@@ -123,6 +123,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"type": SearchParamInfo{
@@ -154,9 +155,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "ActivityDefinition",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -165,6 +166,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "ActivityDefinition",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -180,10 +189,34 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "composed-of",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
 			},
 			Targets: []string{
 				"Any",
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "ActivityDefinition",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "ActivityDefinition",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "ActivityDefinition",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
 			},
 		},
 		"date": SearchParamInfo{
@@ -199,8 +232,8 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "depends-on",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]library", Type: "Reference"},
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
+				SearchParamPath{Path: "[]library", Type: "canonical"},
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
 			},
 			Targets: []string{
 				"Any",
@@ -212,7 +245,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "derived-from",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
 			},
 			Targets: []string{
 				"Any",
@@ -263,7 +296,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "predecessor",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
 			},
 			Targets: []string{
 				"Any",
@@ -290,7 +323,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "successor",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
 			},
 			Targets: []string{
 				"Any",
@@ -329,6 +362,91 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 	},
+	"AdministrableProductDefinition": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "AdministrableProductDefinition",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "AdministrableProductDefinition",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "AdministrableProductDefinition",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "AdministrableProductDefinition",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "AdministrableProductDefinition",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "AdministrableProductDefinition",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "AdministrableProductDefinition",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"route": SearchParamInfo{
+			Resource: "AdministrableProductDefinition",
+			Name:     "route",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]routeOfAdministration.code", Type: "CodeableConcept"},
+			},
+		},
+		"subject": SearchParamInfo{
+			Resource: "AdministrableProductDefinition",
+			Name:     "subject",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]subject", Type: "Reference"},
+			},
+			Targets: []string{
+				"MedicinalProductDefinition",
+			},
+		},
+		"target-species": SearchParamInfo{
+			Resource: "AdministrableProductDefinition",
+			Name:     "target-species",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]routeOfAdministration.[]targetSpecies.code", Type: "CodeableConcept"},
+			},
+		},
+	},
 	"AdverseEvent": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
 			Resource: "AdverseEvent",
@@ -349,9 +467,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "AdverseEvent",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -362,6 +480,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "AdverseEvent",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
 			Resource: "AdverseEvent",
 			Name:     "_tag",
@@ -370,12 +496,28 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
 			},
 		},
+		"actuality": SearchParamInfo{
+			Resource: "AdverseEvent",
+			Name:     "actuality",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "actuality", Type: "code"},
+			},
+		},
 		"category": SearchParamInfo{
 			Resource: "AdverseEvent",
 			Name:     "category",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "category", Type: "code"},
+				SearchParamPath{Path: "[]category", Type: "CodeableConcept"},
+			},
+		},
+		"code": SearchParamInfo{
+			Resource: "AdverseEvent",
+			Name:     "code",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "code", Type: "CodeableConcept"},
 			},
 		},
 		"date": SearchParamInfo{
@@ -384,6 +526,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "date",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "date", Type: "dateTime"},
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "AdverseEvent",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
 		"location": SearchParamInfo{
@@ -397,15 +547,18 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Location",
 			},
 		},
-		"reaction": SearchParamInfo{
+		"patient": SearchParamInfo{
 			Resource: "AdverseEvent",
-			Name:     "reaction",
+			Name:     "patient",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]reaction", Type: "Reference"},
+				SearchParamPath{Path: "subject", Type: "Reference"},
 			},
 			Targets: []string{
-				"Condition",
+				"Group",
+				"Patient",
+				"Practitioner",
+				"RelatedPerson",
 			},
 		},
 		"recorder": SearchParamInfo{
@@ -418,7 +571,19 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Targets: []string{
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
+			},
+		},
+		"resultingcondition": SearchParamInfo{
+			Resource: "AdverseEvent",
+			Name:     "resultingcondition",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]resultingCondition", Type: "Reference"},
+			},
+			Targets: []string{
+				"Condition",
 			},
 		},
 		"seriousness": SearchParamInfo{
@@ -448,10 +613,10 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "subject", Type: "Reference"},
 			},
 			Targets: []string{
-				"Device",
-				"Medication",
+				"Group",
 				"Patient",
-				"ResearchSubject",
+				"Practitioner",
+				"RelatedPerson",
 			},
 		},
 		"substance": SearchParamInfo{
@@ -459,22 +624,16 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "substance",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]suspectEntity.instance", Type: "Reference"},
+				SearchParamPath{Path: "[]suspectEntity.instanceReference", Type: "Reference"},
 			},
 			Targets: []string{
 				"Device",
+				"Immunization",
 				"Medication",
 				"MedicationAdministration",
-				"MedicationStatement",
+				"MedicationUsage",
+				"Procedure",
 				"Substance",
-			},
-		},
-		"type": SearchParamInfo{
-			Resource: "AdverseEvent",
-			Name:     "type",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "type", Type: "CodeableConcept"},
 			},
 		},
 	},
@@ -498,9 +657,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "AllergyIntolerance",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -509,6 +668,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "AllergyIntolerance",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -529,6 +696,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Targets: []string{
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -545,7 +713,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "clinical-status",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "clinicalStatus", Type: "code"},
+				SearchParamPath{Path: "clinicalStatus", Type: "CodeableConcept"},
 			},
 		},
 		"code": SearchParamInfo{
@@ -570,7 +738,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "date",
 			Type:     "date",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "assertedDate", Type: "dateTime"},
+				SearchParamPath{Path: "recordedDate", Type: "dateTime"},
 			},
 		},
 		"identifier": SearchParamInfo{
@@ -626,6 +794,8 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Targets: []string{
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
+				"RelatedPerson",
 			},
 		},
 		"route": SearchParamInfo{
@@ -657,7 +827,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "verification-status",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "verificationStatus", Type: "code"},
+				SearchParamPath{Path: "verificationStatus", Type: "CodeableConcept"},
 			},
 		},
 	},
@@ -681,9 +851,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Appointment",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -692,6 +862,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Appointment",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -715,6 +893,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Location",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -724,6 +903,17 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "appointmentType", Type: "CodeableConcept"},
+			},
+		},
+		"based-on": SearchParamInfo{
+			Resource: "Appointment",
+			Name:     "based-on",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]basedOn", Type: "Reference"},
+			},
+			Targets: []string{
+				"ServiceRequest",
 			},
 		},
 		"date": SearchParamInfo{
@@ -740,17 +930,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
-			},
-		},
-		"incomingreferral": SearchParamInfo{
-			Resource: "Appointment",
-			Name:     "incomingreferral",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]incomingReferral", Type: "Reference"},
-			},
-			Targets: []string{
-				"ReferralRequest",
 			},
 		},
 		"location": SearchParamInfo{
@@ -794,6 +973,36 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Practitioner",
 			},
 		},
+		"reason-code": SearchParamInfo{
+			Resource: "Appointment",
+			Name:     "reason-code",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]reasonCode", Type: "CodeableConcept"},
+			},
+		},
+		"reason-reference": SearchParamInfo{
+			Resource: "Appointment",
+			Name:     "reason-reference",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]reasonReference", Type: "Reference"},
+			},
+			Targets: []string{
+				"Condition",
+				"ImmunizationRecommendation",
+				"Observation",
+				"Procedure",
+			},
+		},
+		"service-category": SearchParamInfo{
+			Resource: "Appointment",
+			Name:     "service-category",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]serviceCategory", Type: "CodeableConcept"},
+			},
+		},
 		"service-type": SearchParamInfo{
 			Resource: "Appointment",
 			Name:     "service-type",
@@ -802,12 +1011,42 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]serviceType", Type: "CodeableConcept"},
 			},
 		},
+		"slot": SearchParamInfo{
+			Resource: "Appointment",
+			Name:     "slot",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]slot", Type: "Reference"},
+			},
+			Targets: []string{
+				"Slot",
+			},
+		},
+		"specialty": SearchParamInfo{
+			Resource: "Appointment",
+			Name:     "specialty",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]specialty", Type: "CodeableConcept"},
+			},
+		},
 		"status": SearchParamInfo{
 			Resource: "Appointment",
 			Name:     "status",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"supporting-info": SearchParamInfo{
+			Resource: "Appointment",
+			Name:     "supporting-info",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]supportingInformation", Type: "Reference"},
+			},
+			Targets: []string{
+				"Any",
 			},
 		},
 	},
@@ -831,9 +1070,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "AppointmentResponse",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -842,6 +1081,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "AppointmentResponse",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -865,6 +1112,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Location",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -949,9 +1197,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "AuditEvent",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -960,6 +1208,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "AuditEvent",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -991,13 +1247,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "agent",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]agent.reference", Type: "Reference"},
+				SearchParamPath{Path: "[]agent.who", Type: "Reference"},
 			},
 			Targets: []string{
 				"Device",
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -1038,18 +1295,10 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "entity",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]entity.reference", Type: "Reference"},
+				SearchParamPath{Path: "[]entity.what", Type: "Reference"},
 			},
 			Targets: []string{
 				"Any",
-			},
-		},
-		"entity-id": SearchParamInfo{
-			Resource: "AuditEvent",
-			Name:     "entity-id",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]entity.identifier", Type: "Identifier"},
 			},
 		},
 		"entity-name": SearchParamInfo{
@@ -1089,8 +1338,8 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "patient",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]agent.reference", Type: "Reference"},
-				SearchParamPath{Path: "[]entity.reference", Type: "Reference"},
+				SearchParamPath{Path: "[]agent.who", Type: "Reference"},
+				SearchParamPath{Path: "[]entity.what", Type: "Reference"},
 			},
 			Targets: []string{
 				"Patient",
@@ -1104,6 +1353,15 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]agent.[]policy", Type: "uri"},
 			},
 		},
+		"purpose": SearchParamInfo{
+			Resource: "AuditEvent",
+			Name:     "purpose",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]agent.[]purposeOfUse", Type: "CodeableConcept"},
+				SearchParamPath{Path: "[]purposeOfEvent", Type: "CodeableConcept"},
+			},
+		},
 		"site": SearchParamInfo{
 			Resource: "AuditEvent",
 			Name:     "site",
@@ -1115,9 +1373,17 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"source": SearchParamInfo{
 			Resource: "AuditEvent",
 			Name:     "source",
-			Type:     "token",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "source.identifier", Type: "Identifier"},
+				SearchParamPath{Path: "source.observer", Type: "Reference"},
+			},
+			Targets: []string{
+				"Device",
+				"Organization",
+				"Patient",
+				"Practitioner",
+				"PractitionerRole",
+				"RelatedPerson",
 			},
 		},
 		"subtype": SearchParamInfo{
@@ -1134,14 +1400,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "type", Type: "Coding"},
-			},
-		},
-		"user": SearchParamInfo{
-			Resource: "AuditEvent",
-			Name:     "user",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]agent.userId", Type: "Identifier"},
 			},
 		},
 	},
@@ -1165,9 +1423,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Basic",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -1176,6 +1434,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Basic",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -1194,8 +1460,10 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "author", Type: "Reference"},
 			},
 			Targets: []string{
+				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -1266,9 +1534,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Binary",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -1279,6 +1547,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "Binary",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
 			Resource: "Binary",
 			Name:     "_tag",
@@ -1287,18 +1563,10 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
 			},
 		},
-		"contenttype": SearchParamInfo{
-			Resource: "Binary",
-			Name:     "contenttype",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "contentType", Type: "code"},
-			},
-		},
 	},
-	"BodySite": map[string]SearchParamInfo{
+	"BiologicallyDerivedProduct": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
-			Resource: "BodySite",
+			Resource: "BiologicallyDerivedProduct",
 			Name:     "_id",
 			Type:     "token",
 			Paths: []SearchParamPath{
@@ -1306,7 +1574,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"_lastUpdated": SearchParamInfo{
-			Resource: "BodySite",
+			Resource: "BiologicallyDerivedProduct",
 			Name:     "_lastUpdated",
 			Type:     "date",
 			Paths: []SearchParamPath{
@@ -1314,47 +1582,113 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"_profile": SearchParamInfo{
-			Resource: "BodySite",
+			Resource: "BiologicallyDerivedProduct",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
-			Resource: "BodySite",
+			Resource: "BiologicallyDerivedProduct",
 			Name:     "_security",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "BiologicallyDerivedProduct",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
-			Resource: "BodySite",
+			Resource: "BiologicallyDerivedProduct",
 			Name:     "_tag",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
 			},
 		},
-		"code": SearchParamInfo{
-			Resource: "BodySite",
-			Name:     "code",
+	},
+	"BodyStructure": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "BodyStructure",
+			Name:     "_id",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "code", Type: "CodeableConcept"},
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "BodyStructure",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "BodyStructure",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "BodyStructure",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "BodyStructure",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "BodyStructure",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
 			},
 		},
 		"identifier": SearchParamInfo{
-			Resource: "BodySite",
+			Resource: "BodyStructure",
 			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
+		"location": SearchParamInfo{
+			Resource: "BodyStructure",
+			Name:     "location",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "location", Type: "CodeableConcept"},
+			},
+		},
+		"morphology": SearchParamInfo{
+			Resource: "BodyStructure",
+			Name:     "morphology",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "morphology", Type: "CodeableConcept"},
+			},
+		},
 		"patient": SearchParamInfo{
-			Resource: "BodySite",
+			Resource: "BodyStructure",
 			Name:     "patient",
 			Type:     "reference",
 			Paths: []SearchParamPath{
@@ -1385,9 +1719,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Bundle",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -1396,6 +1730,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Bundle",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -1436,6 +1778,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"MessageHeader",
 			},
 		},
+		"timestamp": SearchParamInfo{
+			Resource: "Bundle",
+			Name:     "timestamp",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "timestamp", Type: "instant"},
+			},
+		},
 		"type": SearchParamInfo{
 			Resource: "Bundle",
 			Name:     "type",
@@ -1465,9 +1815,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "CapabilityStatement",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -1478,12 +1828,44 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "CapabilityStatement",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
 			Resource: "CapabilityStatement",
 			Name:     "_tag",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "CapabilityStatement",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "CapabilityStatement",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "CapabilityStatement",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
 			},
 		},
 		"date": SearchParamInfo{
@@ -1500,14 +1882,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "string",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "description", Type: "markdown"},
-			},
-		},
-		"event": SearchParamInfo{
-			Resource: "CapabilityStatement",
-			Name:     "event",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]messaging.[]event.code", Type: "Coding"},
 			},
 		},
 		"fhirversion": SearchParamInfo{
@@ -1529,9 +1903,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"guide": SearchParamInfo{
 			Resource: "CapabilityStatement",
 			Name:     "guide",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]implementationGuide", Type: "uri"},
+				SearchParamPath{Path: "[]implementationGuide", Type: "canonical"},
+			},
+			Targets: []string{
+				"ImplementationGuide",
 			},
 		},
 		"jurisdiction": SearchParamInfo{
@@ -1579,7 +1956,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "resource-profile",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]rest.[]resource.profile", Type: "Reference"},
+				SearchParamPath{Path: "[]rest.[]resource.profile", Type: "canonical"},
 			},
 			Targets: []string{
 				"StructureDefinition",
@@ -1614,7 +1991,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "supported-profile",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]profile", Type: "Reference"},
+				SearchParamPath{Path: "[]rest.[]resource.[]supportedProfile", Type: "canonical"},
 			},
 			Targets: []string{
 				"StructureDefinition",
@@ -1645,6 +2022,225 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 	},
+	"CapabilityStatement2": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
+			},
+		},
+		"date": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "date",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "date", Type: "dateTime"},
+			},
+		},
+		"description": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "description",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "description", Type: "markdown"},
+			},
+		},
+		"fhirversion": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "fhirversion",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "version", Type: "string"},
+			},
+		},
+		"format": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "format",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]format", Type: "code"},
+			},
+		},
+		"guide": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "guide",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]implementationGuide", Type: "canonical"},
+			},
+			Targets: []string{
+				"ImplementationGuide",
+			},
+		},
+		"jurisdiction": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "jurisdiction",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]jurisdiction", Type: "CodeableConcept"},
+			},
+		},
+		"mode": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "mode",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]rest.mode", Type: "code"},
+			},
+		},
+		"name": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "name",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "name", Type: "string"},
+			},
+		},
+		"publisher": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "publisher",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "publisher", Type: "string"},
+			},
+		},
+		"resource": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "resource",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]rest.[]resource.type", Type: "code"},
+			},
+		},
+		"resource-profile": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "resource-profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]rest.[]resource.profile", Type: "canonical"},
+			},
+			Targets: []string{
+				"StructureDefinition",
+			},
+		},
+		"software": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "software",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "software.name", Type: "string"},
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"supported-profile": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "supported-profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]rest.[]resource.[]supportedProfile", Type: "canonical"},
+			},
+			Targets: []string{
+				"StructureDefinition",
+			},
+		},
+		"title": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "title",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "title", Type: "string"},
+			},
+		},
+		"url": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "url",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "url", Type: "uri"},
+			},
+		},
+		"version": SearchParamInfo{
+			Resource: "CapabilityStatement2",
+			Name:     "version",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "version", Type: "string"},
+			},
+		},
+	},
 	"CarePlan": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
 			Resource: "CarePlan",
@@ -1665,9 +2261,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "CarePlan",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -1676,6 +2272,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "CarePlan",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -1714,11 +2318,11 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Appointment",
 				"CommunicationRequest",
 				"DeviceRequest",
+				"ImmunizationRecommendation",
 				"MedicationRequest",
 				"NutritionOrder",
-				"ProcedureRequest",
-				"ReferralRequest",
 				"RequestGroup",
+				"ServiceRequest",
 				"Task",
 				"VisionPrescription",
 			},
@@ -1758,22 +2362,10 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "condition",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]addresses", Type: "Reference"},
+				SearchParamPath{Path: "[]addressesReference", Type: "Reference"},
 			},
 			Targets: []string{
 				"Condition",
-			},
-		},
-		"context": SearchParamInfo{
-			Resource: "CarePlan",
-			Name:     "context",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
-			},
-			Targets: []string{
-				"Encounter",
-				"EpisodeOfCare",
 			},
 		},
 		"date": SearchParamInfo{
@@ -1784,24 +2376,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "period", Type: "Period"},
 			},
 		},
-		"definition": SearchParamInfo{
-			Resource: "CarePlan",
-			Name:     "definition",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]definition", Type: "Reference"},
-			},
-			Targets: []string{
-				"PlanDefinition",
-				"Questionnaire",
-			},
-		},
 		"encounter": SearchParamInfo{
 			Resource: "CarePlan",
 			Name:     "encounter",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
+				SearchParamPath{Path: "encounter", Type: "Reference"},
 			},
 			Targets: []string{
 				"Encounter",
@@ -1824,6 +2404,29 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"instantiates-canonical": SearchParamInfo{
+			Resource: "CarePlan",
+			Name:     "instantiates-canonical",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]instantiatesCanonical", Type: "canonical"},
+			},
+			Targets: []string{
+				"ActivityDefinition",
+				"Measure",
+				"OperationDefinition",
+				"PlanDefinition",
+				"Questionnaire",
+			},
+		},
+		"instantiates-uri": SearchParamInfo{
+			Resource: "CarePlan",
+			Name:     "instantiates-uri",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]instantiatesUri", Type: "uri"},
 			},
 		},
 		"intent": SearchParamInfo{
@@ -1865,9 +2468,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"CareTeam",
+				"Device",
+				"HealthcareService",
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -1923,9 +2529,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "CareTeam",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -1934,6 +2540,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "CareTeam",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -1952,32 +2566,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]category", Type: "CodeableConcept"},
 			},
 		},
-		"context": SearchParamInfo{
-			Resource: "CareTeam",
-			Name:     "context",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
-			},
-			Targets: []string{
-				"Encounter",
-				"EpisodeOfCare",
-			},
-		},
-		"date": SearchParamInfo{
-			Resource: "CareTeam",
-			Name:     "date",
-			Type:     "date",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "period", Type: "Period"},
-			},
-		},
 		"encounter": SearchParamInfo{
 			Resource: "CareTeam",
 			Name:     "encounter",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
+				SearchParamPath{Path: "encounter", Type: "Reference"},
 			},
 			Targets: []string{
 				"Encounter",
@@ -2003,6 +2597,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -2038,6 +2633,129 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 	},
+	"CatalogEntry": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "CatalogEntry",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "CatalogEntry",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "CatalogEntry",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "CatalogEntry",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "CatalogEntry",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "CatalogEntry",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "CatalogEntry",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"name": SearchParamInfo{
+			Resource: "CatalogEntry",
+			Name:     "name",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "name", Type: "string"},
+			},
+		},
+		"orderable": SearchParamInfo{
+			Resource: "CatalogEntry",
+			Name:     "orderable",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "orderable", Type: "boolean"},
+			},
+		},
+		"referenced-item": SearchParamInfo{
+			Resource: "CatalogEntry",
+			Name:     "referenced-item",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "referencedItem", Type: "Reference"},
+			},
+			Targets: []string{
+				"ActivityDefinition",
+				"DeviceDefinition",
+				"HealthcareService",
+				"Location",
+				"MedicationKnowledge",
+				"ObservationDefinition",
+				"Organization",
+				"PlanDefinition",
+				"Practitioner",
+				"PractitionerRole",
+				"SpecimenDefinition",
+				"Substance",
+			},
+		},
+		"related-entry": SearchParamInfo{
+			Resource: "CatalogEntry",
+			Name:     "related-entry",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedEntry.target", Type: "Reference"},
+			},
+			Targets: []string{
+				"CatalogEntry",
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "CatalogEntry",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"type": SearchParamInfo{
+			Resource: "CatalogEntry",
+			Name:     "type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "type", Type: "code"},
+			},
+		},
+	},
 	"ChargeItem": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
 			Resource: "ChargeItem",
@@ -2058,9 +2776,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "ChargeItem",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -2069,6 +2787,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "ChargeItem",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -2130,6 +2856,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -2146,7 +2873,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "identifier", Type: "Identifier"},
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
 		"occurrence": SearchParamInfo{
@@ -2159,29 +2886,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "occurrenceTiming", Type: "Timing"},
 			},
 		},
-		"participant-actor": SearchParamInfo{
-			Resource: "ChargeItem",
-			Name:     "participant-actor",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]participant.actor", Type: "Reference"},
-			},
-			Targets: []string{
-				"Device",
-				"Organization",
-				"Patient",
-				"Practitioner",
-				"RelatedPerson",
-			},
-		},
-		"participant-role": SearchParamInfo{
-			Resource: "ChargeItem",
-			Name:     "participant-role",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]participant.role", Type: "CodeableConcept"},
-			},
-		},
 		"patient": SearchParamInfo{
 			Resource: "ChargeItem",
 			Name:     "patient",
@@ -2191,6 +2895,31 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Patient",
+			},
+		},
+		"performer-actor": SearchParamInfo{
+			Resource: "ChargeItem",
+			Name:     "performer-actor",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]performer.actor", Type: "Reference"},
+			},
+			Targets: []string{
+				"CareTeam",
+				"Device",
+				"Organization",
+				"Patient",
+				"Practitioner",
+				"PractitionerRole",
+				"RelatedPerson",
+			},
+		},
+		"performer-function": SearchParamInfo{
+			Resource: "ChargeItem",
+			Name:     "performer-function",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]performer.function", Type: "CodeableConcept"},
 			},
 		},
 		"performing-organization": SearchParamInfo{
@@ -2262,6 +2991,160 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 	},
+	"ChargeItemDefinition": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "ChargeItemDefinition",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "ChargeItemDefinition",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "ChargeItemDefinition",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "ChargeItemDefinition",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "ChargeItemDefinition",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "ChargeItemDefinition",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "ChargeItemDefinition",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "ChargeItemDefinition",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "ChargeItemDefinition",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
+			},
+		},
+		"date": SearchParamInfo{
+			Resource: "ChargeItemDefinition",
+			Name:     "date",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "date", Type: "dateTime"},
+			},
+		},
+		"description": SearchParamInfo{
+			Resource: "ChargeItemDefinition",
+			Name:     "description",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "description", Type: "markdown"},
+			},
+		},
+		"effective": SearchParamInfo{
+			Resource: "ChargeItemDefinition",
+			Name:     "effective",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "effectivePeriod", Type: "Period"},
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "ChargeItemDefinition",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"jurisdiction": SearchParamInfo{
+			Resource: "ChargeItemDefinition",
+			Name:     "jurisdiction",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]jurisdiction", Type: "CodeableConcept"},
+			},
+		},
+		"publisher": SearchParamInfo{
+			Resource: "ChargeItemDefinition",
+			Name:     "publisher",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "publisher", Type: "string"},
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "ChargeItemDefinition",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"title": SearchParamInfo{
+			Resource: "ChargeItemDefinition",
+			Name:     "title",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "title", Type: "string"},
+			},
+		},
+		"url": SearchParamInfo{
+			Resource: "ChargeItemDefinition",
+			Name:     "url",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "url", Type: "uri"},
+			},
+		},
+		"version": SearchParamInfo{
+			Resource: "ChargeItemDefinition",
+			Name:     "version",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "version", Type: "string"},
+			},
+		},
+	},
 	"Claim": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
 			Resource: "Claim",
@@ -2282,9 +3165,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Claim",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -2293,6 +3176,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Claim",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -2313,6 +3204,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Targets: []string{
 				"Organization",
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"created": SearchParamInfo{
@@ -2321,6 +3213,17 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "date",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "created", Type: "dateTime"},
+			},
+		},
+		"detail-udi": SearchParamInfo{
+			Resource: "Claim",
+			Name:     "detail-udi",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]item.[]detail.[]udi", Type: "Reference"},
+			},
+			Targets: []string{
+				"Device",
 			},
 		},
 		"encounter": SearchParamInfo{
@@ -2343,6 +3246,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"facility": SearchParamInfo{
@@ -2375,15 +3279,15 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Organization",
 			},
 		},
-		"organization": SearchParamInfo{
+		"item-udi": SearchParamInfo{
 			Resource: "Claim",
-			Name:     "organization",
+			Name:     "item-udi",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "organization", Type: "Reference"},
+				SearchParamPath{Path: "[]item.[]udi", Type: "Reference"},
 			},
 			Targets: []string{
-				"Organization",
+				"Device",
 			},
 		},
 		"patient": SearchParamInfo{
@@ -2408,6 +3312,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -2419,6 +3324,17 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "priority", Type: "CodeableConcept"},
 			},
 		},
+		"procedure-udi": SearchParamInfo{
+			Resource: "Claim",
+			Name:     "procedure-udi",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]procedure.[]udi", Type: "Reference"},
+			},
+			Targets: []string{
+				"Device",
+			},
+		},
 		"provider": SearchParamInfo{
 			Resource: "Claim",
 			Name:     "provider",
@@ -2427,7 +3343,28 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "provider", Type: "Reference"},
 			},
 			Targets: []string{
+				"Organization",
 				"Practitioner",
+				"PractitionerRole",
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "Claim",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"subdetail-udi": SearchParamInfo{
+			Resource: "Claim",
+			Name:     "subdetail-udi",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]item.[]detail.[]subDetail.[]udi", Type: "Reference"},
+			},
+			Targets: []string{
+				"Device",
 			},
 		},
 		"use": SearchParamInfo{
@@ -2459,9 +3396,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "ClaimResponse",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -2470,6 +3407,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "ClaimResponse",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -2520,7 +3465,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "outcome",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "outcome", Type: "CodeableConcept"},
+				SearchParamPath{Path: "outcome", Type: "code"},
 			},
 		},
 		"patient": SearchParamInfo{
@@ -2553,15 +3498,33 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Claim",
 			},
 		},
-		"request-provider": SearchParamInfo{
+		"requestor": SearchParamInfo{
 			Resource: "ClaimResponse",
-			Name:     "request-provider",
+			Name:     "requestor",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "requestProvider", Type: "Reference"},
+				SearchParamPath{Path: "requestor", Type: "Reference"},
 			},
 			Targets: []string{
+				"Organization",
 				"Practitioner",
+				"PractitionerRole",
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "ClaimResponse",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"use": SearchParamInfo{
+			Resource: "ClaimResponse",
+			Name:     "use",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "use", Type: "code"},
 			},
 		},
 	},
@@ -2585,9 +3548,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "ClinicalImpression",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -2598,6 +3561,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "ClinicalImpression",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
 			Resource: "ClinicalImpression",
 			Name:     "_tag",
@@ -2606,50 +3577,23 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
 			},
 		},
-		"action": SearchParamInfo{
-			Resource: "ClinicalImpression",
-			Name:     "action",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]action", Type: "Reference"},
-			},
-			Targets: []string{
-				"Appointment",
-				"MedicationRequest",
-				"Procedure",
-				"ProcedureRequest",
-				"ReferralRequest",
-			},
-		},
-		"assessor": SearchParamInfo{
-			Resource: "ClinicalImpression",
-			Name:     "assessor",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "assessor", Type: "Reference"},
-			},
-			Targets: []string{
-				"Practitioner",
-			},
-		},
-		"context": SearchParamInfo{
-			Resource: "ClinicalImpression",
-			Name:     "context",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
-			},
-			Targets: []string{
-				"Encounter",
-				"EpisodeOfCare",
-			},
-		},
 		"date": SearchParamInfo{
 			Resource: "ClinicalImpression",
 			Name:     "date",
 			Type:     "date",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "date", Type: "dateTime"},
+			},
+		},
+		"encounter": SearchParamInfo{
+			Resource: "ClinicalImpression",
+			Name:     "encounter",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "encounter", Type: "Reference"},
+			},
+			Targets: []string{
+				"Encounter",
 			},
 		},
 		"finding-code": SearchParamInfo{
@@ -2669,6 +3613,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Condition",
+				"DocumentReference",
 				"Observation",
 			},
 		},
@@ -2680,22 +3625,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
-		"investigation": SearchParamInfo{
-			Resource: "ClinicalImpression",
-			Name:     "investigation",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]investigation.[]item", Type: "Reference"},
-			},
-			Targets: []string{
-				"DiagnosticReport",
-				"FamilyMemberHistory",
-				"ImagingStudy",
-				"Observation",
-				"QuestionnaireResponse",
-				"RiskAssessment",
-			},
-		},
 		"patient": SearchParamInfo{
 			Resource: "ClinicalImpression",
 			Name:     "patient",
@@ -2705,6 +3634,18 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Patient",
+			},
+		},
+		"performer": SearchParamInfo{
+			Resource: "ClinicalImpression",
+			Name:     "performer",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "performer", Type: "Reference"},
+			},
+			Targets: []string{
+				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"previous": SearchParamInfo{
@@ -2750,6 +3691,84 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Patient",
 			},
 		},
+		"supporting-info": SearchParamInfo{
+			Resource: "ClinicalImpression",
+			Name:     "supporting-info",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]supportingInfo", Type: "Reference"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+	},
+	"ClinicalUseIssue": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "ClinicalUseIssue",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "ClinicalUseIssue",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "ClinicalUseIssue",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "ClinicalUseIssue",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "ClinicalUseIssue",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "ClinicalUseIssue",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"subject": SearchParamInfo{
+			Resource: "ClinicalUseIssue",
+			Name:     "subject",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]subject", Type: "Reference"},
+			},
+			Targets: []string{
+				"ActivityDefinition",
+				"Device",
+				"DeviceDefinition",
+				"Medication",
+				"MedicinalProductDefinition",
+				"PlanDefinition",
+				"Substance",
+			},
+		},
 	},
 	"CodeSystem": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
@@ -2771,9 +3790,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "CodeSystem",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -2782,6 +3801,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "CodeSystem",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -2808,6 +3835,30 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "content", Type: "code"},
 			},
 		},
+		"context": SearchParamInfo{
+			Resource: "CodeSystem",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "CodeSystem",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "CodeSystem",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
+			},
+		},
 		"date": SearchParamInfo{
 			Resource: "CodeSystem",
 			Name:     "date",
@@ -2829,7 +3880,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "identifier", Type: "Identifier"},
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
 		"jurisdiction": SearchParamInfo{
@@ -2870,6 +3921,17 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"supplements": SearchParamInfo{
+			Resource: "CodeSystem",
+			Name:     "supplements",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "supplements", Type: "canonical"},
+			},
+			Targets: []string{
+				"CodeSystem",
 			},
 		},
 		"system": SearchParamInfo{
@@ -2925,9 +3987,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Communication",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -2936,6 +3998,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Communication",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -2965,36 +4035,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]category", Type: "CodeableConcept"},
 			},
 		},
-		"context": SearchParamInfo{
-			Resource: "Communication",
-			Name:     "context",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
-			},
-			Targets: []string{
-				"Encounter",
-				"EpisodeOfCare",
-			},
-		},
-		"definition": SearchParamInfo{
-			Resource: "Communication",
-			Name:     "definition",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]definition", Type: "Reference"},
-			},
-			Targets: []string{
-				"ActivityDefinition",
-				"PlanDefinition",
-			},
-		},
 		"encounter": SearchParamInfo{
 			Resource: "Communication",
 			Name:     "encounter",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
+				SearchParamPath{Path: "encounter", Type: "Reference"},
 			},
 			Targets: []string{
 				"Encounter",
@@ -3006,6 +4052,29 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"instantiates-canonical": SearchParamInfo{
+			Resource: "Communication",
+			Name:     "instantiates-canonical",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]instantiatesCanonical", Type: "canonical"},
+			},
+			Targets: []string{
+				"ActivityDefinition",
+				"Measure",
+				"OperationDefinition",
+				"PlanDefinition",
+				"Questionnaire",
+			},
+		},
+		"instantiates-uri": SearchParamInfo{
+			Resource: "Communication",
+			Name:     "instantiates-uri",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]instantiatesUri", Type: "uri"},
 			},
 		},
 		"medium": SearchParamInfo{
@@ -3054,11 +4123,15 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]recipient", Type: "Reference"},
 			},
 			Targets: []string{
+				"CareTeam",
 				"Device",
 				"Group",
+				"HealthcareService",
+				"Location",
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -3071,9 +4144,11 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Device",
+				"HealthcareService",
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -3105,6 +4180,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Patient",
 			},
 		},
+		"topic": SearchParamInfo{
+			Resource: "Communication",
+			Name:     "topic",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "topic", Type: "CodeableConcept"},
+			},
+		},
 	},
 	"CommunicationRequest": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
@@ -3126,9 +4209,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "CommunicationRequest",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -3137,6 +4220,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "CommunicationRequest",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -3174,24 +4265,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]category", Type: "CodeableConcept"},
 			},
 		},
-		"context": SearchParamInfo{
-			Resource: "CommunicationRequest",
-			Name:     "context",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
-			},
-			Targets: []string{
-				"Encounter",
-				"EpisodeOfCare",
-			},
-		},
 		"encounter": SearchParamInfo{
 			Resource: "CommunicationRequest",
 			Name:     "encounter",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
+				SearchParamPath{Path: "encounter", Type: "Reference"},
 			},
 			Targets: []string{
 				"Encounter",
@@ -3213,6 +4292,23 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
+		"information-provider": SearchParamInfo{
+			Resource: "CommunicationRequest",
+			Name:     "information-provider",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "informationProvider", Type: "Reference"},
+			},
+			Targets: []string{
+				"Device",
+				"HealthcareService",
+				"Organization",
+				"Patient",
+				"Practitioner",
+				"PractitionerRole",
+				"RelatedPerson",
+			},
+		},
 		"medium": SearchParamInfo{
 			Resource: "CommunicationRequest",
 			Name:     "medium",
@@ -3227,6 +4323,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "date",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "occurrenceDateTime", Type: "dateTime"},
+				SearchParamPath{Path: "occurrencePeriod", Type: "Period"},
 			},
 		},
 		"patient": SearchParamInfo{
@@ -3259,9 +4356,11 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"CareTeam",
 				"Device",
 				"Group",
+				"HealthcareService",
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -3281,28 +4380,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "requester",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "requester.agent", Type: "Reference"},
+				SearchParamPath{Path: "requester", Type: "Reference"},
 			},
 			Targets: []string{
 				"Device",
 				"Organization",
 				"Patient",
 				"Practitioner",
-				"RelatedPerson",
-			},
-		},
-		"sender": SearchParamInfo{
-			Resource: "CommunicationRequest",
-			Name:     "sender",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "sender", Type: "Reference"},
-			},
-			Targets: []string{
-				"Device",
-				"Organization",
-				"Patient",
-				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -3347,9 +4432,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "CompartmentDefinition",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -3358,6 +4443,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "CompartmentDefinition",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -3376,6 +4469,30 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "code", Type: "code"},
 			},
 		},
+		"context": SearchParamInfo{
+			Resource: "CompartmentDefinition",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "CompartmentDefinition",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "CompartmentDefinition",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
+			},
+		},
 		"date": SearchParamInfo{
 			Resource: "CompartmentDefinition",
 			Name:     "date",
@@ -3390,14 +4507,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "string",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "description", Type: "markdown"},
-			},
-		},
-		"jurisdiction": SearchParamInfo{
-			Resource: "CompartmentDefinition",
-			Name:     "jurisdiction",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]jurisdiction", Type: "CodeableConcept"},
 			},
 		},
 		"name": SearchParamInfo{
@@ -3432,20 +4541,20 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "status", Type: "code"},
 			},
 		},
-		"title": SearchParamInfo{
-			Resource: "CompartmentDefinition",
-			Name:     "title",
-			Type:     "string",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "title", Type: "string"},
-			},
-		},
 		"url": SearchParamInfo{
 			Resource: "CompartmentDefinition",
 			Name:     "url",
 			Type:     "uri",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "url", Type: "uri"},
+			},
+		},
+		"version": SearchParamInfo{
+			Resource: "CompartmentDefinition",
+			Name:     "version",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "version", Type: "string"},
 			},
 		},
 	},
@@ -3469,9 +4578,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Composition",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -3480,6 +4589,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Composition",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -3501,6 +4618,8 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
+				"RelatedPerson",
 			},
 		},
 		"author": SearchParamInfo{
@@ -3512,17 +4631,19 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Device",
+				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
-		"class": SearchParamInfo{
+		"category": SearchParamInfo{
 			Resource: "Composition",
-			Name:     "class",
+			Name:     "category",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "class", Type: "CodeableConcept"},
+				SearchParamPath{Path: "[]category", Type: "CodeableConcept"},
 			},
 		},
 		"confidentiality": SearchParamInfo{
@@ -3681,9 +4802,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "ConceptMap",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -3694,12 +4815,44 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "ConceptMap",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
 			Resource: "ConceptMap",
 			Name:     "_tag",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "ConceptMap",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "ConceptMap",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "ConceptMap",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
 			},
 		},
 		"date": SearchParamInfo{
@@ -3753,9 +4906,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"other": SearchParamInfo{
 			Resource: "ConceptMap",
 			Name:     "other",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]group.unmapped.url", Type: "uri"},
+				SearchParamPath{Path: "[]group.unmapped.url", Type: "canonical"},
+			},
+			Targets: []string{
+				"ConceptMap",
 			},
 		},
 		"product": SearchParamInfo{
@@ -3778,9 +4934,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Resource: "ConceptMap",
 			Name:     "source",
 			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "sourceReference", Type: "Reference"},
-			},
 			Targets: []string{
 				"ValueSet",
 			},
@@ -3821,9 +4974,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Resource: "ConceptMap",
 			Name:     "target",
 			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "targetReference", Type: "Reference"},
-			},
 			Targets: []string{
 				"ValueSet",
 			},
@@ -3897,9 +5047,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Condition",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -3908,6 +5058,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Condition",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -3924,15 +5082,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "quantity",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "abatementAge", Type: "Age"},
-			},
-		},
-		"abatement-boolean": SearchParamInfo{
-			Resource: "Condition",
-			Name:     "abatement-boolean",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "abatementBoolean", Type: "boolean"},
-				SearchParamPath{Path: "abatementString", Type: "string"},
 			},
 		},
 		"abatement-date": SearchParamInfo{
@@ -3952,14 +5101,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "abatementString", Type: "string"},
 			},
 		},
-		"asserted-date": SearchParamInfo{
-			Resource: "Condition",
-			Name:     "asserted-date",
-			Type:     "date",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "assertedDate", Type: "dateTime"},
-			},
-		},
 		"asserter": SearchParamInfo{
 			Resource: "Condition",
 			Name:     "asserter",
@@ -3968,8 +5109,10 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "asserter", Type: "Reference"},
 			},
 			Targets: []string{
+				"Device",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -3994,7 +5137,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "clinical-status",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "clinicalStatus", Type: "code"},
+				SearchParamPath{Path: "clinicalStatus", Type: "CodeableConcept"},
 			},
 		},
 		"code": SearchParamInfo{
@@ -4005,24 +5148,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "code", Type: "CodeableConcept"},
 			},
 		},
-		"context": SearchParamInfo{
-			Resource: "Condition",
-			Name:     "context",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
-			},
-			Targets: []string{
-				"Encounter",
-				"EpisodeOfCare",
-			},
-		},
 		"encounter": SearchParamInfo{
 			Resource: "Condition",
 			Name:     "encounter",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
+				SearchParamPath{Path: "encounter", Type: "Reference"},
 			},
 			Targets: []string{
 				"Encounter",
@@ -4091,6 +5222,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Patient",
 			},
 		},
+		"recorded-date": SearchParamInfo{
+			Resource: "Condition",
+			Name:     "recorded-date",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "recordedDate", Type: "dateTime"},
+			},
+		},
 		"severity": SearchParamInfo{
 			Resource: "Condition",
 			Name:     "severity",
@@ -4104,7 +5243,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "stage",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "stage.summary", Type: "CodeableConcept"},
+				SearchParamPath{Path: "[]stage.summary", Type: "CodeableConcept"},
 			},
 		},
 		"subject": SearchParamInfo{
@@ -4124,7 +5263,161 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "verification-status",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "verificationStatus", Type: "code"},
+				SearchParamPath{Path: "verificationStatus", Type: "CodeableConcept"},
+			},
+		},
+	},
+	"ConditionDefinition": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "ConditionDefinition",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "ConditionDefinition",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "ConditionDefinition",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "ConditionDefinition",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "ConditionDefinition",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "ConditionDefinition",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "ConditionDefinition",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "ConditionDefinition",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "ConditionDefinition",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
+			},
+		},
+		"date": SearchParamInfo{
+			Resource: "ConditionDefinition",
+			Name:     "date",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "date", Type: "dateTime"},
+			},
+		},
+		"description": SearchParamInfo{
+			Resource: "ConditionDefinition",
+			Name:     "description",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "description", Type: "markdown"},
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "ConditionDefinition",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"jurisdiction": SearchParamInfo{
+			Resource: "ConditionDefinition",
+			Name:     "jurisdiction",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]jurisdiction", Type: "CodeableConcept"},
+			},
+		},
+		"name": SearchParamInfo{
+			Resource: "ConditionDefinition",
+			Name:     "name",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "name", Type: "string"},
+			},
+		},
+		"publisher": SearchParamInfo{
+			Resource: "ConditionDefinition",
+			Name:     "publisher",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "publisher", Type: "string"},
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "ConditionDefinition",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"title": SearchParamInfo{
+			Resource: "ConditionDefinition",
+			Name:     "title",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "title", Type: "string"},
+			},
+		},
+		"url": SearchParamInfo{
+			Resource: "ConditionDefinition",
+			Name:     "url",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "url", Type: "uri"},
+			},
+		},
+		"version": SearchParamInfo{
+			Resource: "ConditionDefinition",
+			Name:     "version",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "version", Type: "string"},
 			},
 		},
 	},
@@ -4148,9 +5441,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Consent",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -4159,6 +5452,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Consent",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -4174,8 +5475,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "action",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]action", Type: "CodeableConcept"},
-				SearchParamPath{Path: "[]except.[]action", Type: "CodeableConcept"},
+				SearchParamPath{Path: "provision.[]action", Type: "CodeableConcept"},
 			},
 		},
 		"actor": SearchParamInfo{
@@ -4183,8 +5483,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "actor",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]actor.reference", Type: "Reference"},
-				SearchParamPath{Path: "[]except.[]actor.reference", Type: "Reference"},
+				SearchParamPath{Path: "provision.[]actor.reference", Type: "Reference"},
 			},
 			Targets: []string{
 				"CareTeam",
@@ -4193,6 +5492,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -4209,12 +5509,13 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "consentor",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]consentingParty", Type: "Reference"},
+				SearchParamPath{Path: "[]performer", Type: "Reference"},
 			},
 			Targets: []string{
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -4223,8 +5524,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "data",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]data.reference", Type: "Reference"},
-				SearchParamPath{Path: "[]except.[]data.reference", Type: "Reference"},
+				SearchParamPath{Path: "provision.[]data.reference", Type: "Reference"},
 			},
 			Targets: []string{
 				"Any",
@@ -4243,7 +5543,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "identifier", Type: "Identifier"},
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
 		"organization": SearchParamInfo{
@@ -4273,7 +5573,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "period",
 			Type:     "date",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "period", Type: "Period"},
+				SearchParamPath{Path: "provision.period", Type: "Period"},
 			},
 		},
 		"purpose": SearchParamInfo{
@@ -4281,31 +5581,23 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "purpose",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]except.[]purpose", Type: "Coding"},
-				SearchParamPath{Path: "[]purpose", Type: "Coding"},
+				SearchParamPath{Path: "provision.[]purpose", Type: "Coding"},
 			},
 		},
-		"securitylabel": SearchParamInfo{
+		"scope": SearchParamInfo{
 			Resource: "Consent",
-			Name:     "securitylabel",
+			Name:     "scope",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]except.[]securityLabel", Type: "Coding"},
-				SearchParamPath{Path: "[]securityLabel", Type: "Coding"},
+				SearchParamPath{Path: "scope", Type: "CodeableConcept"},
 			},
 		},
-		"source": SearchParamInfo{
+		"security-label": SearchParamInfo{
 			Resource: "Consent",
-			Name:     "source",
-			Type:     "reference",
+			Name:     "security-label",
+			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "sourceReference", Type: "Reference"},
-			},
-			Targets: []string{
-				"Consent",
-				"Contract",
-				"DocumentReference",
-				"QuestionnaireResponse",
+				SearchParamPath{Path: "provision.[]securityLabel", Type: "Coding"},
 			},
 		},
 		"status": SearchParamInfo{
@@ -4337,9 +5629,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Contract",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -4350,31 +5642,20 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "Contract",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
 			Resource: "Contract",
 			Name:     "_tag",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
-			},
-		},
-		"agent": SearchParamInfo{
-			Resource: "Contract",
-			Name:     "agent",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]agent.actor", Type: "Reference"},
-			},
-			Targets: []string{
-				"Contract",
-				"Device",
-				"Group",
-				"Location",
-				"Organization",
-				"Patient",
-				"Practitioner",
-				"RelatedPerson",
-				"Substance",
 			},
 		},
 		"authority": SearchParamInfo{
@@ -4404,7 +5685,15 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "identifier", Type: "Identifier"},
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"instantiates": SearchParamInfo{
+			Resource: "Contract",
+			Name:     "instantiates",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "instantiatesUri", Type: "uri"},
 			},
 		},
 		"issued": SearchParamInfo{
@@ -4437,7 +5726,16 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "Contract",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
 			},
 		},
 		"subject": SearchParamInfo{
@@ -4451,15 +5749,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Any",
 			},
 		},
-		"term-topic": SearchParamInfo{
+		"url": SearchParamInfo{
 			Resource: "Contract",
-			Name:     "term-topic",
-			Type:     "reference",
+			Name:     "url",
+			Type:     "uri",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]term.[]topic", Type: "Reference"},
-			},
-			Targets: []string{
-				"Any",
+				SearchParamPath{Path: "url", Type: "uri"},
 			},
 		},
 	},
@@ -4483,9 +5778,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Coverage",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -4494,6 +5789,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Coverage",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -4515,12 +5818,20 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Patient",
 			},
 		},
-		"class": SearchParamInfo{
+		"class-type": SearchParamInfo{
 			Resource: "Coverage",
-			Name:     "class",
+			Name:     "class-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]class.type", Type: "CodeableConcept"},
+			},
+		},
+		"class-value": SearchParamInfo{
+			Resource: "Coverage",
+			Name:     "class-value",
 			Type:     "string",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "grouping.class", Type: "string"},
+				SearchParamPath{Path: "[]class.value", Type: "string"},
 			},
 		},
 		"dependent": SearchParamInfo{
@@ -4531,20 +5842,23 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "dependent", Type: "string"},
 			},
 		},
-		"group": SearchParamInfo{
-			Resource: "Coverage",
-			Name:     "group",
-			Type:     "string",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "grouping.group", Type: "string"},
-			},
-		},
 		"identifier": SearchParamInfo{
 			Resource: "Coverage",
 			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"patient": SearchParamInfo{
+			Resource: "Coverage",
+			Name:     "patient",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "beneficiary", Type: "Reference"},
+			},
+			Targets: []string{
+				"Patient",
 			},
 		},
 		"payor": SearchParamInfo{
@@ -4560,14 +5874,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"RelatedPerson",
 			},
 		},
-		"plan": SearchParamInfo{
-			Resource: "Coverage",
-			Name:     "plan",
-			Type:     "string",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "grouping.plan", Type: "string"},
-			},
-		},
 		"policy-holder": SearchParamInfo{
 			Resource: "Coverage",
 			Name:     "policy-holder",
@@ -4581,36 +5887,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"RelatedPerson",
 			},
 		},
-		"sequence": SearchParamInfo{
+		"status": SearchParamInfo{
 			Resource: "Coverage",
-			Name:     "sequence",
-			Type:     "string",
+			Name:     "status",
+			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "sequence", Type: "string"},
-			},
-		},
-		"subclass": SearchParamInfo{
-			Resource: "Coverage",
-			Name:     "subclass",
-			Type:     "string",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "grouping.subClass", Type: "string"},
-			},
-		},
-		"subgroup": SearchParamInfo{
-			Resource: "Coverage",
-			Name:     "subgroup",
-			Type:     "string",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "grouping.subGroup", Type: "string"},
-			},
-		},
-		"subplan": SearchParamInfo{
-			Resource: "Coverage",
-			Name:     "subplan",
-			Type:     "string",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "grouping.subPlan", Type: "string"},
+				SearchParamPath{Path: "status", Type: "code"},
 			},
 		},
 		"subscriber": SearchParamInfo{
@@ -4634,9 +5916,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 	},
-	"DataElement": map[string]SearchParamInfo{
+	"CoverageEligibilityRequest": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
-			Resource: "DataElement",
+			Resource: "CoverageEligibilityRequest",
 			Name:     "_id",
 			Type:     "token",
 			Paths: []SearchParamPath{
@@ -4644,7 +5926,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"_lastUpdated": SearchParamInfo{
-			Resource: "DataElement",
+			Resource: "CoverageEligibilityRequest",
 			Name:     "_lastUpdated",
 			Type:     "date",
 			Paths: []SearchParamPath{
@@ -4652,123 +5934,242 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"_profile": SearchParamInfo{
-			Resource: "DataElement",
+			Resource: "CoverageEligibilityRequest",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
-			Resource: "DataElement",
+			Resource: "CoverageEligibilityRequest",
 			Name:     "_security",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "CoverageEligibilityRequest",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
-			Resource: "DataElement",
+			Resource: "CoverageEligibilityRequest",
 			Name:     "_tag",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
 			},
 		},
-		"code": SearchParamInfo{
-			Resource: "DataElement",
-			Name:     "code",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]element.[]code", Type: "Coding"},
-			},
-		},
-		"date": SearchParamInfo{
-			Resource: "DataElement",
-			Name:     "date",
+		"created": SearchParamInfo{
+			Resource: "CoverageEligibilityRequest",
+			Name:     "created",
 			Type:     "date",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "date", Type: "dateTime"},
+				SearchParamPath{Path: "created", Type: "dateTime"},
 			},
 		},
-		"description": SearchParamInfo{
-			Resource: "DataElement",
-			Name:     "description",
-			Type:     "string",
+		"enterer": SearchParamInfo{
+			Resource: "CoverageEligibilityRequest",
+			Name:     "enterer",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]element.definition", Type: "markdown"},
+				SearchParamPath{Path: "enterer", Type: "Reference"},
+			},
+			Targets: []string{
+				"Practitioner",
+				"PractitionerRole",
+			},
+		},
+		"facility": SearchParamInfo{
+			Resource: "CoverageEligibilityRequest",
+			Name:     "facility",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "facility", Type: "Reference"},
+			},
+			Targets: []string{
+				"Location",
 			},
 		},
 		"identifier": SearchParamInfo{
-			Resource: "DataElement",
+			Resource: "CoverageEligibilityRequest",
 			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
-		"jurisdiction": SearchParamInfo{
-			Resource: "DataElement",
-			Name:     "jurisdiction",
-			Type:     "token",
+		"patient": SearchParamInfo{
+			Resource: "CoverageEligibilityRequest",
+			Name:     "patient",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]jurisdiction", Type: "CodeableConcept"},
+				SearchParamPath{Path: "patient", Type: "Reference"},
+			},
+			Targets: []string{
+				"Patient",
 			},
 		},
-		"name": SearchParamInfo{
-			Resource: "DataElement",
-			Name:     "name",
-			Type:     "string",
+		"provider": SearchParamInfo{
+			Resource: "CoverageEligibilityRequest",
+			Name:     "provider",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "name", Type: "string"},
+				SearchParamPath{Path: "provider", Type: "Reference"},
 			},
-		},
-		"publisher": SearchParamInfo{
-			Resource: "DataElement",
-			Name:     "publisher",
-			Type:     "string",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "publisher", Type: "string"},
+			Targets: []string{
+				"Organization",
+				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"status": SearchParamInfo{
-			Resource: "DataElement",
+			Resource: "CoverageEligibilityRequest",
 			Name:     "status",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "status", Type: "code"},
 			},
 		},
-		"stringency": SearchParamInfo{
-			Resource: "DataElement",
-			Name:     "stringency",
+	},
+	"CoverageEligibilityResponse": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "CoverageEligibilityResponse",
+			Name:     "_id",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "stringency", Type: "code"},
+				SearchParamPath{Path: "_id", Type: "id"},
 			},
 		},
-		"title": SearchParamInfo{
-			Resource: "DataElement",
-			Name:     "title",
-			Type:     "string",
+		"_lastUpdated": SearchParamInfo{
+			Resource: "CoverageEligibilityResponse",
+			Name:     "_lastUpdated",
+			Type:     "date",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "title", Type: "string"},
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
 			},
 		},
-		"url": SearchParamInfo{
-			Resource: "DataElement",
-			Name:     "url",
+		"_profile": SearchParamInfo{
+			Resource: "CoverageEligibilityResponse",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "CoverageEligibilityResponse",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "CoverageEligibilityResponse",
+			Name:     "_source",
 			Type:     "uri",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "url", Type: "uri"},
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
-		"version": SearchParamInfo{
-			Resource: "DataElement",
-			Name:     "version",
+		"_tag": SearchParamInfo{
+			Resource: "CoverageEligibilityResponse",
+			Name:     "_tag",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "version", Type: "string"},
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"created": SearchParamInfo{
+			Resource: "CoverageEligibilityResponse",
+			Name:     "created",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "created", Type: "dateTime"},
+			},
+		},
+		"disposition": SearchParamInfo{
+			Resource: "CoverageEligibilityResponse",
+			Name:     "disposition",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "disposition", Type: "string"},
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "CoverageEligibilityResponse",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"insurer": SearchParamInfo{
+			Resource: "CoverageEligibilityResponse",
+			Name:     "insurer",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "insurer", Type: "Reference"},
+			},
+			Targets: []string{
+				"Organization",
+			},
+		},
+		"outcome": SearchParamInfo{
+			Resource: "CoverageEligibilityResponse",
+			Name:     "outcome",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "outcome", Type: "code"},
+			},
+		},
+		"patient": SearchParamInfo{
+			Resource: "CoverageEligibilityResponse",
+			Name:     "patient",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "patient", Type: "Reference"},
+			},
+			Targets: []string{
+				"Patient",
+			},
+		},
+		"request": SearchParamInfo{
+			Resource: "CoverageEligibilityResponse",
+			Name:     "request",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "request", Type: "Reference"},
+			},
+			Targets: []string{
+				"CoverageEligibilityRequest",
+			},
+		},
+		"requestor": SearchParamInfo{
+			Resource: "CoverageEligibilityResponse",
+			Name:     "requestor",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "requestor", Type: "Reference"},
+			},
+			Targets: []string{
+				"Organization",
+				"Practitioner",
+				"PractitionerRole",
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "CoverageEligibilityResponse",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
 			},
 		},
 	},
@@ -4792,9 +6193,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "DetectedIssue",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -4803,6 +6204,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "DetectedIssue",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -4823,22 +6232,24 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Targets: []string{
 				"Device",
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
-		"category": SearchParamInfo{
+		"code": SearchParamInfo{
 			Resource: "DetectedIssue",
-			Name:     "category",
+			Name:     "code",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "category", Type: "CodeableConcept"},
+				SearchParamPath{Path: "code", Type: "CodeableConcept"},
 			},
 		},
-		"date": SearchParamInfo{
+		"identified": SearchParamInfo{
 			Resource: "DetectedIssue",
-			Name:     "date",
+			Name:     "identified",
 			Type:     "date",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "date", Type: "dateTime"},
+				SearchParamPath{Path: "identifiedDateTime", Type: "dateTime"},
+				SearchParamPath{Path: "identifiedPeriod", Type: "Period"},
 			},
 		},
 		"identifier": SearchParamInfo{
@@ -4846,7 +6257,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "identifier", Type: "Identifier"},
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
 		"implicated": SearchParamInfo{
@@ -4892,9 +6303,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Device",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -4903,6 +6314,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Device",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -4917,11 +6336,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Resource: "Device",
 			Name:     "device-name",
 			Type:     "string",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "type.[]coding.display", Type: "string"},
-				SearchParamPath{Path: "type.text", Type: "string"},
-				SearchParamPath{Path: "udi.name", Type: "string"},
-			},
 		},
 		"identifier": SearchParamInfo{
 			Resource: "Device",
@@ -4955,7 +6369,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "model",
 			Type:     "string",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "model", Type: "string"},
+				SearchParamPath{Path: "modelNumber", Type: "string"},
 			},
 		},
 		"organization": SearchParamInfo{
@@ -5000,18 +6414,11 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Resource: "Device",
 			Name:     "udi-carrier",
 			Type:     "string",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "udi.carrierAIDC", Type: "base64Binary"},
-				SearchParamPath{Path: "udi.carrierHRF", Type: "string"},
-			},
 		},
 		"udi-di": SearchParamInfo{
 			Resource: "Device",
 			Name:     "udi-di",
 			Type:     "string",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "udi.deviceIdentifier", Type: "string"},
-			},
 		},
 		"url": SearchParamInfo{
 			Resource: "Device",
@@ -5022,9 +6429,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 	},
-	"DeviceComponent": map[string]SearchParamInfo{
+	"DeviceDefinition": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
-			Resource: "DeviceComponent",
+			Resource: "DeviceDefinition",
 			Name:     "_id",
 			Type:     "token",
 			Paths: []SearchParamPath{
@@ -5032,7 +6439,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"_lastUpdated": SearchParamInfo{
-			Resource: "DeviceComponent",
+			Resource: "DeviceDefinition",
 			Name:     "_lastUpdated",
 			Type:     "date",
 			Paths: []SearchParamPath{
@@ -5040,23 +6447,31 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"_profile": SearchParamInfo{
-			Resource: "DeviceComponent",
+			Resource: "DeviceDefinition",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
-			Resource: "DeviceComponent",
+			Resource: "DeviceDefinition",
 			Name:     "_security",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "DeviceDefinition",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
-			Resource: "DeviceComponent",
+			Resource: "DeviceDefinition",
 			Name:     "_tag",
 			Type:     "token",
 			Paths: []SearchParamPath{
@@ -5064,37 +6479,26 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"identifier": SearchParamInfo{
-			Resource: "DeviceComponent",
+			Resource: "DeviceDefinition",
 			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "identifier", Type: "Identifier"},
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
 		"parent": SearchParamInfo{
-			Resource: "DeviceComponent",
+			Resource: "DeviceDefinition",
 			Name:     "parent",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "parent", Type: "Reference"},
+				SearchParamPath{Path: "parentDevice", Type: "Reference"},
 			},
 			Targets: []string{
-				"DeviceComponent",
-			},
-		},
-		"source": SearchParamInfo{
-			Resource: "DeviceComponent",
-			Name:     "source",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "source", Type: "Reference"},
-			},
-			Targets: []string{
-				"Device",
+				"DeviceDefinition",
 			},
 		},
 		"type": SearchParamInfo{
-			Resource: "DeviceComponent",
+			Resource: "DeviceDefinition",
 			Name:     "type",
 			Type:     "token",
 			Paths: []SearchParamPath{
@@ -5122,9 +6526,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "DeviceMetric",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -5133,6 +6537,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "DeviceMetric",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -5156,7 +6568,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "identifier", Type: "Identifier"},
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
 		"parent": SearchParamInfo{
@@ -5167,7 +6579,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "parent", Type: "Reference"},
 			},
 			Targets: []string{
-				"DeviceComponent",
+				"Device",
 			},
 		},
 		"source": SearchParamInfo{
@@ -5210,9 +6622,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "DeviceRequest",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -5221,6 +6633,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "DeviceRequest",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -5258,18 +6678,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "codeCodeableConcept", Type: "CodeableConcept"},
 			},
 		},
-		"definition": SearchParamInfo{
-			Resource: "DeviceRequest",
-			Name:     "definition",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]definition", Type: "Reference"},
-			},
-			Targets: []string{
-				"ActivityDefinition",
-				"PlanDefinition",
-			},
-		},
 		"device": SearchParamInfo{
 			Resource: "DeviceRequest",
 			Name:     "device",
@@ -5286,11 +6694,10 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "encounter",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
+				SearchParamPath{Path: "encounter", Type: "Reference"},
 			},
 			Targets: []string{
 				"Encounter",
-				"EpisodeOfCare",
 			},
 		},
 		"event-date": SearchParamInfo{
@@ -5318,12 +6725,44 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
+		"instantiates-canonical": SearchParamInfo{
+			Resource: "DeviceRequest",
+			Name:     "instantiates-canonical",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]instantiatesCanonical", Type: "canonical"},
+			},
+			Targets: []string{
+				"ActivityDefinition",
+				"PlanDefinition",
+			},
+		},
+		"instantiates-uri": SearchParamInfo{
+			Resource: "DeviceRequest",
+			Name:     "instantiates-uri",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]instantiatesUri", Type: "uri"},
+			},
+		},
+		"insurance": SearchParamInfo{
+			Resource: "DeviceRequest",
+			Name:     "insurance",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]insurance", Type: "Reference"},
+			},
+			Targets: []string{
+				"ClaimResponse",
+				"Coverage",
+			},
+		},
 		"intent": SearchParamInfo{
 			Resource: "DeviceRequest",
 			Name:     "intent",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "intent", Type: "CodeableConcept"},
+				SearchParamPath{Path: "intent", Type: "code"},
 			},
 		},
 		"patient": SearchParamInfo{
@@ -5345,17 +6784,19 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "performer", Type: "Reference"},
 			},
 			Targets: []string{
+				"CareTeam",
 				"Device",
 				"HealthcareService",
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
-		"priorrequest": SearchParamInfo{
+		"prior-request": SearchParamInfo{
 			Resource: "DeviceRequest",
-			Name:     "priorrequest",
+			Name:     "prior-request",
 			Type:     "reference",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]priorRequest", Type: "Reference"},
@@ -5369,12 +6810,13 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "requester",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "requester.agent", Type: "Reference"},
+				SearchParamPath{Path: "requester", Type: "Reference"},
 			},
 			Targets: []string{
 				"Device",
 				"Organization",
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"status": SearchParamInfo{
@@ -5420,9 +6862,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "DeviceUseStatement",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -5431,6 +6873,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "DeviceUseStatement",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -5505,9 +6955,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "DiagnosticReport",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -5516,6 +6966,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "DiagnosticReport",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -5538,8 +6996,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"ImmunizationRecommendation",
 				"MedicationRequest",
 				"NutritionOrder",
-				"ProcedureRequest",
-				"ReferralRequest",
+				"ServiceRequest",
 			},
 		},
 		"category": SearchParamInfo{
@@ -5547,7 +7004,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "category",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "category", Type: "CodeableConcept"},
+				SearchParamPath{Path: "[]category", Type: "CodeableConcept"},
 			},
 		},
 		"code": SearchParamInfo{
@@ -5558,16 +7015,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "code", Type: "CodeableConcept"},
 			},
 		},
-		"context": SearchParamInfo{
+		"conclusion": SearchParamInfo{
 			Resource: "DiagnosticReport",
-			Name:     "context",
-			Type:     "reference",
+			Name:     "conclusion",
+			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
-			},
-			Targets: []string{
-				"Encounter",
-				"EpisodeOfCare",
+				SearchParamPath{Path: "[]conclusionCode", Type: "CodeableConcept"},
 			},
 		},
 		"date": SearchParamInfo{
@@ -5579,20 +7032,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "effectivePeriod", Type: "Period"},
 			},
 		},
-		"diagnosis": SearchParamInfo{
-			Resource: "DiagnosticReport",
-			Name:     "diagnosis",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]codedDiagnosis", Type: "CodeableConcept"},
-			},
-		},
 		"encounter": SearchParamInfo{
 			Resource: "DiagnosticReport",
 			Name:     "encounter",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
+				SearchParamPath{Path: "encounter", Type: "Reference"},
 			},
 			Targets: []string{
 				"Encounter",
@@ -5606,23 +7051,23 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
-		"image": SearchParamInfo{
-			Resource: "DiagnosticReport",
-			Name:     "image",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]image.link", Type: "Reference"},
-			},
-			Targets: []string{
-				"Media",
-			},
-		},
 		"issued": SearchParamInfo{
 			Resource: "DiagnosticReport",
 			Name:     "issued",
 			Type:     "date",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "issued", Type: "instant"},
+			},
+		},
+		"media": SearchParamInfo{
+			Resource: "DiagnosticReport",
+			Name:     "media",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]media.link", Type: "Reference"},
+			},
+			Targets: []string{
+				"DocumentReference",
 			},
 		},
 		"patient": SearchParamInfo{
@@ -5641,11 +7086,13 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "performer",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]performer.actor", Type: "Reference"},
+				SearchParamPath{Path: "[]performer", Type: "Reference"},
 			},
 			Targets: []string{
+				"CareTeam",
 				"Organization",
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"result": SearchParamInfo{
@@ -5657,6 +7104,20 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Observation",
+			},
+		},
+		"results-interpreter": SearchParamInfo{
+			Resource: "DiagnosticReport",
+			Name:     "results-interpreter",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]resultsInterpreter", Type: "Reference"},
+			},
+			Targets: []string{
+				"CareTeam",
+				"Organization",
+				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"specimen": SearchParamInfo{
@@ -5713,9 +7174,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "DocumentManifest",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -5724,6 +7185,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "DocumentManifest",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -5746,18 +7215,8 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
-			},
-		},
-		"content-ref": SearchParamInfo{
-			Resource: "DocumentManifest",
-			Name:     "content-ref",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]content.pReference", Type: "Reference"},
-			},
-			Targets: []string{
-				"Any",
 			},
 		},
 		"created": SearchParamInfo{
@@ -5785,6 +7244,17 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "masterIdentifier", Type: "Identifier"},
 			},
 		},
+		"item": SearchParamInfo{
+			Resource: "DocumentManifest",
+			Name:     "item",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]content", Type: "Reference"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
 		"patient": SearchParamInfo{
 			Resource: "DocumentManifest",
 			Name:     "patient",
@@ -5807,6 +7277,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -5888,9 +7359,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "DocumentReference",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -5899,6 +7370,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "DocumentReference",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -5919,6 +7398,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Targets: []string{
 				"Organization",
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"author": SearchParamInfo{
@@ -5933,23 +7413,36 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
-		"class": SearchParamInfo{
+		"based-on": SearchParamInfo{
 			Resource: "DocumentReference",
-			Name:     "class",
-			Type:     "token",
+			Name:     "based-on",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "class", Type: "CodeableConcept"},
+				SearchParamPath{Path: "context.[]basedOn", Type: "Reference"},
+			},
+			Targets: []string{
+				"CarePlan",
+				"ServiceRequest",
 			},
 		},
-		"created": SearchParamInfo{
+		"category": SearchParamInfo{
 			Resource: "DocumentReference",
-			Name:     "created",
-			Type:     "date",
+			Name:     "category",
+			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "created", Type: "dateTime"},
+				SearchParamPath{Path: "[]category", Type: "CodeableConcept"},
+			},
+		},
+		"contenttype": SearchParamInfo{
+			Resource: "DocumentReference",
+			Name:     "contenttype",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]content.attachment.contentType", Type: "code"},
 			},
 		},
 		"custodian": SearchParamInfo{
@@ -5961,6 +7454,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Organization",
+			},
+		},
+		"date": SearchParamInfo{
+			Resource: "DocumentReference",
+			Name:     "date",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "date", Type: "instant"},
 			},
 		},
 		"description": SearchParamInfo{
@@ -5976,10 +7477,11 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "encounter",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context.encounter", Type: "Reference"},
+				SearchParamPath{Path: "context.[]encounter", Type: "Reference"},
 			},
 			Targets: []string{
 				"Encounter",
+				"EpisodeOfCare",
 			},
 		},
 		"event": SearchParamInfo{
@@ -6015,14 +7517,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "masterIdentifier", Type: "Identifier"},
 			},
 		},
-		"indexed": SearchParamInfo{
-			Resource: "DocumentReference",
-			Name:     "indexed",
-			Type:     "date",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "indexed", Type: "instant"},
-			},
-		},
 		"language": SearchParamInfo{
 			Resource: "DocumentReference",
 			Name:     "language",
@@ -6036,7 +7530,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "location",
 			Type:     "uri",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]content.attachment.url", Type: "uri"},
+				SearchParamPath{Path: "[]content.attachment.url", Type: "url"},
 			},
 		},
 		"patient": SearchParamInfo{
@@ -6058,20 +7552,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "context.period", Type: "Period"},
 			},
 		},
-		"related-id": SearchParamInfo{
+		"related": SearchParamInfo{
 			Resource: "DocumentReference",
-			Name:     "related-id",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context.[]related.identifier", Type: "Identifier"},
-			},
-		},
-		"related-ref": SearchParamInfo{
-			Resource: "DocumentReference",
-			Name:     "related-ref",
+			Name:     "related",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context.[]related.ref", Type: "Reference"},
+				SearchParamPath{Path: "context.[]related", Type: "Reference"},
 			},
 			Targets: []string{
 				"Any",
@@ -6096,9 +7582,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]relatesTo.code", Type: "code"},
 			},
 		},
-		"securitylabel": SearchParamInfo{
+		"security-label": SearchParamInfo{
 			Resource: "DocumentReference",
-			Name:     "securitylabel",
+			Name:     "security-label",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]securityLabel", Type: "CodeableConcept"},
@@ -6143,9 +7629,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 	},
-	"EligibilityRequest": map[string]SearchParamInfo{
+	"EffectEvidenceSynthesis": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
-			Resource: "EligibilityRequest",
+			Resource: "EffectEvidenceSynthesis",
 			Name:     "_id",
 			Type:     "token",
 			Paths: []SearchParamPath{
@@ -6153,7 +7639,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"_lastUpdated": SearchParamInfo{
-			Resource: "EligibilityRequest",
+			Resource: "EffectEvidenceSynthesis",
 			Name:     "_lastUpdated",
 			Type:     "date",
 			Paths: []SearchParamPath{
@@ -6161,216 +7647,147 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"_profile": SearchParamInfo{
-			Resource: "EligibilityRequest",
+			Resource: "EffectEvidenceSynthesis",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
-			Resource: "EligibilityRequest",
+			Resource: "EffectEvidenceSynthesis",
 			Name:     "_security",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
-		"_tag": SearchParamInfo{
-			Resource: "EligibilityRequest",
-			Name:     "_tag",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
-			},
-		},
-		"created": SearchParamInfo{
-			Resource: "EligibilityRequest",
-			Name:     "created",
-			Type:     "date",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "created", Type: "dateTime"},
-			},
-		},
-		"enterer": SearchParamInfo{
-			Resource: "EligibilityRequest",
-			Name:     "enterer",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "enterer", Type: "Reference"},
-			},
-			Targets: []string{
-				"Practitioner",
-			},
-		},
-		"facility": SearchParamInfo{
-			Resource: "EligibilityRequest",
-			Name:     "facility",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "facility", Type: "Reference"},
-			},
-			Targets: []string{
-				"Location",
-			},
-		},
-		"identifier": SearchParamInfo{
-			Resource: "EligibilityRequest",
-			Name:     "identifier",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
-			},
-		},
-		"organization": SearchParamInfo{
-			Resource: "EligibilityRequest",
-			Name:     "organization",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "organization", Type: "Reference"},
-			},
-			Targets: []string{
-				"Organization",
-			},
-		},
-		"patient": SearchParamInfo{
-			Resource: "EligibilityRequest",
-			Name:     "patient",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "patient", Type: "Reference"},
-			},
-			Targets: []string{
-				"Patient",
-			},
-		},
-		"provider": SearchParamInfo{
-			Resource: "EligibilityRequest",
-			Name:     "provider",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "provider", Type: "Reference"},
-			},
-			Targets: []string{
-				"Practitioner",
-			},
-		},
-	},
-	"EligibilityResponse": map[string]SearchParamInfo{
-		"_id": SearchParamInfo{
-			Resource: "EligibilityResponse",
-			Name:     "_id",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "_id", Type: "id"},
-			},
-		},
-		"_lastUpdated": SearchParamInfo{
-			Resource: "EligibilityResponse",
-			Name:     "_lastUpdated",
-			Type:     "date",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
-			},
-		},
-		"_profile": SearchParamInfo{
-			Resource: "EligibilityResponse",
-			Name:     "_profile",
+		"_source": SearchParamInfo{
+			Resource: "EffectEvidenceSynthesis",
+			Name:     "_source",
 			Type:     "uri",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
-			},
-		},
-		"_security": SearchParamInfo{
-			Resource: "EligibilityResponse",
-			Name:     "_security",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
-			Resource: "EligibilityResponse",
+			Resource: "EffectEvidenceSynthesis",
 			Name:     "_tag",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
 			},
 		},
-		"created": SearchParamInfo{
-			Resource: "EligibilityResponse",
-			Name:     "created",
-			Type:     "date",
+		"context": SearchParamInfo{
+			Resource: "EffectEvidenceSynthesis",
+			Name:     "context",
+			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "created", Type: "dateTime"},
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
 			},
 		},
-		"disposition": SearchParamInfo{
-			Resource: "EligibilityResponse",
-			Name:     "disposition",
+		"context-quantity": SearchParamInfo{
+			Resource: "EffectEvidenceSynthesis",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "EffectEvidenceSynthesis",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
+			},
+		},
+		"date": SearchParamInfo{
+			Resource: "EffectEvidenceSynthesis",
+			Name:     "date",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "date", Type: "dateTime"},
+			},
+		},
+		"description": SearchParamInfo{
+			Resource: "EffectEvidenceSynthesis",
+			Name:     "description",
 			Type:     "string",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "disposition", Type: "string"},
+				SearchParamPath{Path: "description", Type: "markdown"},
+			},
+		},
+		"effective": SearchParamInfo{
+			Resource: "EffectEvidenceSynthesis",
+			Name:     "effective",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "effectivePeriod", Type: "Period"},
 			},
 		},
 		"identifier": SearchParamInfo{
-			Resource: "EligibilityResponse",
+			Resource: "EffectEvidenceSynthesis",
 			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
-		"insurer": SearchParamInfo{
-			Resource: "EligibilityResponse",
-			Name:     "insurer",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "insurer", Type: "Reference"},
-			},
-			Targets: []string{
-				"Organization",
-			},
-		},
-		"outcome": SearchParamInfo{
-			Resource: "EligibilityResponse",
-			Name:     "outcome",
+		"jurisdiction": SearchParamInfo{
+			Resource: "EffectEvidenceSynthesis",
+			Name:     "jurisdiction",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "outcome", Type: "CodeableConcept"},
+				SearchParamPath{Path: "[]jurisdiction", Type: "CodeableConcept"},
 			},
 		},
-		"request": SearchParamInfo{
-			Resource: "EligibilityResponse",
-			Name:     "request",
-			Type:     "reference",
+		"name": SearchParamInfo{
+			Resource: "EffectEvidenceSynthesis",
+			Name:     "name",
+			Type:     "string",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "request", Type: "Reference"},
-			},
-			Targets: []string{
-				"EligibilityRequest",
+				SearchParamPath{Path: "name", Type: "string"},
 			},
 		},
-		"request-organization": SearchParamInfo{
-			Resource: "EligibilityResponse",
-			Name:     "request-organization",
-			Type:     "reference",
+		"publisher": SearchParamInfo{
+			Resource: "EffectEvidenceSynthesis",
+			Name:     "publisher",
+			Type:     "string",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "requestOrganization", Type: "Reference"},
-			},
-			Targets: []string{
-				"Organization",
+				SearchParamPath{Path: "publisher", Type: "string"},
 			},
 		},
-		"request-provider": SearchParamInfo{
-			Resource: "EligibilityResponse",
-			Name:     "request-provider",
-			Type:     "reference",
+		"status": SearchParamInfo{
+			Resource: "EffectEvidenceSynthesis",
+			Name:     "status",
+			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "requestProvider", Type: "Reference"},
+				SearchParamPath{Path: "status", Type: "code"},
 			},
-			Targets: []string{
-				"Practitioner",
+		},
+		"title": SearchParamInfo{
+			Resource: "EffectEvidenceSynthesis",
+			Name:     "title",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "title", Type: "string"},
+			},
+		},
+		"url": SearchParamInfo{
+			Resource: "EffectEvidenceSynthesis",
+			Name:     "url",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "url", Type: "uri"},
+			},
+		},
+		"version": SearchParamInfo{
+			Resource: "EffectEvidenceSynthesis",
+			Name:     "version",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "version", Type: "string"},
 			},
 		},
 	},
@@ -6394,9 +7811,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Encounter",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -6407,6 +7824,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "Encounter",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
 			Resource: "Encounter",
 			Name:     "_tag",
@@ -6415,15 +7840,37 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
 			},
 		},
+		"account": SearchParamInfo{
+			Resource: "Encounter",
+			Name:     "account",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]account", Type: "Reference"},
+			},
+			Targets: []string{
+				"Account",
+			},
+		},
 		"appointment": SearchParamInfo{
 			Resource: "Encounter",
 			Name:     "appointment",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "appointment", Type: "Reference"},
+				SearchParamPath{Path: "[]appointment", Type: "Reference"},
 			},
 			Targets: []string{
 				"Appointment",
+			},
+		},
+		"based-on": SearchParamInfo{
+			Resource: "Encounter",
+			Name:     "based-on",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]basedOn", Type: "Reference"},
+			},
+			Targets: []string{
+				"ServiceRequest",
 			},
 		},
 		"class": SearchParamInfo{
@@ -6454,9 +7901,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Procedure",
 			},
 		},
-		"episodeofcare": SearchParamInfo{
+		"episode-of-care": SearchParamInfo{
 			Resource: "Encounter",
-			Name:     "episodeofcare",
+			Name:     "episode-of-care",
 			Type:     "reference",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]episodeOfCare", Type: "Reference"},
@@ -6473,21 +7920,10 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
-		"incomingreferral": SearchParamInfo{
-			Resource: "Encounter",
-			Name:     "incomingreferral",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]incomingReferral", Type: "Reference"},
-			},
-			Targets: []string{
-				"ReferralRequest",
-			},
-		},
 		"length": SearchParamInfo{
 			Resource: "Encounter",
 			Name:     "length",
-			Type:     "number",
+			Type:     "quantity",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "length", Type: "Duration"},
 			},
@@ -6531,6 +7967,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -6564,12 +8001,26 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Practitioner",
 			},
 		},
-		"reason": SearchParamInfo{
+		"reason-code": SearchParamInfo{
 			Resource: "Encounter",
-			Name:     "reason",
+			Name:     "reason-code",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]reason", Type: "CodeableConcept"},
+				SearchParamPath{Path: "[]reasonCode", Type: "CodeableConcept"},
+			},
+		},
+		"reason-reference": SearchParamInfo{
+			Resource: "Encounter",
+			Name:     "reason-reference",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]reasonReference", Type: "Reference"},
+			},
+			Targets: []string{
+				"Condition",
+				"ImmunizationRecommendation",
+				"Observation",
+				"Procedure",
 			},
 		},
 		"service-provider": SearchParamInfo{
@@ -6611,6 +8062,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Patient",
 			},
 		},
+		"subject-status": SearchParamInfo{
+			Resource: "Encounter",
+			Name:     "subject-status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "subjectStatus", Type: "CodeableConcept"},
+			},
+		},
 		"type": SearchParamInfo{
 			Resource: "Encounter",
 			Name:     "type",
@@ -6640,9 +8099,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Endpoint",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -6651,6 +8110,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Endpoint",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -6733,9 +8200,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "EnrollmentRequest",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -6744,6 +8211,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "EnrollmentRequest",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -6762,26 +8237,23 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
-		"organization": SearchParamInfo{
-			Resource: "EnrollmentRequest",
-			Name:     "organization",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "organization", Type: "Reference"},
-			},
-			Targets: []string{
-				"Organization",
-			},
-		},
 		"patient": SearchParamInfo{
 			Resource: "EnrollmentRequest",
 			Name:     "patient",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "subject", Type: "Reference"},
+				SearchParamPath{Path: "candidate", Type: "Reference"},
 			},
 			Targets: []string{
 				"Patient",
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "EnrollmentRequest",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
 			},
 		},
 		"subject": SearchParamInfo{
@@ -6789,7 +8261,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "subject",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "subject", Type: "Reference"},
+				SearchParamPath{Path: "candidate", Type: "Reference"},
 			},
 			Targets: []string{
 				"Patient",
@@ -6816,9 +8288,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "EnrollmentResponse",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -6827,6 +8299,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "EnrollmentResponse",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -6845,17 +8325,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
-		"organization": SearchParamInfo{
-			Resource: "EnrollmentResponse",
-			Name:     "organization",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "organization", Type: "Reference"},
-			},
-			Targets: []string{
-				"Organization",
-			},
-		},
 		"request": SearchParamInfo{
 			Resource: "EnrollmentResponse",
 			Name:     "request",
@@ -6865,6 +8334,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"EnrollmentRequest",
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "EnrollmentResponse",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
 			},
 		},
 	},
@@ -6888,9 +8365,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "EpisodeOfCare",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -6899,6 +8376,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "EpisodeOfCare",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -6947,15 +8432,15 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
-		"incomingreferral": SearchParamInfo{
+		"incoming-referral": SearchParamInfo{
 			Resource: "EpisodeOfCare",
-			Name:     "incomingreferral",
+			Name:     "incoming-referral",
 			Type:     "reference",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]referralRequest", Type: "Reference"},
 			},
 			Targets: []string{
-				"ReferralRequest",
+				"ServiceRequest",
 			},
 		},
 		"organization": SearchParamInfo{
@@ -6997,9 +8482,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 	},
-	"ExpansionProfile": map[string]SearchParamInfo{
+	"EventDefinition": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
-			Resource: "ExpansionProfile",
+			Resource: "EventDefinition",
 			Name:     "_id",
 			Type:     "token",
 			Paths: []SearchParamPath{
@@ -7007,7 +8492,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"_lastUpdated": SearchParamInfo{
-			Resource: "ExpansionProfile",
+			Resource: "EventDefinition",
 			Name:     "_lastUpdated",
 			Type:     "date",
 			Paths: []SearchParamPath{
@@ -7015,55 +8500,128 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"_profile": SearchParamInfo{
-			Resource: "ExpansionProfile",
+			Resource: "EventDefinition",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
-			Resource: "ExpansionProfile",
+			Resource: "EventDefinition",
 			Name:     "_security",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "EventDefinition",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
-			Resource: "ExpansionProfile",
+			Resource: "EventDefinition",
 			Name:     "_tag",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
 			},
 		},
+		"composed-of": SearchParamInfo{
+			Resource: "EventDefinition",
+			Name:     "composed-of",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "EventDefinition",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "EventDefinition",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "EventDefinition",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
+			},
+		},
 		"date": SearchParamInfo{
-			Resource: "ExpansionProfile",
+			Resource: "EventDefinition",
 			Name:     "date",
 			Type:     "date",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "date", Type: "dateTime"},
 			},
 		},
+		"depends-on": SearchParamInfo{
+			Resource: "EventDefinition",
+			Name:     "depends-on",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+		"derived-from": SearchParamInfo{
+			Resource: "EventDefinition",
+			Name:     "derived-from",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
 		"description": SearchParamInfo{
-			Resource: "ExpansionProfile",
+			Resource: "EventDefinition",
 			Name:     "description",
 			Type:     "string",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "description", Type: "markdown"},
 			},
 		},
+		"effective": SearchParamInfo{
+			Resource: "EventDefinition",
+			Name:     "effective",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "effectivePeriod", Type: "Period"},
+			},
+		},
 		"identifier": SearchParamInfo{
-			Resource: "ExpansionProfile",
+			Resource: "EventDefinition",
 			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "identifier", Type: "Identifier"},
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
 		"jurisdiction": SearchParamInfo{
-			Resource: "ExpansionProfile",
+			Resource: "EventDefinition",
 			Name:     "jurisdiction",
 			Type:     "token",
 			Paths: []SearchParamPath{
@@ -7071,15 +8629,26 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"name": SearchParamInfo{
-			Resource: "ExpansionProfile",
+			Resource: "EventDefinition",
 			Name:     "name",
 			Type:     "string",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "name", Type: "string"},
 			},
 		},
+		"predecessor": SearchParamInfo{
+			Resource: "EventDefinition",
+			Name:     "predecessor",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
 		"publisher": SearchParamInfo{
-			Resource: "ExpansionProfile",
+			Resource: "EventDefinition",
 			Name:     "publisher",
 			Type:     "string",
 			Paths: []SearchParamPath{
@@ -7087,15 +8656,42 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"status": SearchParamInfo{
-			Resource: "ExpansionProfile",
+			Resource: "EventDefinition",
 			Name:     "status",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "status", Type: "code"},
 			},
 		},
+		"successor": SearchParamInfo{
+			Resource: "EventDefinition",
+			Name:     "successor",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+		"title": SearchParamInfo{
+			Resource: "EventDefinition",
+			Name:     "title",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "title", Type: "string"},
+			},
+		},
+		"topic": SearchParamInfo{
+			Resource: "EventDefinition",
+			Name:     "topic",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]topic", Type: "CodeableConcept"},
+			},
+		},
 		"url": SearchParamInfo{
-			Resource: "ExpansionProfile",
+			Resource: "EventDefinition",
 			Name:     "url",
 			Type:     "uri",
 			Paths: []SearchParamPath{
@@ -7103,7 +8699,595 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"version": SearchParamInfo{
-			Resource: "ExpansionProfile",
+			Resource: "EventDefinition",
+			Name:     "version",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "version", Type: "string"},
+			},
+		},
+	},
+	"Evidence": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"composed-of": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "composed-of",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
+			},
+		},
+		"date": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "date",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "date", Type: "dateTime"},
+			},
+		},
+		"depends-on": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "depends-on",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+		"derived-from": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "derived-from",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+		"description": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "description",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "description", Type: "markdown"},
+			},
+		},
+		"effective": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "effective",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "effectivePeriod", Type: "Period"},
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"jurisdiction": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "jurisdiction",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]jurisdiction", Type: "CodeableConcept"},
+			},
+		},
+		"name": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "name",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "name", Type: "string"},
+			},
+		},
+		"predecessor": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "predecessor",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+		"publisher": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "publisher",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "publisher", Type: "string"},
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"successor": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "successor",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+		"title": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "title",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "title", Type: "string"},
+			},
+		},
+		"topic": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "topic",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]topic", Type: "CodeableConcept"},
+			},
+		},
+		"url": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "url",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "url", Type: "uri"},
+			},
+		},
+		"version": SearchParamInfo{
+			Resource: "Evidence",
+			Name:     "version",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "version", Type: "string"},
+			},
+		},
+	},
+	"EvidenceVariable": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"composed-of": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "composed-of",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
+			},
+		},
+		"date": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "date",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "date", Type: "dateTime"},
+			},
+		},
+		"depends-on": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "depends-on",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+		"derived-from": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "derived-from",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+		"description": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "description",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "description", Type: "markdown"},
+			},
+		},
+		"effective": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "effective",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "effectivePeriod", Type: "Period"},
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"jurisdiction": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "jurisdiction",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]jurisdiction", Type: "CodeableConcept"},
+			},
+		},
+		"name": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "name",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "name", Type: "string"},
+			},
+		},
+		"predecessor": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "predecessor",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+		"publisher": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "publisher",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "publisher", Type: "string"},
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"successor": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "successor",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+		"title": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "title",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "title", Type: "string"},
+			},
+		},
+		"topic": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "topic",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]topic", Type: "CodeableConcept"},
+			},
+		},
+		"url": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "url",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "url", Type: "uri"},
+			},
+		},
+		"version": SearchParamInfo{
+			Resource: "EvidenceVariable",
+			Name:     "version",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "version", Type: "string"},
+			},
+		},
+	},
+	"ExampleScenario": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "ExampleScenario",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "ExampleScenario",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "ExampleScenario",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "ExampleScenario",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "ExampleScenario",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "ExampleScenario",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "ExampleScenario",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "ExampleScenario",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "ExampleScenario",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
+			},
+		},
+		"date": SearchParamInfo{
+			Resource: "ExampleScenario",
+			Name:     "date",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "date", Type: "dateTime"},
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "ExampleScenario",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"jurisdiction": SearchParamInfo{
+			Resource: "ExampleScenario",
+			Name:     "jurisdiction",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]jurisdiction", Type: "CodeableConcept"},
+			},
+		},
+		"name": SearchParamInfo{
+			Resource: "ExampleScenario",
+			Name:     "name",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "name", Type: "string"},
+			},
+		},
+		"publisher": SearchParamInfo{
+			Resource: "ExampleScenario",
+			Name:     "publisher",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "publisher", Type: "string"},
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "ExampleScenario",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"url": SearchParamInfo{
+			Resource: "ExampleScenario",
+			Name:     "url",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "url", Type: "uri"},
+			},
+		},
+		"version": SearchParamInfo{
+			Resource: "ExampleScenario",
 			Name:     "version",
 			Type:     "token",
 			Paths: []SearchParamPath{
@@ -7131,9 +9315,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "ExplanationOfBenefit",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -7142,6 +9326,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "ExplanationOfBenefit",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -7162,6 +9354,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Targets: []string{
 				"Organization",
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"claim": SearchParamInfo{
@@ -7180,7 +9373,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "coverage",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "insurance.coverage", Type: "Reference"},
+				SearchParamPath{Path: "[]insurance.coverage", Type: "Reference"},
 			},
 			Targets: []string{
 				"Coverage",
@@ -7192,6 +9385,17 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "date",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "created", Type: "dateTime"},
+			},
+		},
+		"detail-udi": SearchParamInfo{
+			Resource: "ExplanationOfBenefit",
+			Name:     "detail-udi",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]item.[]detail.[]udi", Type: "Reference"},
+			},
+			Targets: []string{
+				"Device",
 			},
 		},
 		"disposition": SearchParamInfo{
@@ -7222,6 +9426,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"facility": SearchParamInfo{
@@ -7243,15 +9448,15 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
-		"organization": SearchParamInfo{
+		"item-udi": SearchParamInfo{
 			Resource: "ExplanationOfBenefit",
-			Name:     "organization",
+			Name:     "item-udi",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "organization", Type: "Reference"},
+				SearchParamPath{Path: "[]item.[]udi", Type: "Reference"},
 			},
 			Targets: []string{
-				"Organization",
+				"Device",
 			},
 		},
 		"patient": SearchParamInfo{
@@ -7276,7 +9481,19 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
+			},
+		},
+		"procedure-udi": SearchParamInfo{
+			Resource: "ExplanationOfBenefit",
+			Name:     "procedure-udi",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]procedure.[]udi", Type: "Reference"},
+			},
+			Targets: []string{
+				"Device",
 			},
 		},
 		"provider": SearchParamInfo{
@@ -7287,7 +9504,28 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "provider", Type: "Reference"},
 			},
 			Targets: []string{
+				"Organization",
 				"Practitioner",
+				"PractitionerRole",
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "ExplanationOfBenefit",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"subdetail-udi": SearchParamInfo{
+			Resource: "ExplanationOfBenefit",
+			Name:     "subdetail-udi",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]item.[]detail.[]subDetail.[]udi", Type: "Reference"},
+			},
+			Targets: []string{
+				"Device",
 			},
 		},
 	},
@@ -7311,9 +9549,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "FamilyMemberHistory",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -7322,6 +9560,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "FamilyMemberHistory",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -7348,32 +9594,35 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "date", Type: "dateTime"},
 			},
 		},
-		"definition": SearchParamInfo{
-			Resource: "FamilyMemberHistory",
-			Name:     "definition",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]definition", Type: "Reference"},
-			},
-			Targets: []string{
-				"PlanDefinition",
-				"Questionnaire",
-			},
-		},
-		"gender": SearchParamInfo{
-			Resource: "FamilyMemberHistory",
-			Name:     "gender",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "gender", Type: "code"},
-			},
-		},
 		"identifier": SearchParamInfo{
 			Resource: "FamilyMemberHistory",
 			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"instantiates-canonical": SearchParamInfo{
+			Resource: "FamilyMemberHistory",
+			Name:     "instantiates-canonical",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]instantiatesCanonical", Type: "canonical"},
+			},
+			Targets: []string{
+				"ActivityDefinition",
+				"Measure",
+				"OperationDefinition",
+				"PlanDefinition",
+				"Questionnaire",
+			},
+		},
+		"instantiates-uri": SearchParamInfo{
+			Resource: "FamilyMemberHistory",
+			Name:     "instantiates-uri",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]instantiatesUri", Type: "uri"},
 			},
 		},
 		"patient": SearchParamInfo{
@@ -7393,6 +9642,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "relationship", Type: "CodeableConcept"},
+			},
+		},
+		"sex": SearchParamInfo{
+			Resource: "FamilyMemberHistory",
+			Name:     "sex",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "sex", Type: "CodeableConcept"},
 			},
 		},
 		"status": SearchParamInfo{
@@ -7424,9 +9681,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Flag",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -7435,6 +9692,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Flag",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -7457,6 +9722,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"date": SearchParamInfo{
@@ -7497,6 +9763,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Patient",
 			},
 		},
+		"status": SearchParamInfo{
+			Resource: "Flag",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
 		"subject": SearchParamInfo{
 			Resource: "Flag",
 			Name:     "subject",
@@ -7512,6 +9786,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Patient",
 				"PlanDefinition",
 				"Practitioner",
+				"PractitionerRole",
 				"Procedure",
 			},
 		},
@@ -7536,9 +9811,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Goal",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -7549,12 +9824,28 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "Goal",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
 			Resource: "Goal",
 			Name:     "_tag",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"achievement-status": SearchParamInfo{
+			Resource: "Goal",
+			Name:     "achievement-status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "achievementStatus", Type: "CodeableConcept"},
 			},
 		},
 		"category": SearchParamInfo{
@@ -7571,6 +9862,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"lifecycle-status": SearchParamInfo{
+			Resource: "Goal",
+			Name:     "lifecycle-status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "lifecycleStatus", Type: "code"},
 			},
 		},
 		"patient": SearchParamInfo{
@@ -7592,14 +9891,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "startDate", Type: "date"},
 			},
 		},
-		"status": SearchParamInfo{
-			Resource: "Goal",
-			Name:     "status",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "status", Type: "code"},
-			},
-		},
 		"subject": SearchParamInfo{
 			Resource: "Goal",
 			Name:     "subject",
@@ -7618,7 +9909,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "target-date",
 			Type:     "date",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "target.dueDate", Type: "date"},
+				SearchParamPath{Path: "[]target.dueDate", Type: "date"},
 			},
 		},
 	},
@@ -7642,9 +9933,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "GraphDefinition",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -7655,12 +9946,44 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "GraphDefinition",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
 			Resource: "GraphDefinition",
 			Name:     "_tag",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "GraphDefinition",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "GraphDefinition",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "GraphDefinition",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
 			},
 		},
 		"date": SearchParamInfo{
@@ -7756,9 +10079,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Group",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -7767,6 +10090,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Group",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -7817,6 +10148,20 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
+		"managing-entity": SearchParamInfo{
+			Resource: "Group",
+			Name:     "managing-entity",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "managingEntity", Type: "Reference"},
+			},
+			Targets: []string{
+				"Organization",
+				"Practitioner",
+				"PractitionerRole",
+				"RelatedPerson",
+			},
+		},
 		"member": SearchParamInfo{
 			Resource: "Group",
 			Name:     "member",
@@ -7826,9 +10171,11 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Device",
+				"Group",
 				"Medication",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"Substance",
 			},
 		},
@@ -7870,9 +10217,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "GuidanceResponse",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -7881,6 +10228,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "GuidanceResponse",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -7896,7 +10251,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "identifier", Type: "Identifier"},
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
 		"patient": SearchParamInfo{
@@ -7915,7 +10270,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "request",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "requestId", Type: "id"},
+				SearchParamPath{Path: "requestIdentifier", Type: "Identifier"},
 			},
 		},
 		"subject": SearchParamInfo{
@@ -7951,9 +10306,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "HealthcareService",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -7962,6 +10317,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "HealthcareService",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -7980,20 +10343,23 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "active", Type: "boolean"},
 			},
 		},
-		"category": SearchParamInfo{
-			Resource: "HealthcareService",
-			Name:     "category",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "category", Type: "CodeableConcept"},
-			},
-		},
 		"characteristic": SearchParamInfo{
 			Resource: "HealthcareService",
 			Name:     "characteristic",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]characteristic", Type: "CodeableConcept"},
+			},
+		},
+		"coverage-area": SearchParamInfo{
+			Resource: "HealthcareService",
+			Name:     "coverage-area",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]coverageArea", Type: "Reference"},
+			},
+			Targets: []string{
+				"Location",
 			},
 		},
 		"endpoint": SearchParamInfo{
@@ -8045,135 +10411,36 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Organization",
 			},
 		},
-		"programname": SearchParamInfo{
+		"program": SearchParamInfo{
 			Resource: "HealthcareService",
-			Name:     "programname",
-			Type:     "string",
+			Name:     "program",
+			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]programName", Type: "string"},
+				SearchParamPath{Path: "[]program", Type: "CodeableConcept"},
 			},
 		},
-		"type": SearchParamInfo{
+		"service-category": SearchParamInfo{
 			Resource: "HealthcareService",
-			Name:     "type",
+			Name:     "service-category",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]category", Type: "CodeableConcept"},
+			},
+		},
+		"service-type": SearchParamInfo{
+			Resource: "HealthcareService",
+			Name:     "service-type",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]type", Type: "CodeableConcept"},
 			},
 		},
-	},
-	"ImagingManifest": map[string]SearchParamInfo{
-		"_id": SearchParamInfo{
-			Resource: "ImagingManifest",
-			Name:     "_id",
+		"specialty": SearchParamInfo{
+			Resource: "HealthcareService",
+			Name:     "specialty",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "_id", Type: "id"},
-			},
-		},
-		"_lastUpdated": SearchParamInfo{
-			Resource: "ImagingManifest",
-			Name:     "_lastUpdated",
-			Type:     "date",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
-			},
-		},
-		"_profile": SearchParamInfo{
-			Resource: "ImagingManifest",
-			Name:     "_profile",
-			Type:     "uri",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
-			},
-		},
-		"_security": SearchParamInfo{
-			Resource: "ImagingManifest",
-			Name:     "_security",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
-			},
-		},
-		"_tag": SearchParamInfo{
-			Resource: "ImagingManifest",
-			Name:     "_tag",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
-			},
-		},
-		"author": SearchParamInfo{
-			Resource: "ImagingManifest",
-			Name:     "author",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "author", Type: "Reference"},
-			},
-			Targets: []string{
-				"Device",
-				"Organization",
-				"Patient",
-				"Practitioner",
-				"RelatedPerson",
-			},
-		},
-		"authoring-time": SearchParamInfo{
-			Resource: "ImagingManifest",
-			Name:     "authoring-time",
-			Type:     "date",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "authoringTime", Type: "dateTime"},
-			},
-		},
-		"endpoint": SearchParamInfo{
-			Resource: "ImagingManifest",
-			Name:     "endpoint",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]study.[]endpoint", Type: "Reference"},
-				SearchParamPath{Path: "[]study.[]series.[]endpoint", Type: "Reference"},
-			},
-			Targets: []string{
-				"Endpoint",
-			},
-		},
-		"identifier": SearchParamInfo{
-			Resource: "ImagingManifest",
-			Name:     "identifier",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "identifier", Type: "Identifier"},
-			},
-		},
-		"imaging-study": SearchParamInfo{
-			Resource: "ImagingManifest",
-			Name:     "imaging-study",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]study.imagingStudy", Type: "Reference"},
-			},
-			Targets: []string{
-				"ImagingStudy",
-			},
-		},
-		"patient": SearchParamInfo{
-			Resource: "ImagingManifest",
-			Name:     "patient",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "patient", Type: "Reference"},
-			},
-			Targets: []string{
-				"Patient",
-			},
-		},
-		"selected-study": SearchParamInfo{
-			Resource: "ImagingManifest",
-			Name:     "selected-study",
-			Type:     "uri",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]study.uid", Type: "oid"},
+				SearchParamPath{Path: "[]specialty", Type: "CodeableConcept"},
 			},
 		},
 	},
@@ -8197,9 +10464,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "ImagingStudy",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -8210,20 +10477,20 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "ImagingStudy",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
 			Resource: "ImagingStudy",
 			Name:     "_tag",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
-			},
-		},
-		"accession": SearchParamInfo{
-			Resource: "ImagingStudy",
-			Name:     "accession",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "accession", Type: "Identifier"},
 			},
 		},
 		"basedon": SearchParamInfo{
@@ -8234,9 +10501,11 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]basedOn", Type: "Reference"},
 			},
 			Targets: []string{
+				"Appointment",
+				"AppointmentResponse",
 				"CarePlan",
-				"ProcedureRequest",
-				"ReferralRequest",
+				"ServiceRequest",
+				"Task",
 			},
 		},
 		"bodysite": SearchParamInfo{
@@ -8247,24 +10516,23 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]series.bodySite", Type: "Coding"},
 			},
 		},
-		"context": SearchParamInfo{
-			Resource: "ImagingStudy",
-			Name:     "context",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
-			},
-			Targets: []string{
-				"Encounter",
-				"EpisodeOfCare",
-			},
-		},
 		"dicom-class": SearchParamInfo{
 			Resource: "ImagingStudy",
 			Name:     "dicom-class",
-			Type:     "uri",
+			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]series.[]instance.sopClass", Type: "oid"},
+				SearchParamPath{Path: "[]series.[]instance.sopClass", Type: "Coding"},
+			},
+		},
+		"encounter": SearchParamInfo{
+			Resource: "ImagingStudy",
+			Name:     "encounter",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "encounter", Type: "Reference"},
+			},
+			Targets: []string{
+				"Encounter",
 			},
 		},
 		"endpoint": SearchParamInfo{
@@ -8287,6 +10555,26 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
+		"instance": SearchParamInfo{
+			Resource: "ImagingStudy",
+			Name:     "instance",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]series.[]instance.uid", Type: "id"},
+			},
+		},
+		"interpreter": SearchParamInfo{
+			Resource: "ImagingStudy",
+			Name:     "interpreter",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]interpreter", Type: "Reference"},
+			},
+			Targets: []string{
+				"Practitioner",
+				"PractitionerRole",
+			},
+		},
 		"modality": SearchParamInfo{
 			Resource: "ImagingStudy",
 			Name:     "modality",
@@ -8300,7 +10588,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "patient",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "patient", Type: "Reference"},
+				SearchParamPath{Path: "subject", Type: "Reference"},
 			},
 			Targets: []string{
 				"Patient",
@@ -8311,10 +10599,16 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "performer",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]series.[]performer", Type: "Reference"},
+				SearchParamPath{Path: "[]series.[]performer.actor", Type: "Reference"},
 			},
 			Targets: []string{
+				"CareTeam",
+				"Device",
+				"Organization",
+				"Patient",
 				"Practitioner",
+				"PractitionerRole",
+				"RelatedPerson",
 			},
 		},
 		"reason": SearchParamInfo{
@@ -8322,15 +10616,27 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "reason",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "reason", Type: "CodeableConcept"},
+				SearchParamPath{Path: "[]reasonCode", Type: "CodeableConcept"},
+			},
+		},
+		"referrer": SearchParamInfo{
+			Resource: "ImagingStudy",
+			Name:     "referrer",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "referrer", Type: "Reference"},
+			},
+			Targets: []string{
+				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"series": SearchParamInfo{
 			Resource: "ImagingStudy",
 			Name:     "series",
-			Type:     "uri",
+			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]series.uid", Type: "oid"},
+				SearchParamPath{Path: "[]series.uid", Type: "id"},
 			},
 		},
 		"started": SearchParamInfo{
@@ -8341,20 +10647,25 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "started", Type: "dateTime"},
 			},
 		},
-		"study": SearchParamInfo{
+		"status": SearchParamInfo{
 			Resource: "ImagingStudy",
-			Name:     "study",
-			Type:     "uri",
+			Name:     "status",
+			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "uid", Type: "oid"},
+				SearchParamPath{Path: "status", Type: "code"},
 			},
 		},
-		"uid": SearchParamInfo{
+		"subject": SearchParamInfo{
 			Resource: "ImagingStudy",
-			Name:     "uid",
-			Type:     "uri",
+			Name:     "subject",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]series.[]instance.uid", Type: "oid"},
+				SearchParamPath{Path: "subject", Type: "Reference"},
+			},
+			Targets: []string{
+				"Device",
+				"Group",
+				"Patient",
 			},
 		},
 	},
@@ -8378,9 +10689,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Immunization",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -8389,6 +10700,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Immunization",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -8404,15 +10723,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "date",
 			Type:     "date",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "date", Type: "dateTime"},
-			},
-		},
-		"dose-sequence": SearchParamInfo{
-			Resource: "Immunization",
-			Name:     "dose-sequence",
-			Type:     "number",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]vaccinationProtocol.doseSequence", Type: "positiveInt"},
+				SearchParamPath{Path: "occurrenceDateTime", Type: "dateTime"},
 			},
 		},
 		"identifier": SearchParamInfo{
@@ -8453,14 +10764,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Organization",
 			},
 		},
-		"notgiven": SearchParamInfo{
-			Resource: "Immunization",
-			Name:     "notgiven",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "notGiven", Type: "boolean"},
-			},
-		},
 		"patient": SearchParamInfo{
 			Resource: "Immunization",
 			Name:     "patient",
@@ -8472,15 +10775,17 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Patient",
 			},
 		},
-		"practitioner": SearchParamInfo{
+		"performer": SearchParamInfo{
 			Resource: "Immunization",
-			Name:     "practitioner",
+			Name:     "performer",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]practitioner.actor", Type: "Reference"},
+				SearchParamPath{Path: "[]performer.actor", Type: "Reference"},
 			},
 			Targets: []string{
+				"Organization",
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"reaction": SearchParamInfo{
@@ -8502,20 +10807,33 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]reaction.date", Type: "dateTime"},
 			},
 		},
-		"reason": SearchParamInfo{
+		"reason-code": SearchParamInfo{
 			Resource: "Immunization",
-			Name:     "reason",
+			Name:     "reason-code",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "explanation.[]reason", Type: "CodeableConcept"},
+				SearchParamPath{Path: "[]reasonCode", Type: "CodeableConcept"},
 			},
 		},
-		"reason-not-given": SearchParamInfo{
+		"reason-reference": SearchParamInfo{
 			Resource: "Immunization",
-			Name:     "reason-not-given",
-			Type:     "token",
+			Name:     "reason-reference",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "explanation.[]reasonNotGiven", Type: "CodeableConcept"},
+				SearchParamPath{Path: "[]reasonReference", Type: "Reference"},
+			},
+			Targets: []string{
+				"Condition",
+				"DiagnosticReport",
+				"Observation",
+			},
+		},
+		"series": SearchParamInfo{
+			Resource: "Immunization",
+			Name:     "series",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]protocolApplied.series", Type: "string"},
 			},
 		},
 		"status": SearchParamInfo{
@@ -8526,12 +10844,140 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "status", Type: "code"},
 			},
 		},
+		"status-reason": SearchParamInfo{
+			Resource: "Immunization",
+			Name:     "status-reason",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "statusReason", Type: "CodeableConcept"},
+			},
+		},
+		"target-disease": SearchParamInfo{
+			Resource: "Immunization",
+			Name:     "target-disease",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]protocolApplied.[]targetDisease", Type: "CodeableConcept"},
+			},
+		},
 		"vaccine-code": SearchParamInfo{
 			Resource: "Immunization",
 			Name:     "vaccine-code",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "vaccineCode", Type: "CodeableConcept"},
+			},
+		},
+	},
+	"ImmunizationEvaluation": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "ImmunizationEvaluation",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "ImmunizationEvaluation",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "ImmunizationEvaluation",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "ImmunizationEvaluation",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "ImmunizationEvaluation",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "ImmunizationEvaluation",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"date": SearchParamInfo{
+			Resource: "ImmunizationEvaluation",
+			Name:     "date",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "date", Type: "dateTime"},
+			},
+		},
+		"dose-status": SearchParamInfo{
+			Resource: "ImmunizationEvaluation",
+			Name:     "dose-status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "doseStatus", Type: "CodeableConcept"},
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "ImmunizationEvaluation",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"immunization-event": SearchParamInfo{
+			Resource: "ImmunizationEvaluation",
+			Name:     "immunization-event",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "immunizationEvent", Type: "Reference"},
+			},
+			Targets: []string{
+				"Immunization",
+			},
+		},
+		"patient": SearchParamInfo{
+			Resource: "ImmunizationEvaluation",
+			Name:     "patient",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "patient", Type: "Reference"},
+			},
+			Targets: []string{
+				"Patient",
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "ImmunizationEvaluation",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"target-disease": SearchParamInfo{
+			Resource: "ImmunizationEvaluation",
+			Name:     "target-disease",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "targetDisease", Type: "CodeableConcept"},
 			},
 		},
 	},
@@ -8555,9 +11001,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "ImmunizationRecommendation",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -8566,6 +11012,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "ImmunizationRecommendation",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -8581,23 +11035,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "date",
 			Type:     "date",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]recommendation.date", Type: "dateTime"},
-			},
-		},
-		"dose-number": SearchParamInfo{
-			Resource: "ImmunizationRecommendation",
-			Name:     "dose-number",
-			Type:     "number",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]recommendation.doseNumber", Type: "positiveInt"},
-			},
-		},
-		"dose-sequence": SearchParamInfo{
-			Resource: "ImmunizationRecommendation",
-			Name:     "dose-sequence",
-			Type:     "number",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]recommendation.protocol.doseSequence", Type: "positiveInt"},
+				SearchParamPath{Path: "date", Type: "dateTime"},
 			},
 		},
 		"identifier": SearchParamInfo{
@@ -8616,8 +11054,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]recommendation.[]supportingPatientInformation", Type: "Reference"},
 			},
 			Targets: []string{
-				"AllergyIntolerance",
-				"Observation",
+				"Any",
 			},
 		},
 		"patient": SearchParamInfo{
@@ -8648,6 +11085,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Immunization",
+				"ImmunizationEvaluation",
 			},
 		},
 		"target-disease": SearchParamInfo{
@@ -8655,7 +11093,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "target-disease",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]recommendation.targetDisease", Type: "CodeableConcept"},
+				SearchParamPath{Path: "[]recommendation.[]targetDisease", Type: "CodeableConcept"},
 			},
 		},
 		"vaccine-type": SearchParamInfo{
@@ -8663,7 +11101,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "vaccine-type",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]recommendation.vaccineCode", Type: "CodeableConcept"},
+				SearchParamPath{Path: "[]recommendation.[]vaccineCode", Type: "CodeableConcept"},
 			},
 		},
 	},
@@ -8687,9 +11125,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "ImplementationGuide",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -8700,12 +11138,44 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "ImplementationGuide",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
 			Resource: "ImplementationGuide",
 			Name:     "_tag",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "ImplementationGuide",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "ImplementationGuide",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "ImplementationGuide",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
 			},
 		},
 		"date": SearchParamInfo{
@@ -8716,12 +11186,15 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "date", Type: "dateTime"},
 			},
 		},
-		"dependency": SearchParamInfo{
+		"depends-on": SearchParamInfo{
 			Resource: "ImplementationGuide",
-			Name:     "dependency",
-			Type:     "uri",
+			Name:     "depends-on",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]dependency.uri", Type: "uri"},
+				SearchParamPath{Path: "[]dependsOn.uri", Type: "canonical"},
+			},
+			Targets: []string{
+				"ImplementationGuide",
 			},
 		},
 		"description": SearchParamInfo{
@@ -8738,6 +11211,17 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "experimental", Type: "boolean"},
+			},
+		},
+		"global": SearchParamInfo{
+			Resource: "ImplementationGuide",
+			Name:     "global",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]global.profile", Type: "canonical"},
+			},
+			Targets: []string{
+				"StructureDefinition",
 			},
 		},
 		"jurisdiction": SearchParamInfo{
@@ -8769,7 +11253,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "resource",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]package.[]resource.sourceReference", Type: "Reference"},
+				SearchParamPath{Path: "definition.[]resource.reference", Type: "Reference"},
 			},
 			Targets: []string{
 				"Any",
@@ -8781,6 +11265,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"title": SearchParamInfo{
+			Resource: "ImplementationGuide",
+			Name:     "title",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "title", Type: "string"},
 			},
 		},
 		"url": SearchParamInfo{
@@ -8797,6 +11289,408 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "version", Type: "string"},
+			},
+		},
+	},
+	"Ingredient": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "Ingredient",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "Ingredient",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "Ingredient",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "Ingredient",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Ingredient",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "Ingredient",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+	},
+	"InsurancePlan": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "InsurancePlan",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "InsurancePlan",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "InsurancePlan",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "InsurancePlan",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "InsurancePlan",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "InsurancePlan",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"address": SearchParamInfo{
+			Resource: "InsurancePlan",
+			Name:     "address",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]contact.address", Type: "Address"},
+			},
+		},
+		"address-city": SearchParamInfo{
+			Resource: "InsurancePlan",
+			Name:     "address-city",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]contact.address.city", Type: "string"},
+			},
+		},
+		"address-country": SearchParamInfo{
+			Resource: "InsurancePlan",
+			Name:     "address-country",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]contact.address.country", Type: "string"},
+			},
+		},
+		"address-postalcode": SearchParamInfo{
+			Resource: "InsurancePlan",
+			Name:     "address-postalcode",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]contact.address.postalCode", Type: "string"},
+			},
+		},
+		"address-state": SearchParamInfo{
+			Resource: "InsurancePlan",
+			Name:     "address-state",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]contact.address.state", Type: "string"},
+			},
+		},
+		"address-use": SearchParamInfo{
+			Resource: "InsurancePlan",
+			Name:     "address-use",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]contact.address.use", Type: "code"},
+			},
+		},
+		"administered-by": SearchParamInfo{
+			Resource: "InsurancePlan",
+			Name:     "administered-by",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "administeredBy", Type: "Reference"},
+			},
+			Targets: []string{
+				"Organization",
+			},
+		},
+		"endpoint": SearchParamInfo{
+			Resource: "InsurancePlan",
+			Name:     "endpoint",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]endpoint", Type: "Reference"},
+			},
+			Targets: []string{
+				"Endpoint",
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "InsurancePlan",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"name": SearchParamInfo{
+			Resource: "InsurancePlan",
+			Name:     "name",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]alias", Type: "string"},
+				SearchParamPath{Path: "name", Type: "string"},
+			},
+		},
+		"owned-by": SearchParamInfo{
+			Resource: "InsurancePlan",
+			Name:     "owned-by",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "ownedBy", Type: "Reference"},
+			},
+			Targets: []string{
+				"Organization",
+			},
+		},
+		"phonetic": SearchParamInfo{
+			Resource: "InsurancePlan",
+			Name:     "phonetic",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "name", Type: "string"},
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "InsurancePlan",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"type": SearchParamInfo{
+			Resource: "InsurancePlan",
+			Name:     "type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]type", Type: "CodeableConcept"},
+			},
+		},
+	},
+	"Invoice": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "Invoice",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "Invoice",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "Invoice",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "Invoice",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Invoice",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "Invoice",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"account": SearchParamInfo{
+			Resource: "Invoice",
+			Name:     "account",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "account", Type: "Reference"},
+			},
+			Targets: []string{
+				"Account",
+			},
+		},
+		"date": SearchParamInfo{
+			Resource: "Invoice",
+			Name:     "date",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "date", Type: "dateTime"},
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "Invoice",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"issuer": SearchParamInfo{
+			Resource: "Invoice",
+			Name:     "issuer",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "issuer", Type: "Reference"},
+			},
+			Targets: []string{
+				"Organization",
+			},
+		},
+		"participant": SearchParamInfo{
+			Resource: "Invoice",
+			Name:     "participant",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]participant.actor", Type: "Reference"},
+			},
+			Targets: []string{
+				"Device",
+				"Organization",
+				"Patient",
+				"Practitioner",
+				"PractitionerRole",
+				"RelatedPerson",
+			},
+		},
+		"participant-role": SearchParamInfo{
+			Resource: "Invoice",
+			Name:     "participant-role",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]participant.role", Type: "CodeableConcept"},
+			},
+		},
+		"patient": SearchParamInfo{
+			Resource: "Invoice",
+			Name:     "patient",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "subject", Type: "Reference"},
+			},
+			Targets: []string{
+				"Patient",
+			},
+		},
+		"recipient": SearchParamInfo{
+			Resource: "Invoice",
+			Name:     "recipient",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "recipient", Type: "Reference"},
+			},
+			Targets: []string{
+				"Organization",
+				"Patient",
+				"RelatedPerson",
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "Invoice",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"subject": SearchParamInfo{
+			Resource: "Invoice",
+			Name:     "subject",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "subject", Type: "Reference"},
+			},
+			Targets: []string{
+				"Group",
+				"Patient",
+			},
+		},
+		"totalgross": SearchParamInfo{
+			Resource: "Invoice",
+			Name:     "totalgross",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "totalGross", Type: "Money"},
+			},
+		},
+		"totalnet": SearchParamInfo{
+			Resource: "Invoice",
+			Name:     "totalnet",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "totalNet", Type: "Money"},
+			},
+		},
+		"type": SearchParamInfo{
+			Resource: "Invoice",
+			Name:     "type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "type", Type: "CodeableConcept"},
 			},
 		},
 	},
@@ -8820,9 +11714,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Library",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -8831,6 +11725,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Library",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -8846,10 +11748,42 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "composed-of",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
 			},
 			Targets: []string{
 				"Any",
+			},
+		},
+		"content-type": SearchParamInfo{
+			Resource: "Library",
+			Name:     "content-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]content.contentType", Type: "code"},
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "Library",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "Library",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "Library",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
 			},
 		},
 		"date": SearchParamInfo{
@@ -8865,7 +11799,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "depends-on",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
 			},
 			Targets: []string{
 				"Any",
@@ -8876,7 +11810,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "derived-from",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
 			},
 			Targets: []string{
 				"Any",
@@ -8927,7 +11861,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "predecessor",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
 			},
 			Targets: []string{
 				"Any",
@@ -8954,7 +11888,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "successor",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
 			},
 			Targets: []string{
 				"Any",
@@ -8974,6 +11908,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]topic", Type: "CodeableConcept"},
+			},
+		},
+		"type": SearchParamInfo{
+			Resource: "Library",
+			Name:     "type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "type", Type: "CodeableConcept"},
 			},
 		},
 		"url": SearchParamInfo{
@@ -9013,9 +11955,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Linkage",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -9024,6 +11966,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Linkage",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -9044,6 +11994,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Targets: []string{
 				"Organization",
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"item": SearchParamInfo{
@@ -9053,6 +12004,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]item.resource", Type: "Reference"},
 			},
+			Targets: []string{
+				"Any",
+			},
 		},
 		"source": SearchParamInfo{
 			Resource: "Linkage",
@@ -9060,6 +12014,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "reference",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]item.resource", Type: "Reference"},
+			},
+			Targets: []string{
+				"Any",
 			},
 		},
 	},
@@ -9083,9 +12040,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "List",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -9094,6 +12051,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "List",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -9163,7 +12128,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "notes",
 			Type:     "string",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]note.text", Type: "string"},
+				SearchParamPath{Path: "[]note.text", Type: "markdown"},
 			},
 		},
 		"patient": SearchParamInfo{
@@ -9188,6 +12153,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Device",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"status": SearchParamInfo{
@@ -9241,9 +12207,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Location",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -9252,6 +12218,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Location",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -9341,12 +12315,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"near": SearchParamInfo{
 			Resource: "Location",
 			Name:     "near",
-			Type:     "token",
-		},
-		"near-distance": SearchParamInfo{
-			Resource: "Location",
-			Name:     "near-distance",
-			Type:     "quantity",
+			Type:     "special",
 		},
 		"operational-status": SearchParamInfo{
 			Resource: "Location",
@@ -9391,7 +12360,57 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "type",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "type", Type: "CodeableConcept"},
+				SearchParamPath{Path: "[]type", Type: "CodeableConcept"},
+			},
+		},
+	},
+	"ManufacturedItemDefinition": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "ManufacturedItemDefinition",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "ManufacturedItemDefinition",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "ManufacturedItemDefinition",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "ManufacturedItemDefinition",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "ManufacturedItemDefinition",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "ManufacturedItemDefinition",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
 			},
 		},
 	},
@@ -9415,9 +12434,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Measure",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -9426,6 +12445,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Measure",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -9441,10 +12468,34 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "composed-of",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
 			},
 			Targets: []string{
 				"Any",
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "Measure",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "Measure",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "Measure",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
 			},
 		},
 		"date": SearchParamInfo{
@@ -9460,8 +12511,8 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "depends-on",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]library", Type: "Reference"},
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
+				SearchParamPath{Path: "[]library", Type: "canonical"},
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
 			},
 			Targets: []string{
 				"Any",
@@ -9473,7 +12524,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "derived-from",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
 			},
 			Targets: []string{
 				"Any",
@@ -9524,7 +12575,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "predecessor",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
 			},
 			Targets: []string{
 				"Any",
@@ -9551,7 +12602,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "successor",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
 			},
 			Targets: []string{
 				"Any",
@@ -9610,9 +12661,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "MeasureReport",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -9623,6 +12674,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "MeasureReport",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
 			Resource: "MeasureReport",
 			Name:     "_tag",
@@ -9631,12 +12690,42 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
 			},
 		},
+		"date": SearchParamInfo{
+			Resource: "MeasureReport",
+			Name:     "date",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "date", Type: "dateTime"},
+			},
+		},
+		"evaluated-resource": SearchParamInfo{
+			Resource: "MeasureReport",
+			Name:     "evaluated-resource",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]evaluatedResource", Type: "Reference"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
 		"identifier": SearchParamInfo{
 			Resource: "MeasureReport",
 			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "identifier", Type: "Identifier"},
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"measure": SearchParamInfo{
+			Resource: "MeasureReport",
+			Name:     "measure",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "measure", Type: "canonical"},
+			},
+			Targets: []string{
+				"Measure",
 			},
 		},
 		"patient": SearchParamInfo{
@@ -9644,10 +12733,32 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "patient",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "patient", Type: "Reference"},
+				SearchParamPath{Path: "subject", Type: "Reference"},
 			},
 			Targets: []string{
 				"Patient",
+			},
+		},
+		"period": SearchParamInfo{
+			Resource: "MeasureReport",
+			Name:     "period",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "period", Type: "Period"},
+			},
+		},
+		"reporter": SearchParamInfo{
+			Resource: "MeasureReport",
+			Name:     "reporter",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "reporter", Type: "Reference"},
+			},
+			Targets: []string{
+				"Location",
+				"Organization",
+				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"status": SearchParamInfo{
@@ -9658,140 +12769,8 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "status", Type: "code"},
 			},
 		},
-	},
-	"Media": map[string]SearchParamInfo{
-		"_id": SearchParamInfo{
-			Resource: "Media",
-			Name:     "_id",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "_id", Type: "id"},
-			},
-		},
-		"_lastUpdated": SearchParamInfo{
-			Resource: "Media",
-			Name:     "_lastUpdated",
-			Type:     "date",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
-			},
-		},
-		"_profile": SearchParamInfo{
-			Resource: "Media",
-			Name:     "_profile",
-			Type:     "uri",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
-			},
-		},
-		"_security": SearchParamInfo{
-			Resource: "Media",
-			Name:     "_security",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
-			},
-		},
-		"_tag": SearchParamInfo{
-			Resource: "Media",
-			Name:     "_tag",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
-			},
-		},
-		"based-on": SearchParamInfo{
-			Resource: "Media",
-			Name:     "based-on",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]basedOn", Type: "Reference"},
-			},
-			Targets: []string{
-				"ProcedureRequest",
-			},
-		},
-		"context": SearchParamInfo{
-			Resource: "Media",
-			Name:     "context",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
-			},
-			Targets: []string{
-				"Encounter",
-				"EpisodeOfCare",
-			},
-		},
-		"created": SearchParamInfo{
-			Resource: "Media",
-			Name:     "created",
-			Type:     "date",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "content.creation", Type: "dateTime"},
-			},
-		},
-		"date": SearchParamInfo{
-			Resource: "Media",
-			Name:     "date",
-			Type:     "date",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "occurrenceDateTime", Type: "dateTime"},
-				SearchParamPath{Path: "occurrencePeriod", Type: "Period"},
-			},
-		},
-		"device": SearchParamInfo{
-			Resource: "Media",
-			Name:     "device",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "device", Type: "Reference"},
-			},
-			Targets: []string{
-				"Device",
-				"DeviceMetric",
-			},
-		},
-		"identifier": SearchParamInfo{
-			Resource: "Media",
-			Name:     "identifier",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
-			},
-		},
-		"operator": SearchParamInfo{
-			Resource: "Media",
-			Name:     "operator",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "operator", Type: "Reference"},
-			},
-			Targets: []string{
-				"Practitioner",
-			},
-		},
-		"patient": SearchParamInfo{
-			Resource: "Media",
-			Name:     "patient",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "subject", Type: "Reference"},
-			},
-			Targets: []string{
-				"Patient",
-			},
-		},
-		"site": SearchParamInfo{
-			Resource: "Media",
-			Name:     "site",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "bodySite", Type: "CodeableConcept"},
-			},
-		},
 		"subject": SearchParamInfo{
-			Resource: "Media",
+			Resource: "MeasureReport",
 			Name:     "subject",
 			Type:     "reference",
 			Paths: []SearchParamPath{
@@ -9800,33 +12779,11 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Targets: []string{
 				"Device",
 				"Group",
+				"Location",
 				"Patient",
 				"Practitioner",
-				"Specimen",
-			},
-		},
-		"subtype": SearchParamInfo{
-			Resource: "Media",
-			Name:     "subtype",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "subtype", Type: "CodeableConcept"},
-			},
-		},
-		"type": SearchParamInfo{
-			Resource: "Media",
-			Name:     "type",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "type", Type: "code"},
-			},
-		},
-		"view": SearchParamInfo{
-			Resource: "Media",
-			Name:     "view",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "view", Type: "CodeableConcept"},
+				"PractitionerRole",
+				"RelatedPerson",
 			},
 		},
 	},
@@ -9850,9 +12807,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Medication",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -9861,6 +12818,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Medication",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -9879,20 +12844,20 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "code", Type: "CodeableConcept"},
 			},
 		},
-		"container": SearchParamInfo{
+		"expiration-date": SearchParamInfo{
 			Resource: "Medication",
-			Name:     "container",
-			Type:     "token",
+			Name:     "expiration-date",
+			Type:     "date",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "package.container", Type: "CodeableConcept"},
+				SearchParamPath{Path: "batch.expirationDate", Type: "dateTime"},
 			},
 		},
-		"form": SearchParamInfo{
+		"identifier": SearchParamInfo{
 			Resource: "Medication",
-			Name:     "form",
+			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "form", Type: "CodeableConcept"},
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
 		"ingredient": SearchParamInfo{
@@ -9915,6 +12880,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]ingredient.itemCodeableConcept", Type: "CodeableConcept"},
 			},
 		},
+		"lot-number": SearchParamInfo{
+			Resource: "Medication",
+			Name:     "lot-number",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "batch.lotNumber", Type: "string"},
+			},
+		},
 		"manufacturer": SearchParamInfo{
 			Resource: "Medication",
 			Name:     "manufacturer",
@@ -9924,33 +12897,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Organization",
-			},
-		},
-		"over-the-counter": SearchParamInfo{
-			Resource: "Medication",
-			Name:     "over-the-counter",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "isOverTheCounter", Type: "boolean"},
-			},
-		},
-		"package-item": SearchParamInfo{
-			Resource: "Medication",
-			Name:     "package-item",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "package.[]content.itemReference", Type: "Reference"},
-			},
-			Targets: []string{
-				"Medication",
-			},
-		},
-		"package-item-code": SearchParamInfo{
-			Resource: "Medication",
-			Name:     "package-item-code",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "package.[]content.itemCodeableConcept", Type: "CodeableConcept"},
 			},
 		},
 		"status": SearchParamInfo{
@@ -9982,9 +12928,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "MedicationAdministration",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -9993,6 +12939,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "MedicationAdministration",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -10011,16 +12965,13 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "medicationCodeableConcept", Type: "CodeableConcept"},
 			},
 		},
-		"context": SearchParamInfo{
+		"date": SearchParamInfo{
 			Resource: "MedicationAdministration",
-			Name:     "context",
-			Type:     "reference",
+			Name:     "date",
+			Type:     "date",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
-			},
-			Targets: []string{
-				"Encounter",
-				"EpisodeOfCare",
+				SearchParamPath{Path: "occurenceDateTime", Type: "dateTime"},
+				SearchParamPath{Path: "occurencePeriod", Type: "Period"},
 			},
 		},
 		"device": SearchParamInfo{
@@ -10034,13 +12985,15 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Device",
 			},
 		},
-		"effective-time": SearchParamInfo{
+		"encounter": SearchParamInfo{
 			Resource: "MedicationAdministration",
-			Name:     "effective-time",
-			Type:     "date",
+			Name:     "encounter",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "effectiveDateTime", Type: "dateTime"},
-				SearchParamPath{Path: "effectivePeriod", Type: "Period"},
+				SearchParamPath{Path: "encounter", Type: "Reference"},
+			},
+			Targets: []string{
+				"Encounter",
 			},
 		},
 		"identifier": SearchParamInfo{
@@ -10060,14 +13013,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Medication",
-			},
-		},
-		"not-given": SearchParamInfo{
-			Resource: "MedicationAdministration",
-			Name:     "not-given",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "notGiven", Type: "boolean"},
 			},
 		},
 		"patient": SearchParamInfo{
@@ -10092,18 +13037,8 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Device",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
-			},
-		},
-		"prescription": SearchParamInfo{
-			Resource: "MedicationAdministration",
-			Name:     "prescription",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "prescription", Type: "Reference"},
-			},
-			Targets: []string{
-				"MedicationRequest",
 			},
 		},
 		"reason-given": SearchParamInfo{
@@ -10119,7 +13054,18 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "reason-not-given",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]reasonNotGiven", Type: "CodeableConcept"},
+				SearchParamPath{Path: "[]statusReason", Type: "CodeableConcept"},
+			},
+		},
+		"request": SearchParamInfo{
+			Resource: "MedicationAdministration",
+			Name:     "request",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "request", Type: "Reference"},
+			},
+			Targets: []string{
+				"MedicationRequest",
 			},
 		},
 		"status": SearchParamInfo{
@@ -10163,9 +13109,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "MedicationDispense",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -10174,6 +13120,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "MedicationDispense",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -10192,18 +13146,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "medicationCodeableConcept", Type: "CodeableConcept"},
 			},
 		},
-		"context": SearchParamInfo{
-			Resource: "MedicationDispense",
-			Name:     "context",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
-			},
-			Targets: []string{
-				"Encounter",
-				"EpisodeOfCare",
-			},
-		},
 		"destination": SearchParamInfo{
 			Resource: "MedicationDispense",
 			Name:     "destination",
@@ -10213,6 +13155,17 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Location",
+			},
+		},
+		"encounter": SearchParamInfo{
+			Resource: "MedicationDispense",
+			Name:     "encounter",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "encounter", Type: "Reference"},
+			},
+			Targets: []string{
+				"Encounter",
 			},
 		},
 		"identifier": SearchParamInfo{
@@ -10257,6 +13210,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -10279,8 +13233,11 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]receiver", Type: "Reference"},
 			},
 			Targets: []string{
+				"Location",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
+				"RelatedPerson",
 			},
 		},
 		"responsibleparty": SearchParamInfo{
@@ -10288,10 +13245,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "responsibleparty",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "substitution.[]responsibleParty", Type: "Reference"},
+				SearchParamPath{Path: "substitution.responsibleParty", Type: "Reference"},
 			},
 			Targets: []string{
+				"Organization",
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"status": SearchParamInfo{
@@ -10339,6 +13298,185 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 	},
+	"MedicationKnowledge": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "MedicationKnowledge",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "MedicationKnowledge",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "MedicationKnowledge",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "MedicationKnowledge",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "MedicationKnowledge",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "MedicationKnowledge",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"classification": SearchParamInfo{
+			Resource: "MedicationKnowledge",
+			Name:     "classification",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]medicineClassification.[]classification", Type: "CodeableConcept"},
+			},
+		},
+		"classification-type": SearchParamInfo{
+			Resource: "MedicationKnowledge",
+			Name:     "classification-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]medicineClassification.type", Type: "CodeableConcept"},
+			},
+		},
+		"code": SearchParamInfo{
+			Resource: "MedicationKnowledge",
+			Name:     "code",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "code", Type: "CodeableConcept"},
+			},
+		},
+		"doseform": SearchParamInfo{
+			Resource: "MedicationKnowledge",
+			Name:     "doseform",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "doseForm", Type: "CodeableConcept"},
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "MedicationKnowledge",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"ingredient": SearchParamInfo{
+			Resource: "MedicationKnowledge",
+			Name:     "ingredient",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]ingredient.itemReference", Type: "Reference"},
+			},
+			Targets: []string{
+				"Ingredient",
+			},
+		},
+		"ingredient-code": SearchParamInfo{
+			Resource: "MedicationKnowledge",
+			Name:     "ingredient-code",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]ingredient.itemCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"manufacturer": SearchParamInfo{
+			Resource: "MedicationKnowledge",
+			Name:     "manufacturer",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "manufacturer", Type: "Reference"},
+			},
+			Targets: []string{
+				"Organization",
+			},
+		},
+		"monitoring-program-name": SearchParamInfo{
+			Resource: "MedicationKnowledge",
+			Name:     "monitoring-program-name",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]monitoringProgram.name", Type: "string"},
+			},
+		},
+		"monitoring-program-type": SearchParamInfo{
+			Resource: "MedicationKnowledge",
+			Name:     "monitoring-program-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]monitoringProgram.type", Type: "CodeableConcept"},
+			},
+		},
+		"monograph": SearchParamInfo{
+			Resource: "MedicationKnowledge",
+			Name:     "monograph",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]monograph.source", Type: "Reference"},
+			},
+			Targets: []string{
+				"DocumentReference",
+			},
+		},
+		"monograph-type": SearchParamInfo{
+			Resource: "MedicationKnowledge",
+			Name:     "monograph-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]monograph.type", Type: "CodeableConcept"},
+			},
+		},
+		"product-type": SearchParamInfo{
+			Resource: "MedicationKnowledge",
+			Name:     "product-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]productType", Type: "CodeableConcept"},
+			},
+		},
+		"source-cost": SearchParamInfo{
+			Resource: "MedicationKnowledge",
+			Name:     "source-cost",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]cost.source", Type: "string"},
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "MedicationKnowledge",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+	},
 	"MedicationRequest": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
 			Resource: "MedicationRequest",
@@ -10359,9 +13497,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "MedicationRequest",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -10370,6 +13508,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "MedicationRequest",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -10393,7 +13539,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "category",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "category", Type: "CodeableConcept"},
+				SearchParamPath{Path: "[]category", Type: "CodeableConcept"},
 			},
 		},
 		"code": SearchParamInfo{
@@ -10404,24 +13550,23 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "medicationCodeableConcept", Type: "CodeableConcept"},
 			},
 		},
-		"context": SearchParamInfo{
-			Resource: "MedicationRequest",
-			Name:     "context",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
-			},
-			Targets: []string{
-				"Encounter",
-				"EpisodeOfCare",
-			},
-		},
 		"date": SearchParamInfo{
 			Resource: "MedicationRequest",
 			Name:     "date",
 			Type:     "date",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]dosageInstruction.timing.[]event", Type: "dateTime"},
+			},
+		},
+		"encounter": SearchParamInfo{
+			Resource: "MedicationRequest",
+			Name:     "encounter",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "encounter", Type: "Reference"},
+			},
+			Targets: []string{
+				"Encounter",
 			},
 		},
 		"identifier": SearchParamInfo{
@@ -10441,6 +13586,32 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Organization",
+			},
+		},
+		"intended-performer": SearchParamInfo{
+			Resource: "MedicationRequest",
+			Name:     "intended-performer",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "performer", Type: "Reference"},
+			},
+			Targets: []string{
+				"CareTeam",
+				"Device",
+				"HealthcareService",
+				"Organization",
+				"Patient",
+				"Practitioner",
+				"PractitionerRole",
+				"RelatedPerson",
+			},
+		},
+		"intended-performertype": SearchParamInfo{
+			Resource: "MedicationRequest",
+			Name:     "intended-performertype",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "performerType", Type: "CodeableConcept"},
 			},
 		},
 		"intent": SearchParamInfo{
@@ -10486,13 +13657,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "requester",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "requester.agent", Type: "Reference"},
+				SearchParamPath{Path: "requester", Type: "Reference"},
 			},
 			Targets: []string{
 				"Device",
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -10517,9 +13689,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 	},
-	"MedicationStatement": map[string]SearchParamInfo{
+	"MedicationUsage": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
-			Resource: "MedicationStatement",
+			Resource: "MedicationUsage",
 			Name:     "_id",
 			Type:     "token",
 			Paths: []SearchParamPath{
@@ -10527,7 +13699,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"_lastUpdated": SearchParamInfo{
-			Resource: "MedicationStatement",
+			Resource: "MedicationUsage",
 			Name:     "_lastUpdated",
 			Type:     "date",
 			Paths: []SearchParamPath{
@@ -10535,59 +13707,63 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"_profile": SearchParamInfo{
-			Resource: "MedicationStatement",
+			Resource: "MedicationUsage",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
-			Resource: "MedicationStatement",
+			Resource: "MedicationUsage",
 			Name:     "_security",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "MedicationUsage",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
-			Resource: "MedicationStatement",
+			Resource: "MedicationUsage",
 			Name:     "_tag",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
 			},
 		},
+		"adherence": SearchParamInfo{
+			Resource: "MedicationUsage",
+			Name:     "adherence",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "takenAsOrdered", Type: "boolean"},
+			},
+		},
 		"category": SearchParamInfo{
-			Resource: "MedicationStatement",
+			Resource: "MedicationUsage",
 			Name:     "category",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "category", Type: "CodeableConcept"},
+				SearchParamPath{Path: "[]category", Type: "CodeableConcept"},
 			},
 		},
 		"code": SearchParamInfo{
-			Resource: "MedicationStatement",
+			Resource: "MedicationUsage",
 			Name:     "code",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "medicationCodeableConcept", Type: "CodeableConcept"},
 			},
 		},
-		"context": SearchParamInfo{
-			Resource: "MedicationStatement",
-			Name:     "context",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
-			},
-			Targets: []string{
-				"Encounter",
-				"EpisodeOfCare",
-			},
-		},
 		"effective": SearchParamInfo{
-			Resource: "MedicationStatement",
+			Resource: "MedicationUsage",
 			Name:     "effective",
 			Type:     "date",
 			Paths: []SearchParamPath{
@@ -10595,8 +13771,19 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "effectivePeriod", Type: "Period"},
 			},
 		},
+		"encounter": SearchParamInfo{
+			Resource: "MedicationUsage",
+			Name:     "encounter",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "encounter", Type: "Reference"},
+			},
+			Targets: []string{
+				"Encounter",
+			},
+		},
 		"identifier": SearchParamInfo{
-			Resource: "MedicationStatement",
+			Resource: "MedicationUsage",
 			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
@@ -10604,7 +13791,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"medication": SearchParamInfo{
-			Resource: "MedicationStatement",
+			Resource: "MedicationUsage",
 			Name:     "medication",
 			Type:     "reference",
 			Paths: []SearchParamPath{
@@ -10615,7 +13802,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"part-of": SearchParamInfo{
-			Resource: "MedicationStatement",
+			Resource: "MedicationUsage",
 			Name:     "part-of",
 			Type:     "reference",
 			Paths: []SearchParamPath{
@@ -10624,13 +13811,13 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Targets: []string{
 				"MedicationAdministration",
 				"MedicationDispense",
-				"MedicationStatement",
+				"MedicationUsage",
 				"Observation",
 				"Procedure",
 			},
 		},
 		"patient": SearchParamInfo{
-			Resource: "MedicationStatement",
+			Resource: "MedicationUsage",
 			Name:     "patient",
 			Type:     "reference",
 			Paths: []SearchParamPath{
@@ -10641,7 +13828,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"source": SearchParamInfo{
-			Resource: "MedicationStatement",
+			Resource: "MedicationUsage",
 			Name:     "source",
 			Type:     "reference",
 			Paths: []SearchParamPath{
@@ -10651,11 +13838,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
 		"status": SearchParamInfo{
-			Resource: "MedicationStatement",
+			Resource: "MedicationUsage",
 			Name:     "status",
 			Type:     "token",
 			Paths: []SearchParamPath{
@@ -10663,7 +13851,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"subject": SearchParamInfo{
-			Resource: "MedicationStatement",
+			Resource: "MedicationUsage",
 			Name:     "subject",
 			Type:     "reference",
 			Paths: []SearchParamPath{
@@ -10672,6 +13860,80 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Targets: []string{
 				"Group",
 				"Patient",
+			},
+		},
+	},
+	"MedicinalProductDefinition": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "MedicinalProductDefinition",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "MedicinalProductDefinition",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "MedicinalProductDefinition",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "MedicinalProductDefinition",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "MedicinalProductDefinition",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "MedicinalProductDefinition",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "MedicinalProductDefinition",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"name": SearchParamInfo{
+			Resource: "MedicinalProductDefinition",
+			Name:     "name",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]name.productName", Type: "string"},
+			},
+		},
+		"name-language": SearchParamInfo{
+			Resource: "MedicinalProductDefinition",
+			Name:     "name-language",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]name.[]countryLanguage.language", Type: "CodeableConcept"},
 			},
 		},
 	},
@@ -10695,9 +13957,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "MessageDefinition",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -10706,6 +13968,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "MessageDefinition",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -10722,6 +13992,30 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "category", Type: "code"},
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "MessageDefinition",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "MessageDefinition",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "MessageDefinition",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
 			},
 		},
 		"date": SearchParamInfo{
@@ -10745,7 +14039,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "event",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "event", Type: "Coding"},
+				SearchParamPath{Path: "eventCoding", Type: "Coding"},
 			},
 		},
 		"focus": SearchParamInfo{
@@ -10761,7 +14055,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "identifier", Type: "Identifier"},
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
 		"jurisdiction": SearchParamInfo{
@@ -10778,6 +14072,18 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "string",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "name", Type: "string"},
+			},
+		},
+		"parent": SearchParamInfo{
+			Resource: "MessageDefinition",
+			Name:     "parent",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]parent", Type: "canonical"},
+			},
+			Targets: []string{
+				"ActivityDefinition",
+				"PlanDefinition",
 			},
 		},
 		"publisher": SearchParamInfo{
@@ -10841,9 +14147,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "MessageHeader",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -10852,6 +14158,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "MessageHeader",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -10871,6 +14185,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"code": SearchParamInfo{
@@ -10894,7 +14209,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "destination-uri",
 			Type:     "uri",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]destination.endpoint", Type: "uri"},
+				SearchParamPath{Path: "[]destination.endpoint", Type: "url"},
 			},
 		},
 		"enterer": SearchParamInfo{
@@ -10906,6 +14221,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"event": SearchParamInfo{
@@ -10913,7 +14229,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "event",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "event", Type: "Coding"},
+				SearchParamPath{Path: "eventCoding", Type: "Coding"},
 			},
 		},
 		"focus": SearchParamInfo{
@@ -10932,11 +14248,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "receiver",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "receiver", Type: "Reference"},
+				SearchParamPath{Path: "[]destination.receiver", Type: "Reference"},
 			},
 			Targets: []string{
 				"Organization",
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"response-id": SearchParamInfo{
@@ -10957,6 +14274,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Targets: []string{
 				"Organization",
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"sender": SearchParamInfo{
@@ -10969,6 +14287,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Targets: []string{
 				"Organization",
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"source": SearchParamInfo{
@@ -10984,7 +14303,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "source-uri",
 			Type:     "uri",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "source.endpoint", Type: "uri"},
+				SearchParamPath{Path: "source.endpoint", Type: "url"},
 			},
 		},
 		"target": SearchParamInfo{
@@ -10998,12 +14317,129 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Device",
 			},
 		},
-		"timestamp": SearchParamInfo{
-			Resource: "MessageHeader",
-			Name:     "timestamp",
+	},
+	"MolecularSequence": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "MolecularSequence",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "MolecularSequence",
+			Name:     "_lastUpdated",
 			Type:     "date",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "timestamp", Type: "instant"},
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "MolecularSequence",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "MolecularSequence",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "MolecularSequence",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "MolecularSequence",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"chromosome": SearchParamInfo{
+			Resource: "MolecularSequence",
+			Name:     "chromosome",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "referenceSeq.chromosome", Type: "CodeableConcept"},
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "MolecularSequence",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"patient": SearchParamInfo{
+			Resource: "MolecularSequence",
+			Name:     "patient",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "patient", Type: "Reference"},
+			},
+			Targets: []string{
+				"Patient",
+			},
+		},
+		"referenceseqid": SearchParamInfo{
+			Resource: "MolecularSequence",
+			Name:     "referenceseqid",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "referenceSeq.referenceSeqId", Type: "CodeableConcept"},
+			},
+		},
+		"type": SearchParamInfo{
+			Resource: "MolecularSequence",
+			Name:     "type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "type", Type: "code"},
+			},
+		},
+		"variant-end": SearchParamInfo{
+			Resource: "MolecularSequence",
+			Name:     "variant-end",
+			Type:     "number",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]variant.end", Type: "integer"},
+			},
+		},
+		"variant-start": SearchParamInfo{
+			Resource: "MolecularSequence",
+			Name:     "variant-start",
+			Type:     "number",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]variant.start", Type: "integer"},
+			},
+		},
+		"window-end": SearchParamInfo{
+			Resource: "MolecularSequence",
+			Name:     "window-end",
+			Type:     "number",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "referenceSeq.windowEnd", Type: "integer"},
+			},
+		},
+		"window-start": SearchParamInfo{
+			Resource: "MolecularSequence",
+			Name:     "window-start",
+			Type:     "number",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "referenceSeq.windowStart", Type: "integer"},
 			},
 		},
 	},
@@ -11027,9 +14463,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "NamingSystem",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -11038,6 +14474,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "NamingSystem",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -11054,6 +14498,30 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "string",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]contact.name", Type: "string"},
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "NamingSystem",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "NamingSystem",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "NamingSystem",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
 			},
 		},
 		"date": SearchParamInfo{
@@ -11120,17 +14588,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "publisher", Type: "string"},
 			},
 		},
-		"replaced-by": SearchParamInfo{
-			Resource: "NamingSystem",
-			Name:     "replaced-by",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "replacedBy", Type: "Reference"},
-			},
-			Targets: []string{
-				"NamingSystem",
-			},
-		},
 		"responsible": SearchParamInfo{
 			Resource: "NamingSystem",
 			Name:     "responsible",
@@ -11172,6 +14629,159 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 	},
+	"NutritionIntake": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "NutritionIntake",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "NutritionIntake",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "NutritionIntake",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "NutritionIntake",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "NutritionIntake",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "NutritionIntake",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"category": SearchParamInfo{
+			Resource: "NutritionIntake",
+			Name:     "category",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]category", Type: "CodeableConcept"},
+			},
+		},
+		"effective": SearchParamInfo{
+			Resource: "NutritionIntake",
+			Name:     "effective",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "effectiveDateTime", Type: "dateTime"},
+				SearchParamPath{Path: "effectivePeriod", Type: "Period"},
+			},
+		},
+		"encounter": SearchParamInfo{
+			Resource: "NutritionIntake",
+			Name:     "encounter",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "encounter", Type: "Reference"},
+			},
+			Targets: []string{
+				"Encounter",
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "NutritionIntake",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"nutrition": SearchParamInfo{
+			Resource: "NutritionIntake",
+			Name:     "nutrition",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]consumedItem.nutritionProduct", Type: "CodeableConcept"},
+			},
+		},
+		"part-of": SearchParamInfo{
+			Resource: "NutritionIntake",
+			Name:     "part-of",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]partOf", Type: "Reference"},
+			},
+			Targets: []string{
+				"NutritionIntake",
+				"Observation",
+				"Procedure",
+			},
+		},
+		"patient": SearchParamInfo{
+			Resource: "NutritionIntake",
+			Name:     "patient",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "subject", Type: "Reference"},
+			},
+			Targets: []string{
+				"Patient",
+			},
+		},
+		"source": SearchParamInfo{
+			Resource: "NutritionIntake",
+			Name:     "source",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "informationSource", Type: "Reference"},
+			},
+			Targets: []string{
+				"Organization",
+				"Patient",
+				"Practitioner",
+				"PractitionerRole",
+				"RelatedPerson",
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "NutritionIntake",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"subject": SearchParamInfo{
+			Resource: "NutritionIntake",
+			Name:     "subject",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "subject", Type: "Reference"},
+			},
+			Targets: []string{
+				"Group",
+				"Patient",
+			},
+		},
+	},
 	"NutritionOrder": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
 			Resource: "NutritionOrder",
@@ -11192,9 +14802,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "NutritionOrder",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -11203,6 +14813,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "NutritionOrder",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -11256,6 +14874,26 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
+		"instantiates-canonical": SearchParamInfo{
+			Resource: "NutritionOrder",
+			Name:     "instantiates-canonical",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]instantiatesCanonical", Type: "canonical"},
+			},
+			Targets: []string{
+				"ActivityDefinition",
+				"PlanDefinition",
+			},
+		},
+		"instantiates-uri": SearchParamInfo{
+			Resource: "NutritionOrder",
+			Name:     "instantiates-uri",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]instantiatesUri", Type: "uri"},
+			},
+		},
 		"oraldiet": SearchParamInfo{
 			Resource: "NutritionOrder",
 			Name:     "oraldiet",
@@ -11284,6 +14922,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"status": SearchParamInfo{
@@ -11323,9 +14962,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Observation",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -11334,6 +14973,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Observation",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -11357,8 +15004,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"ImmunizationRecommendation",
 				"MedicationRequest",
 				"NutritionOrder",
-				"ProcedureRequest",
-				"ReferralRequest",
+				"ServiceRequest",
 			},
 		},
 		"category": SearchParamInfo{
@@ -11409,7 +15055,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "combo-value-quantity",
 			Type:     "quantity",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]component.valueQuantity", Type: "Quantity"},
 				SearchParamPath{Path: "valueQuantity", Type: "Quantity"},
 			},
 		},
@@ -11445,18 +15090,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]component.valueQuantity", Type: "Quantity"},
 			},
 		},
-		"context": SearchParamInfo{
-			Resource: "Observation",
-			Name:     "context",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
-			},
-			Targets: []string{
-				"Encounter",
-				"EpisodeOfCare",
-			},
-		},
 		"data-absent-reason": SearchParamInfo{
 			Resource: "Observation",
 			Name:     "data-absent-reason",
@@ -11471,7 +15104,24 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "date",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "effectiveDateTime", Type: "dateTime"},
+				SearchParamPath{Path: "effectiveInstant", Type: "instant"},
 				SearchParamPath{Path: "effectivePeriod", Type: "Period"},
+				SearchParamPath{Path: "effectiveTiming", Type: "Timing"},
+			},
+		},
+		"derived-from": SearchParamInfo{
+			Resource: "Observation",
+			Name:     "derived-from",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]derivedFrom", Type: "Reference"},
+			},
+			Targets: []string{
+				"DocumentReference",
+				"ImagingStudy",
+				"MolecularSequence",
+				"Observation",
+				"QuestionnaireResponse",
 			},
 		},
 		"device": SearchParamInfo{
@@ -11491,10 +15141,34 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "encounter",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
+				SearchParamPath{Path: "encounter", Type: "Reference"},
 			},
 			Targets: []string{
 				"Encounter",
+			},
+		},
+		"focus": SearchParamInfo{
+			Resource: "Observation",
+			Name:     "focus",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]focus", Type: "Reference"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+		"has-member": SearchParamInfo{
+			Resource: "Observation",
+			Name:     "has-member",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]hasMember", Type: "Reference"},
+			},
+			Targets: []string{
+				"MolecularSequence",
+				"Observation",
+				"QuestionnaireResponse",
 			},
 		},
 		"identifier": SearchParamInfo{
@@ -11511,6 +15185,22 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "method", Type: "CodeableConcept"},
+			},
+		},
+		"part-of": SearchParamInfo{
+			Resource: "Observation",
+			Name:     "part-of",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]partOf", Type: "Reference"},
+			},
+			Targets: []string{
+				"ImagingStudy",
+				"Immunization",
+				"MedicationAdministration",
+				"MedicationDispense",
+				"MedicationUsage",
+				"Procedure",
 			},
 		},
 		"patient": SearchParamInfo{
@@ -11532,31 +15222,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]performer", Type: "Reference"},
 			},
 			Targets: []string{
+				"CareTeam",
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
-			},
-		},
-		"related-target": SearchParamInfo{
-			Resource: "Observation",
-			Name:     "related-target",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]related.target", Type: "Reference"},
-			},
-			Targets: []string{
-				"Observation",
-				"QuestionnaireResponse",
-				"Sequence",
-			},
-		},
-		"related-type": SearchParamInfo{
-			Resource: "Observation",
-			Name:     "related-type",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]related.type", Type: "code"},
 			},
 		},
 		"specimen": SearchParamInfo{
@@ -11626,6 +15297,112 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 	},
+	"ObservationDefinition": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "ObservationDefinition",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "ObservationDefinition",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "ObservationDefinition",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "ObservationDefinition",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "ObservationDefinition",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "ObservationDefinition",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"category": SearchParamInfo{
+			Resource: "ObservationDefinition",
+			Name:     "category",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]category", Type: "CodeableConcept"},
+			},
+		},
+		"code": SearchParamInfo{
+			Resource: "ObservationDefinition",
+			Name:     "code",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "code", Type: "CodeableConcept"},
+			},
+		},
+		"experimental": SearchParamInfo{
+			Resource: "ObservationDefinition",
+			Name:     "experimental",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "experimental", Type: "boolean"},
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "ObservationDefinition",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "identifier", Type: "Identifier"},
+			},
+		},
+		"method": SearchParamInfo{
+			Resource: "ObservationDefinition",
+			Name:     "method",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "method", Type: "CodeableConcept"},
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "ObservationDefinition",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"title": SearchParamInfo{
+			Resource: "ObservationDefinition",
+			Name:     "title",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "title", Type: "string"},
+			},
+		},
+	},
 	"OperationDefinition": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
 			Resource: "OperationDefinition",
@@ -11646,9 +15423,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "OperationDefinition",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -11657,6 +15434,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "OperationDefinition",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -11672,7 +15457,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "base",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "base", Type: "Reference"},
+				SearchParamPath{Path: "base", Type: "canonical"},
 			},
 			Targets: []string{
 				"OperationDefinition",
@@ -11684,6 +15469,30 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "code", Type: "code"},
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "OperationDefinition",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "OperationDefinition",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "OperationDefinition",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
 			},
 		},
 		"date": SearchParamInfo{
@@ -11700,6 +15509,17 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "string",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "description", Type: "markdown"},
+			},
+		},
+		"input-profile": SearchParamInfo{
+			Resource: "OperationDefinition",
+			Name:     "input-profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "inputProfile", Type: "canonical"},
+			},
+			Targets: []string{
+				"StructureDefinition",
 			},
 		},
 		"instance": SearchParamInfo{
@@ -11734,12 +15554,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "name", Type: "string"},
 			},
 		},
-		"param-profile": SearchParamInfo{
+		"output-profile": SearchParamInfo{
 			Resource: "OperationDefinition",
-			Name:     "param-profile",
+			Name:     "output-profile",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]parameter.profile", Type: "Reference"},
+				SearchParamPath{Path: "outputProfile", Type: "canonical"},
 			},
 			Targets: []string{
 				"StructureDefinition",
@@ -11767,6 +15587,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "system", Type: "boolean"},
+			},
+		},
+		"title": SearchParamInfo{
+			Resource: "OperationDefinition",
+			Name:     "title",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "title", Type: "string"},
 			},
 		},
 		"type": SearchParamInfo{
@@ -11814,9 +15642,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "OperationOutcome",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -11825,6 +15653,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "OperationOutcome",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -11856,9 +15692,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Organization",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -11867,6 +15703,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Organization",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -11989,6 +15833,239 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 	},
+	"OrganizationAffiliation": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "OrganizationAffiliation",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "OrganizationAffiliation",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "OrganizationAffiliation",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "OrganizationAffiliation",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "OrganizationAffiliation",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "OrganizationAffiliation",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"active": SearchParamInfo{
+			Resource: "OrganizationAffiliation",
+			Name:     "active",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "active", Type: "boolean"},
+			},
+		},
+		"date": SearchParamInfo{
+			Resource: "OrganizationAffiliation",
+			Name:     "date",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "period", Type: "Period"},
+			},
+		},
+		"endpoint": SearchParamInfo{
+			Resource: "OrganizationAffiliation",
+			Name:     "endpoint",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]endpoint", Type: "Reference"},
+			},
+			Targets: []string{
+				"Endpoint",
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "OrganizationAffiliation",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"location": SearchParamInfo{
+			Resource: "OrganizationAffiliation",
+			Name:     "location",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]location", Type: "Reference"},
+			},
+			Targets: []string{
+				"Location",
+			},
+		},
+		"network": SearchParamInfo{
+			Resource: "OrganizationAffiliation",
+			Name:     "network",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]network", Type: "Reference"},
+			},
+			Targets: []string{
+				"Organization",
+			},
+		},
+		"participating-organization": SearchParamInfo{
+			Resource: "OrganizationAffiliation",
+			Name:     "participating-organization",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "participatingOrganization", Type: "Reference"},
+			},
+			Targets: []string{
+				"Organization",
+			},
+		},
+		"primary-organization": SearchParamInfo{
+			Resource: "OrganizationAffiliation",
+			Name:     "primary-organization",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "organization", Type: "Reference"},
+			},
+			Targets: []string{
+				"Organization",
+			},
+		},
+		"role": SearchParamInfo{
+			Resource: "OrganizationAffiliation",
+			Name:     "role",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]code", Type: "CodeableConcept"},
+			},
+		},
+		"service": SearchParamInfo{
+			Resource: "OrganizationAffiliation",
+			Name:     "service",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]healthcareService", Type: "Reference"},
+			},
+			Targets: []string{
+				"HealthcareService",
+			},
+		},
+		"specialty": SearchParamInfo{
+			Resource: "OrganizationAffiliation",
+			Name:     "specialty",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]specialty", Type: "CodeableConcept"},
+			},
+		},
+		"telecom": SearchParamInfo{
+			Resource: "OrganizationAffiliation",
+			Name:     "telecom",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]telecom", Type: "ContactPoint"},
+			},
+		},
+	},
+	"PackagedProductDefinition": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "PackagedProductDefinition",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "PackagedProductDefinition",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "PackagedProductDefinition",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "PackagedProductDefinition",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "PackagedProductDefinition",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "PackagedProductDefinition",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "PackagedProductDefinition",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"subject": SearchParamInfo{
+			Resource: "PackagedProductDefinition",
+			Name:     "subject",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]subject", Type: "Reference"},
+			},
+			Targets: []string{
+				"MedicinalProductDefinition",
+			},
+		},
+	},
 	"Patient": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
 			Resource: "Patient",
@@ -12009,9 +16086,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Patient",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -12020,6 +16097,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Patient",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -12086,22 +16171,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]address.use", Type: "code"},
 			},
 		},
-		"animal-breed": SearchParamInfo{
-			Resource: "Patient",
-			Name:     "animal-breed",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "animal.breed", Type: "CodeableConcept"},
-			},
-		},
-		"animal-species": SearchParamInfo{
-			Resource: "Patient",
-			Name:     "animal-species",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "animal.species", Type: "CodeableConcept"},
-			},
-		},
 		"birthdate": SearchParamInfo{
 			Resource: "Patient",
 			Name:     "birthdate",
@@ -12152,6 +16221,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Targets: []string{
 				"Organization",
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"given": SearchParamInfo{
@@ -12246,9 +16316,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "PaymentNotice",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -12257,6 +16327,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "PaymentNotice",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -12283,17 +16361,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
-		"organization": SearchParamInfo{
-			Resource: "PaymentNotice",
-			Name:     "organization",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "organization", Type: "Reference"},
-			},
-			Targets: []string{
-				"Organization",
-			},
-		},
 		"payment-status": SearchParamInfo{
 			Resource: "PaymentNotice",
 			Name:     "payment-status",
@@ -12310,7 +16377,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "provider", Type: "Reference"},
 			},
 			Targets: []string{
+				"Organization",
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"request": SearchParamInfo{
@@ -12335,12 +16404,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Any",
 			},
 		},
-		"statusdate": SearchParamInfo{
+		"status": SearchParamInfo{
 			Resource: "PaymentNotice",
-			Name:     "statusdate",
-			Type:     "date",
+			Name:     "status",
+			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "statusDate", Type: "date"},
+				SearchParamPath{Path: "status", Type: "code"},
 			},
 		},
 	},
@@ -12364,9 +16433,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "PaymentReconciliation",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -12375,6 +16444,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "PaymentReconciliation",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -12409,23 +16486,23 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
-		"organization": SearchParamInfo{
-			Resource: "PaymentReconciliation",
-			Name:     "organization",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "organization", Type: "Reference"},
-			},
-			Targets: []string{
-				"Organization",
-			},
-		},
 		"outcome": SearchParamInfo{
 			Resource: "PaymentReconciliation",
 			Name:     "outcome",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "outcome", Type: "CodeableConcept"},
+				SearchParamPath{Path: "outcome", Type: "code"},
+			},
+		},
+		"payment-issuer": SearchParamInfo{
+			Resource: "PaymentReconciliation",
+			Name:     "payment-issuer",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "paymentIssuer", Type: "Reference"},
+			},
+			Targets: []string{
+				"Organization",
 			},
 		},
 		"request": SearchParamInfo{
@@ -12436,29 +16513,28 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "request", Type: "Reference"},
 			},
 			Targets: []string{
-				"ProcessRequest",
+				"Task",
 			},
 		},
-		"request-organization": SearchParamInfo{
+		"requestor": SearchParamInfo{
 			Resource: "PaymentReconciliation",
-			Name:     "request-organization",
+			Name:     "requestor",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "requestOrganization", Type: "Reference"},
+				SearchParamPath{Path: "requestor", Type: "Reference"},
 			},
 			Targets: []string{
 				"Organization",
+				"Practitioner",
+				"PractitionerRole",
 			},
 		},
-		"request-provider": SearchParamInfo{
+		"status": SearchParamInfo{
 			Resource: "PaymentReconciliation",
-			Name:     "request-provider",
-			Type:     "reference",
+			Name:     "status",
+			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "requestProvider", Type: "Reference"},
-			},
-			Targets: []string{
-				"Practitioner",
+				SearchParamPath{Path: "status", Type: "code"},
 			},
 		},
 	},
@@ -12482,9 +16558,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Person",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -12493,6 +16569,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Person",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -12678,9 +16762,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "PlanDefinition",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -12689,6 +16773,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "PlanDefinition",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -12704,10 +16796,34 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "composed-of",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
 			},
 			Targets: []string{
 				"Any",
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "PlanDefinition",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "PlanDefinition",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "PlanDefinition",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
 			},
 		},
 		"date": SearchParamInfo{
@@ -12718,13 +16834,23 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "date", Type: "dateTime"},
 			},
 		},
+		"definition": SearchParamInfo{
+			Resource: "PlanDefinition",
+			Name:     "definition",
+			Type:     "reference",
+			Targets: []string{
+				"ActivityDefinition",
+				"PlanDefinition",
+				"Questionnaire",
+			},
+		},
 		"depends-on": SearchParamInfo{
 			Resource: "PlanDefinition",
 			Name:     "depends-on",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]library", Type: "Reference"},
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
+				SearchParamPath{Path: "[]library", Type: "canonical"},
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
 			},
 			Targets: []string{
 				"Any",
@@ -12736,7 +16862,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "derived-from",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
 			},
 			Targets: []string{
 				"Any",
@@ -12787,7 +16913,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "predecessor",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
 			},
 			Targets: []string{
 				"Any",
@@ -12814,7 +16940,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "successor",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
 			},
 			Targets: []string{
 				"Any",
@@ -12834,6 +16960,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]topic", Type: "CodeableConcept"},
+			},
+		},
+		"type": SearchParamInfo{
+			Resource: "PlanDefinition",
+			Name:     "type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "type", Type: "CodeableConcept"},
 			},
 		},
 		"url": SearchParamInfo{
@@ -12873,9 +17007,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Practitioner",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -12884,6 +17018,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Practitioner",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -13035,9 +17177,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "PractitionerRole",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -13046,6 +17188,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "PractitionerRole",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -13180,9 +17330,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Procedure",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -13191,6 +17341,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Procedure",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -13210,8 +17368,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"CarePlan",
-				"ProcedureRequest",
-				"ReferralRequest",
+				"ServiceRequest",
 			},
 		},
 		"category": SearchParamInfo{
@@ -13219,7 +17376,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "category",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "category", Type: "CodeableConcept"},
+				SearchParamPath{Path: "[]category", Type: "CodeableConcept"},
 			},
 		},
 		"code": SearchParamInfo{
@@ -13230,38 +17387,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "code", Type: "CodeableConcept"},
 			},
 		},
-		"context": SearchParamInfo{
-			Resource: "Procedure",
-			Name:     "context",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
-			},
-			Targets: []string{
-				"Encounter",
-				"EpisodeOfCare",
-			},
-		},
 		"date": SearchParamInfo{
 			Resource: "Procedure",
 			Name:     "date",
 			Type:     "date",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "performedDateTime", Type: "dateTime"},
-				SearchParamPath{Path: "performedPeriod", Type: "Period"},
-			},
-		},
-		"definition": SearchParamInfo{
-			Resource: "Procedure",
-			Name:     "definition",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]definition", Type: "Reference"},
-			},
-			Targets: []string{
-				"ActivityDefinition",
-				"HealthcareService",
-				"PlanDefinition",
+				SearchParamPath{Path: "occurrenceDateTime", Type: "dateTime"},
+				SearchParamPath{Path: "occurrencePeriod", Type: "Period"},
+				SearchParamPath{Path: "occurrenceTiming", Type: "Timing"},
 			},
 		},
 		"encounter": SearchParamInfo{
@@ -13269,7 +17402,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "encounter",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
+				SearchParamPath{Path: "encounter", Type: "Reference"},
 			},
 			Targets: []string{
 				"Encounter",
@@ -13281,6 +17414,29 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"instantiates-canonical": SearchParamInfo{
+			Resource: "Procedure",
+			Name:     "instantiates-canonical",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]instantiatesCanonical", Type: "canonical"},
+			},
+			Targets: []string{
+				"ActivityDefinition",
+				"Measure",
+				"OperationDefinition",
+				"PlanDefinition",
+				"Questionnaire",
+			},
+		},
+		"instantiates-uri": SearchParamInfo{
+			Resource: "Procedure",
+			Name:     "instantiates-uri",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]instantiatesUri", Type: "uri"},
 			},
 		},
 		"location": SearchParamInfo{
@@ -13326,259 +17482,41 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]performer.actor", Type: "Reference"},
 			},
 			Targets: []string{
-				"Device",
-				"Organization",
-				"Patient",
-				"Practitioner",
-				"RelatedPerson",
-			},
-		},
-		"status": SearchParamInfo{
-			Resource: "Procedure",
-			Name:     "status",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "status", Type: "code"},
-			},
-		},
-		"subject": SearchParamInfo{
-			Resource: "Procedure",
-			Name:     "subject",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "subject", Type: "Reference"},
-			},
-			Targets: []string{
-				"Group",
-				"Patient",
-			},
-		},
-	},
-	"ProcedureRequest": map[string]SearchParamInfo{
-		"_id": SearchParamInfo{
-			Resource: "ProcedureRequest",
-			Name:     "_id",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "_id", Type: "id"},
-			},
-		},
-		"_lastUpdated": SearchParamInfo{
-			Resource: "ProcedureRequest",
-			Name:     "_lastUpdated",
-			Type:     "date",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
-			},
-		},
-		"_profile": SearchParamInfo{
-			Resource: "ProcedureRequest",
-			Name:     "_profile",
-			Type:     "uri",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
-			},
-		},
-		"_security": SearchParamInfo{
-			Resource: "ProcedureRequest",
-			Name:     "_security",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
-			},
-		},
-		"_tag": SearchParamInfo{
-			Resource: "ProcedureRequest",
-			Name:     "_tag",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
-			},
-		},
-		"authored": SearchParamInfo{
-			Resource: "ProcedureRequest",
-			Name:     "authored",
-			Type:     "date",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "authoredOn", Type: "dateTime"},
-			},
-		},
-		"based-on": SearchParamInfo{
-			Resource: "ProcedureRequest",
-			Name:     "based-on",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]basedOn", Type: "Reference"},
-			},
-			Targets: []string{
-				"Any",
-			},
-		},
-		"body-site": SearchParamInfo{
-			Resource: "ProcedureRequest",
-			Name:     "body-site",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]bodySite", Type: "CodeableConcept"},
-			},
-		},
-		"code": SearchParamInfo{
-			Resource: "ProcedureRequest",
-			Name:     "code",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "code", Type: "CodeableConcept"},
-			},
-		},
-		"context": SearchParamInfo{
-			Resource: "ProcedureRequest",
-			Name:     "context",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
-			},
-			Targets: []string{
-				"Encounter",
-				"EpisodeOfCare",
-			},
-		},
-		"definition": SearchParamInfo{
-			Resource: "ProcedureRequest",
-			Name:     "definition",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]definition", Type: "Reference"},
-			},
-			Targets: []string{
-				"ActivityDefinition",
-				"PlanDefinition",
-			},
-		},
-		"encounter": SearchParamInfo{
-			Resource: "ProcedureRequest",
-			Name:     "encounter",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
-			},
-			Targets: []string{
-				"Encounter",
-			},
-		},
-		"identifier": SearchParamInfo{
-			Resource: "ProcedureRequest",
-			Name:     "identifier",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
-			},
-		},
-		"intent": SearchParamInfo{
-			Resource: "ProcedureRequest",
-			Name:     "intent",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "intent", Type: "code"},
-			},
-		},
-		"occurrence": SearchParamInfo{
-			Resource: "ProcedureRequest",
-			Name:     "occurrence",
-			Type:     "date",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "occurrenceDateTime", Type: "dateTime"},
-				SearchParamPath{Path: "occurrencePeriod", Type: "Period"},
-				SearchParamPath{Path: "occurrenceTiming", Type: "Timing"},
-			},
-		},
-		"patient": SearchParamInfo{
-			Resource: "ProcedureRequest",
-			Name:     "patient",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "subject", Type: "Reference"},
-			},
-			Targets: []string{
-				"Patient",
-			},
-		},
-		"performer": SearchParamInfo{
-			Resource: "ProcedureRequest",
-			Name:     "performer",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "performer", Type: "Reference"},
-			},
-			Targets: []string{
+				"CareTeam",
 				"Device",
 				"HealthcareService",
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
-		"performer-type": SearchParamInfo{
-			Resource: "ProcedureRequest",
-			Name:     "performer-type",
+		"reason-code": SearchParamInfo{
+			Resource: "Procedure",
+			Name:     "reason-code",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "performerType", Type: "CodeableConcept"},
+				SearchParamPath{Path: "[]reasonCode", Type: "CodeableConcept"},
 			},
 		},
-		"priority": SearchParamInfo{
-			Resource: "ProcedureRequest",
-			Name:     "priority",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "priority", Type: "code"},
-			},
-		},
-		"replaces": SearchParamInfo{
-			Resource: "ProcedureRequest",
-			Name:     "replaces",
+		"reason-reference": SearchParamInfo{
+			Resource: "Procedure",
+			Name:     "reason-reference",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]replaces", Type: "Reference"},
+				SearchParamPath{Path: "[]reasonReference", Type: "Reference"},
 			},
 			Targets: []string{
-				"Any",
-			},
-		},
-		"requester": SearchParamInfo{
-			Resource: "ProcedureRequest",
-			Name:     "requester",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "requester.agent", Type: "Reference"},
-			},
-			Targets: []string{
-				"Device",
-				"Organization",
-				"Practitioner",
-			},
-		},
-		"requisition": SearchParamInfo{
-			Resource: "ProcedureRequest",
-			Name:     "requisition",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "requisition", Type: "Identifier"},
-			},
-		},
-		"specimen": SearchParamInfo{
-			Resource: "ProcedureRequest",
-			Name:     "specimen",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]specimen", Type: "Reference"},
-			},
-			Targets: []string{
-				"Specimen",
+				"Condition",
+				"DiagnosticReport",
+				"DocumentReference",
+				"Observation",
+				"Procedure",
 			},
 		},
 		"status": SearchParamInfo{
-			Resource: "ProcedureRequest",
+			Resource: "Procedure",
 			Name:     "status",
 			Type:     "token",
 			Paths: []SearchParamPath{
@@ -13586,191 +17524,15 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"subject": SearchParamInfo{
-			Resource: "ProcedureRequest",
+			Resource: "Procedure",
 			Name:     "subject",
 			Type:     "reference",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "subject", Type: "Reference"},
 			},
 			Targets: []string{
-				"Device",
 				"Group",
-				"Location",
 				"Patient",
-			},
-		},
-	},
-	"ProcessRequest": map[string]SearchParamInfo{
-		"_id": SearchParamInfo{
-			Resource: "ProcessRequest",
-			Name:     "_id",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "_id", Type: "id"},
-			},
-		},
-		"_lastUpdated": SearchParamInfo{
-			Resource: "ProcessRequest",
-			Name:     "_lastUpdated",
-			Type:     "date",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
-			},
-		},
-		"_profile": SearchParamInfo{
-			Resource: "ProcessRequest",
-			Name:     "_profile",
-			Type:     "uri",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
-			},
-		},
-		"_security": SearchParamInfo{
-			Resource: "ProcessRequest",
-			Name:     "_security",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
-			},
-		},
-		"_tag": SearchParamInfo{
-			Resource: "ProcessRequest",
-			Name:     "_tag",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
-			},
-		},
-		"action": SearchParamInfo{
-			Resource: "ProcessRequest",
-			Name:     "action",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "action", Type: "code"},
-			},
-		},
-		"identifier": SearchParamInfo{
-			Resource: "ProcessRequest",
-			Name:     "identifier",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
-			},
-		},
-		"organization": SearchParamInfo{
-			Resource: "ProcessRequest",
-			Name:     "organization",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "organization", Type: "Reference"},
-			},
-			Targets: []string{
-				"Organization",
-			},
-		},
-		"provider": SearchParamInfo{
-			Resource: "ProcessRequest",
-			Name:     "provider",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "provider", Type: "Reference"},
-			},
-			Targets: []string{
-				"Practitioner",
-			},
-		},
-	},
-	"ProcessResponse": map[string]SearchParamInfo{
-		"_id": SearchParamInfo{
-			Resource: "ProcessResponse",
-			Name:     "_id",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "_id", Type: "id"},
-			},
-		},
-		"_lastUpdated": SearchParamInfo{
-			Resource: "ProcessResponse",
-			Name:     "_lastUpdated",
-			Type:     "date",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
-			},
-		},
-		"_profile": SearchParamInfo{
-			Resource: "ProcessResponse",
-			Name:     "_profile",
-			Type:     "uri",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
-			},
-		},
-		"_security": SearchParamInfo{
-			Resource: "ProcessResponse",
-			Name:     "_security",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
-			},
-		},
-		"_tag": SearchParamInfo{
-			Resource: "ProcessResponse",
-			Name:     "_tag",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
-			},
-		},
-		"identifier": SearchParamInfo{
-			Resource: "ProcessResponse",
-			Name:     "identifier",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
-			},
-		},
-		"organization": SearchParamInfo{
-			Resource: "ProcessResponse",
-			Name:     "organization",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "organization", Type: "Reference"},
-			},
-			Targets: []string{
-				"Organization",
-			},
-		},
-		"request": SearchParamInfo{
-			Resource: "ProcessResponse",
-			Name:     "request",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "request", Type: "Reference"},
-			},
-			Targets: []string{
-				"Any",
-			},
-		},
-		"request-organization": SearchParamInfo{
-			Resource: "ProcessResponse",
-			Name:     "request-organization",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "requestOrganization", Type: "Reference"},
-			},
-			Targets: []string{
-				"Organization",
-			},
-		},
-		"request-provider": SearchParamInfo{
-			Resource: "ProcessResponse",
-			Name:     "request-provider",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "requestProvider", Type: "Reference"},
-			},
-			Targets: []string{
-				"Practitioner",
 			},
 		},
 	},
@@ -13794,9 +17556,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Provenance",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -13805,6 +17567,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Provenance",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -13820,13 +17590,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "agent",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]agent.whoReference", Type: "Reference"},
+				SearchParamPath{Path: "[]agent.who", Type: "Reference"},
 			},
 			Targets: []string{
 				"Device",
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -13838,28 +17609,20 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]agent.[]role", Type: "CodeableConcept"},
 			},
 		},
-		"end": SearchParamInfo{
+		"agent-type": SearchParamInfo{
 			Resource: "Provenance",
-			Name:     "end",
-			Type:     "date",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "period.end", Type: "dateTime"},
-			},
-		},
-		"entity-id": SearchParamInfo{
-			Resource: "Provenance",
-			Name:     "entity-id",
+			Name:     "agent-type",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]entity.whatIdentifier", Type: "Identifier"},
+				SearchParamPath{Path: "[]agent.type", Type: "CodeableConcept"},
 			},
 		},
-		"entity-ref": SearchParamInfo{
+		"entity": SearchParamInfo{
 			Resource: "Provenance",
-			Name:     "entity-ref",
+			Name:     "entity",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]entity.whatReference", Type: "Reference"},
+				SearchParamPath{Path: "[]entity.what", Type: "Reference"},
 			},
 			Targets: []string{
 				"Any",
@@ -13903,14 +17666,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]signature.[]type", Type: "Coding"},
 			},
 		},
-		"start": SearchParamInfo{
-			Resource: "Provenance",
-			Name:     "start",
-			Type:     "date",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "period.start", Type: "dateTime"},
-			},
-		},
 		"target": SearchParamInfo{
 			Resource: "Provenance",
 			Name:     "target",
@@ -13920,6 +17675,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Any",
+			},
+		},
+		"when": SearchParamInfo{
+			Resource: "Provenance",
+			Name:     "when",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "occurredDateTime", Type: "dateTime"},
 			},
 		},
 	},
@@ -13943,9 +17706,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Questionnaire",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -13954,6 +17717,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Questionnaire",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -13972,12 +17743,44 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]item.[]code", Type: "Coding"},
 			},
 		},
+		"context": SearchParamInfo{
+			Resource: "Questionnaire",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "Questionnaire",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "Questionnaire",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
+			},
+		},
 		"date": SearchParamInfo{
 			Resource: "Questionnaire",
 			Name:     "date",
 			Type:     "date",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "date", Type: "dateTime"},
+			},
+		},
+		"definition": SearchParamInfo{
+			Resource: "Questionnaire",
+			Name:     "definition",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]item.definition", Type: "uri"},
 			},
 		},
 		"description": SearchParamInfo{
@@ -14036,6 +17839,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "status", Type: "code"},
 			},
 		},
+		"subject-type": SearchParamInfo{
+			Resource: "Questionnaire",
+			Name:     "subject-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]subjectType", Type: "code"},
+			},
+		},
 		"title": SearchParamInfo{
 			Resource: "Questionnaire",
 			Name:     "title",
@@ -14081,9 +17892,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "QuestionnaireResponse",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -14092,6 +17903,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "QuestionnaireResponse",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -14111,8 +17930,10 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Device",
+				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -14133,20 +17954,18 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"CarePlan",
-				"ProcedureRequest",
-				"ReferralRequest",
+				"ServiceRequest",
 			},
 		},
-		"context": SearchParamInfo{
+		"encounter": SearchParamInfo{
 			Resource: "QuestionnaireResponse",
-			Name:     "context",
+			Name:     "encounter",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
+				SearchParamPath{Path: "encounter", Type: "Reference"},
 			},
 			Targets: []string{
 				"Encounter",
-				"EpisodeOfCare",
 			},
 		},
 		"identifier": SearchParamInfo{
@@ -14157,12 +17976,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "identifier", Type: "Identifier"},
 			},
 		},
-		"parent": SearchParamInfo{
+		"part-of": SearchParamInfo{
 			Resource: "QuestionnaireResponse",
-			Name:     "parent",
+			Name:     "part-of",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]parent", Type: "Reference"},
+				SearchParamPath{Path: "[]partOf", Type: "Reference"},
 			},
 			Targets: []string{
 				"Observation",
@@ -14185,7 +18004,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "questionnaire",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "questionnaire", Type: "Reference"},
+				SearchParamPath{Path: "questionnaire", Type: "canonical"},
 			},
 			Targets: []string{
 				"Questionnaire",
@@ -14201,6 +18020,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Targets: []string{
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -14224,9 +18044,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 	},
-	"ReferralRequest": map[string]SearchParamInfo{
+	"RegulatedAuthorization": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
-			Resource: "ReferralRequest",
+			Resource: "RegulatedAuthorization",
 			Name:     "_id",
 			Type:     "token",
 			Paths: []SearchParamPath{
@@ -14234,7 +18054,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"_lastUpdated": SearchParamInfo{
-			Resource: "ReferralRequest",
+			Resource: "RegulatedAuthorization",
 			Name:     "_lastUpdated",
 			Type:     "date",
 			Paths: []SearchParamPath{
@@ -14242,218 +18062,94 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"_profile": SearchParamInfo{
-			Resource: "ReferralRequest",
+			Resource: "RegulatedAuthorization",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
-			Resource: "ReferralRequest",
+			Resource: "RegulatedAuthorization",
 			Name:     "_security",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "RegulatedAuthorization",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
-			Resource: "ReferralRequest",
+			Resource: "RegulatedAuthorization",
 			Name:     "_tag",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
 			},
 		},
-		"authored-on": SearchParamInfo{
-			Resource: "ReferralRequest",
-			Name:     "authored-on",
-			Type:     "date",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "authoredOn", Type: "dateTime"},
-			},
-		},
-		"based-on": SearchParamInfo{
-			Resource: "ReferralRequest",
-			Name:     "based-on",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]basedOn", Type: "Reference"},
-			},
-			Targets: []string{
-				"CarePlan",
-				"ProcedureRequest",
-				"ReferralRequest",
-			},
-		},
-		"context": SearchParamInfo{
-			Resource: "ReferralRequest",
-			Name:     "context",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
-			},
-			Targets: []string{
-				"Encounter",
-				"EpisodeOfCare",
-			},
-		},
-		"definition": SearchParamInfo{
-			Resource: "ReferralRequest",
-			Name:     "definition",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]definition", Type: "Reference"},
-			},
-			Targets: []string{
-				"ActivityDefinition",
-				"PlanDefinition",
-			},
-		},
-		"encounter": SearchParamInfo{
-			Resource: "ReferralRequest",
-			Name:     "encounter",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
-			},
-			Targets: []string{
-				"Encounter",
-			},
-		},
-		"group-identifier": SearchParamInfo{
-			Resource: "ReferralRequest",
-			Name:     "group-identifier",
+		"case": SearchParamInfo{
+			Resource: "RegulatedAuthorization",
+			Name:     "case",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "groupIdentifier", Type: "Identifier"},
+				SearchParamPath{Path: "case.identifier", Type: "Identifier"},
+			},
+		},
+		"holder": SearchParamInfo{
+			Resource: "RegulatedAuthorization",
+			Name:     "holder",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "holder", Type: "Reference"},
+			},
+			Targets: []string{
+				"Organization",
 			},
 		},
 		"identifier": SearchParamInfo{
-			Resource: "ReferralRequest",
+			Resource: "RegulatedAuthorization",
 			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
-		"intent": SearchParamInfo{
-			Resource: "ReferralRequest",
-			Name:     "intent",
+		"region": SearchParamInfo{
+			Resource: "RegulatedAuthorization",
+			Name:     "region",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "intent", Type: "code"},
-			},
-		},
-		"occurrence-date": SearchParamInfo{
-			Resource: "ReferralRequest",
-			Name:     "occurrence-date",
-			Type:     "date",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "occurrenceDateTime", Type: "dateTime"},
-				SearchParamPath{Path: "occurrencePeriod", Type: "Period"},
-			},
-		},
-		"patient": SearchParamInfo{
-			Resource: "ReferralRequest",
-			Name:     "patient",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "subject", Type: "Reference"},
-			},
-			Targets: []string{
-				"Patient",
-			},
-		},
-		"priority": SearchParamInfo{
-			Resource: "ReferralRequest",
-			Name:     "priority",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "priority", Type: "code"},
-			},
-		},
-		"recipient": SearchParamInfo{
-			Resource: "ReferralRequest",
-			Name:     "recipient",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]recipient", Type: "Reference"},
-			},
-			Targets: []string{
-				"HealthcareService",
-				"Organization",
-				"Practitioner",
-			},
-		},
-		"replaces": SearchParamInfo{
-			Resource: "ReferralRequest",
-			Name:     "replaces",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]replaces", Type: "Reference"},
-			},
-			Targets: []string{
-				"ReferralRequest",
-			},
-		},
-		"requester": SearchParamInfo{
-			Resource: "ReferralRequest",
-			Name:     "requester",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "requester.agent", Type: "Reference"},
-			},
-			Targets: []string{
-				"Device",
-				"Organization",
-				"Patient",
-				"Practitioner",
-				"RelatedPerson",
-			},
-		},
-		"service": SearchParamInfo{
-			Resource: "ReferralRequest",
-			Name:     "service",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]serviceRequested", Type: "CodeableConcept"},
-			},
-		},
-		"specialty": SearchParamInfo{
-			Resource: "ReferralRequest",
-			Name:     "specialty",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "specialty", Type: "CodeableConcept"},
+				SearchParamPath{Path: "[]region", Type: "CodeableConcept"},
 			},
 		},
 		"status": SearchParamInfo{
-			Resource: "ReferralRequest",
+			Resource: "RegulatedAuthorization",
 			Name:     "status",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "status", Type: "code"},
+				SearchParamPath{Path: "status", Type: "CodeableConcept"},
 			},
 		},
 		"subject": SearchParamInfo{
-			Resource: "ReferralRequest",
+			Resource: "RegulatedAuthorization",
 			Name:     "subject",
 			Type:     "reference",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "subject", Type: "Reference"},
 			},
 			Targets: []string{
-				"Group",
-				"Patient",
-			},
-		},
-		"type": SearchParamInfo{
-			Resource: "ReferralRequest",
-			Name:     "type",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "type", Type: "CodeableConcept"},
+				"ActivityDefinition",
+				"DeviceDefinition",
+				"MedicinalProductDefinition",
+				"PackagedProductDefinition",
+				"PlanDefinition",
+				"ResearchStudy",
 			},
 		},
 	},
@@ -14477,9 +18173,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "RelatedPerson",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -14488,6 +18184,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "RelatedPerson",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -14605,6 +18309,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]name", Type: "HumanName"},
 			},
 		},
+		"relationship": SearchParamInfo{
+			Resource: "RelatedPerson",
+			Name:     "relationship",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relationship", Type: "CodeableConcept"},
+			},
+		},
 		"telecom": SearchParamInfo{
 			Resource: "RelatedPerson",
 			Name:     "telecom",
@@ -14634,9 +18346,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "RequestGroup",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -14645,6 +18357,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "RequestGroup",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -14665,6 +18385,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Targets: []string{
 				"Device",
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"authored": SearchParamInfo{
@@ -14675,27 +18396,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "authoredOn", Type: "dateTime"},
 			},
 		},
-		"context": SearchParamInfo{
+		"code": SearchParamInfo{
 			Resource: "RequestGroup",
-			Name:     "context",
-			Type:     "reference",
+			Name:     "code",
+			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
-			},
-			Targets: []string{
-				"Encounter",
-				"EpisodeOfCare",
-			},
-		},
-		"definition": SearchParamInfo{
-			Resource: "RequestGroup",
-			Name:     "definition",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]definition", Type: "Reference"},
-			},
-			Targets: []string{
-				"Any",
+				SearchParamPath{Path: "code", Type: "CodeableConcept"},
 			},
 		},
 		"encounter": SearchParamInfo{
@@ -14703,7 +18409,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "encounter",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
+				SearchParamPath{Path: "encounter", Type: "Reference"},
 			},
 			Targets: []string{
 				"Encounter",
@@ -14725,6 +18431,22 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
+		"instantiates-canonical": SearchParamInfo{
+			Resource: "RequestGroup",
+			Name:     "instantiates-canonical",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]instantiatesCanonical", Type: "canonical"},
+			},
+		},
+		"instantiates-uri": SearchParamInfo{
+			Resource: "RequestGroup",
+			Name:     "instantiates-uri",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]instantiatesUri", Type: "uri"},
+			},
+		},
 		"intent": SearchParamInfo{
 			Resource: "RequestGroup",
 			Name:     "intent",
@@ -14741,9 +18463,10 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]action.[]participant", Type: "Reference"},
 			},
 			Targets: []string{
+				"Device",
 				"Patient",
-				"Person",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -14787,6 +18510,460 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 	},
+	"ResearchDefinition": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"composed-of": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "composed-of",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
+			},
+		},
+		"date": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "date",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "date", Type: "dateTime"},
+			},
+		},
+		"depends-on": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "depends-on",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]library", Type: "canonical"},
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+				"Library",
+			},
+		},
+		"derived-from": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "derived-from",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+		"description": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "description",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "description", Type: "markdown"},
+			},
+		},
+		"effective": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "effective",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "effectivePeriod", Type: "Period"},
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"jurisdiction": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "jurisdiction",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]jurisdiction", Type: "CodeableConcept"},
+			},
+		},
+		"name": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "name",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "name", Type: "string"},
+			},
+		},
+		"predecessor": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "predecessor",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+		"publisher": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "publisher",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "publisher", Type: "string"},
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"successor": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "successor",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+		"title": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "title",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "title", Type: "string"},
+			},
+		},
+		"topic": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "topic",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]topic", Type: "CodeableConcept"},
+			},
+		},
+		"url": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "url",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "url", Type: "uri"},
+			},
+		},
+		"version": SearchParamInfo{
+			Resource: "ResearchDefinition",
+			Name:     "version",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "version", Type: "string"},
+			},
+		},
+	},
+	"ResearchElementDefinition": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"composed-of": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "composed-of",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
+			},
+		},
+		"date": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "date",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "date", Type: "dateTime"},
+			},
+		},
+		"depends-on": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "depends-on",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]library", Type: "canonical"},
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+				"Library",
+			},
+		},
+		"derived-from": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "derived-from",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+		"description": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "description",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "description", Type: "markdown"},
+			},
+		},
+		"effective": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "effective",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "effectivePeriod", Type: "Period"},
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"jurisdiction": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "jurisdiction",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]jurisdiction", Type: "CodeableConcept"},
+			},
+		},
+		"name": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "name",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "name", Type: "string"},
+			},
+		},
+		"predecessor": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "predecessor",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+		"publisher": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "publisher",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "publisher", Type: "string"},
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"successor": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "successor",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "canonical"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+		"title": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "title",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "title", Type: "string"},
+			},
+		},
+		"topic": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "topic",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]topic", Type: "CodeableConcept"},
+			},
+		},
+		"url": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "url",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "url", Type: "uri"},
+			},
+		},
+		"version": SearchParamInfo{
+			Resource: "ResearchElementDefinition",
+			Name:     "version",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "version", Type: "string"},
+			},
+		},
+	},
 	"ResearchStudy": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
 			Resource: "ResearchStudy",
@@ -14807,9 +18984,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "ResearchStudy",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -14818,6 +18995,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "ResearchStudy",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -14860,20 +19045,20 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
-		"jurisdiction": SearchParamInfo{
-			Resource: "ResearchStudy",
-			Name:     "jurisdiction",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]jurisdiction", Type: "CodeableConcept"},
-			},
-		},
 		"keyword": SearchParamInfo{
 			Resource: "ResearchStudy",
 			Name:     "keyword",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]keyword", Type: "CodeableConcept"},
+			},
+		},
+		"location": SearchParamInfo{
+			Resource: "ResearchStudy",
+			Name:     "location",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]location", Type: "CodeableConcept"},
 			},
 		},
 		"partof": SearchParamInfo{
@@ -14896,6 +19081,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"protocol": SearchParamInfo{
@@ -14968,9 +19154,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "ResearchSubject",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -14979,6 +19165,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "ResearchSubject",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -15002,7 +19196,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "identifier", Type: "Identifier"},
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
 		"individual": SearchParamInfo{
@@ -15035,6 +19229,17 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "status", Type: "code"},
 			},
 		},
+		"study": SearchParamInfo{
+			Resource: "ResearchSubject",
+			Name:     "study",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "study", Type: "Reference"},
+			},
+			Targets: []string{
+				"ResearchStudy",
+			},
+		},
 	},
 	"RiskAssessment": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
@@ -15056,9 +19261,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "RiskAssessment",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -15067,6 +19272,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "RiskAssessment",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -15101,7 +19314,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "encounter",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
+				SearchParamPath{Path: "encounter", Type: "Reference"},
 			},
 			Targets: []string{
 				"Encounter",
@@ -15112,7 +19325,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "identifier", Type: "Identifier"},
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
 		"method": SearchParamInfo{
@@ -15144,6 +19357,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Targets: []string{
 				"Device",
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"probability": SearchParamInfo{
@@ -15175,6 +19389,168 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 	},
+	"RiskEvidenceSynthesis": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "RiskEvidenceSynthesis",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "RiskEvidenceSynthesis",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "RiskEvidenceSynthesis",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "RiskEvidenceSynthesis",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "RiskEvidenceSynthesis",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "RiskEvidenceSynthesis",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "RiskEvidenceSynthesis",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "RiskEvidenceSynthesis",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "RiskEvidenceSynthesis",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
+			},
+		},
+		"date": SearchParamInfo{
+			Resource: "RiskEvidenceSynthesis",
+			Name:     "date",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "date", Type: "dateTime"},
+			},
+		},
+		"description": SearchParamInfo{
+			Resource: "RiskEvidenceSynthesis",
+			Name:     "description",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "description", Type: "markdown"},
+			},
+		},
+		"effective": SearchParamInfo{
+			Resource: "RiskEvidenceSynthesis",
+			Name:     "effective",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "effectivePeriod", Type: "Period"},
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "RiskEvidenceSynthesis",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"jurisdiction": SearchParamInfo{
+			Resource: "RiskEvidenceSynthesis",
+			Name:     "jurisdiction",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]jurisdiction", Type: "CodeableConcept"},
+			},
+		},
+		"name": SearchParamInfo{
+			Resource: "RiskEvidenceSynthesis",
+			Name:     "name",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "name", Type: "string"},
+			},
+		},
+		"publisher": SearchParamInfo{
+			Resource: "RiskEvidenceSynthesis",
+			Name:     "publisher",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "publisher", Type: "string"},
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "RiskEvidenceSynthesis",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"title": SearchParamInfo{
+			Resource: "RiskEvidenceSynthesis",
+			Name:     "title",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "title", Type: "string"},
+			},
+		},
+		"url": SearchParamInfo{
+			Resource: "RiskEvidenceSynthesis",
+			Name:     "url",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "url", Type: "uri"},
+			},
+		},
+		"version": SearchParamInfo{
+			Resource: "RiskEvidenceSynthesis",
+			Name:     "version",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "version", Type: "string"},
+			},
+		},
+	},
 	"Schedule": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
 			Resource: "Schedule",
@@ -15195,9 +19571,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Schedule",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -15206,6 +19582,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Schedule",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -15257,12 +19641,28 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
-		"type": SearchParamInfo{
+		"service-category": SearchParamInfo{
 			Resource: "Schedule",
-			Name:     "type",
+			Name:     "service-category",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]serviceCategory", Type: "CodeableConcept"},
+			},
+		},
+		"service-type": SearchParamInfo{
+			Resource: "Schedule",
+			Name:     "service-type",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]serviceType", Type: "CodeableConcept"},
+			},
+		},
+		"specialty": SearchParamInfo{
+			Resource: "Schedule",
+			Name:     "specialty",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]specialty", Type: "CodeableConcept"},
 			},
 		},
 	},
@@ -15286,9 +19686,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "SearchParameter",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -15297,6 +19697,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "SearchParameter",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -15328,10 +19736,34 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "component",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]component.definition", Type: "Reference"},
+				SearchParamPath{Path: "[]component.definition", Type: "canonical"},
 			},
 			Targets: []string{
 				"SearchParameter",
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "SearchParameter",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "SearchParameter",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "SearchParameter",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
 			},
 		},
 		"date": SearchParamInfo{
@@ -15345,9 +19777,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"derived-from": SearchParamInfo{
 			Resource: "SearchParameter",
 			Name:     "derived-from",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "derivedFrom", Type: "uri"},
+				SearchParamPath{Path: "derivedFrom", Type: "canonical"},
+			},
+			Targets: []string{
+				"SearchParameter",
 			},
 		},
 		"description": SearchParamInfo{
@@ -15423,9 +19858,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 	},
-	"Sequence": map[string]SearchParamInfo{
+	"ServiceRequest": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
-			Resource: "Sequence",
+			Resource: "ServiceRequest",
 			Name:     "_id",
 			Type:     "token",
 			Paths: []SearchParamPath{
@@ -15433,7 +19868,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"_lastUpdated": SearchParamInfo{
-			Resource: "Sequence",
+			Resource: "ServiceRequest",
 			Name:     "_lastUpdated",
 			Type:     "date",
 			Paths: []SearchParamPath{
@@ -15441,271 +19876,250 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 		"_profile": SearchParamInfo{
-			Resource: "Sequence",
+			Resource: "ServiceRequest",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
-			Resource: "Sequence",
+			Resource: "ServiceRequest",
 			Name:     "_security",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "ServiceRequest",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
-			Resource: "Sequence",
+			Resource: "ServiceRequest",
 			Name:     "_tag",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
 			},
 		},
-		"chromosome": SearchParamInfo{
-			Resource: "Sequence",
-			Name:     "chromosome",
-			Type:     "token",
+		"authored": SearchParamInfo{
+			Resource: "ServiceRequest",
+			Name:     "authored",
+			Type:     "date",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "referenceSeq.chromosome", Type: "CodeableConcept"},
+				SearchParamPath{Path: "authoredOn", Type: "dateTime"},
 			},
 		},
-		"end": SearchParamInfo{
-			Resource: "Sequence",
-			Name:     "end",
-			Type:     "number",
+		"based-on": SearchParamInfo{
+			Resource: "ServiceRequest",
+			Name:     "based-on",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "referenceSeq.windowEnd", Type: "integer"},
+				SearchParamPath{Path: "[]basedOn", Type: "Reference"},
+			},
+			Targets: []string{
+				"CarePlan",
+				"MedicationRequest",
+				"ServiceRequest",
+			},
+		},
+		"body-site": SearchParamInfo{
+			Resource: "ServiceRequest",
+			Name:     "body-site",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]bodySite", Type: "CodeableConcept"},
+			},
+		},
+		"category": SearchParamInfo{
+			Resource: "ServiceRequest",
+			Name:     "category",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]category", Type: "CodeableConcept"},
+			},
+		},
+		"code": SearchParamInfo{
+			Resource: "ServiceRequest",
+			Name:     "code",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "code", Type: "CodeableConcept"},
+			},
+		},
+		"encounter": SearchParamInfo{
+			Resource: "ServiceRequest",
+			Name:     "encounter",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "encounter", Type: "Reference"},
+			},
+			Targets: []string{
+				"Encounter",
 			},
 		},
 		"identifier": SearchParamInfo{
-			Resource: "Sequence",
+			Resource: "ServiceRequest",
 			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
+		"instantiates-canonical": SearchParamInfo{
+			Resource: "ServiceRequest",
+			Name:     "instantiates-canonical",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]instantiatesCanonical", Type: "canonical"},
+			},
+			Targets: []string{
+				"ActivityDefinition",
+				"PlanDefinition",
+			},
+		},
+		"instantiates-uri": SearchParamInfo{
+			Resource: "ServiceRequest",
+			Name:     "instantiates-uri",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]instantiatesUri", Type: "uri"},
+			},
+		},
+		"intent": SearchParamInfo{
+			Resource: "ServiceRequest",
+			Name:     "intent",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "intent", Type: "code"},
+			},
+		},
+		"occurrence": SearchParamInfo{
+			Resource: "ServiceRequest",
+			Name:     "occurrence",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "occurrenceDateTime", Type: "dateTime"},
+				SearchParamPath{Path: "occurrencePeriod", Type: "Period"},
+				SearchParamPath{Path: "occurrenceTiming", Type: "Timing"},
+			},
+		},
 		"patient": SearchParamInfo{
-			Resource: "Sequence",
+			Resource: "ServiceRequest",
 			Name:     "patient",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "patient", Type: "Reference"},
+				SearchParamPath{Path: "subject", Type: "Reference"},
 			},
 			Targets: []string{
 				"Patient",
 			},
 		},
-		"start": SearchParamInfo{
-			Resource: "Sequence",
-			Name:     "start",
-			Type:     "number",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "referenceSeq.windowStart", Type: "integer"},
-			},
-		},
-		"type": SearchParamInfo{
-			Resource: "Sequence",
-			Name:     "type",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "type", Type: "code"},
-			},
-		},
-	},
-	"ServiceDefinition": map[string]SearchParamInfo{
-		"_id": SearchParamInfo{
-			Resource: "ServiceDefinition",
-			Name:     "_id",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "_id", Type: "id"},
-			},
-		},
-		"_lastUpdated": SearchParamInfo{
-			Resource: "ServiceDefinition",
-			Name:     "_lastUpdated",
-			Type:     "date",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
-			},
-		},
-		"_profile": SearchParamInfo{
-			Resource: "ServiceDefinition",
-			Name:     "_profile",
-			Type:     "uri",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
-			},
-		},
-		"_security": SearchParamInfo{
-			Resource: "ServiceDefinition",
-			Name:     "_security",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
-			},
-		},
-		"_tag": SearchParamInfo{
-			Resource: "ServiceDefinition",
-			Name:     "_tag",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
-			},
-		},
-		"composed-of": SearchParamInfo{
-			Resource: "ServiceDefinition",
-			Name:     "composed-of",
+		"performer": SearchParamInfo{
+			Resource: "ServiceRequest",
+			Name:     "performer",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
+				SearchParamPath{Path: "[]performer", Type: "Reference"},
 			},
 			Targets: []string{
-				"Any",
+				"CareTeam",
+				"Device",
+				"HealthcareService",
+				"Organization",
+				"Patient",
+				"Practitioner",
+				"PractitionerRole",
+				"RelatedPerson",
 			},
 		},
-		"date": SearchParamInfo{
-			Resource: "ServiceDefinition",
-			Name:     "date",
-			Type:     "date",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "date", Type: "dateTime"},
-			},
-		},
-		"depends-on": SearchParamInfo{
-			Resource: "ServiceDefinition",
-			Name:     "depends-on",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
-			},
-			Targets: []string{
-				"Any",
-			},
-		},
-		"derived-from": SearchParamInfo{
-			Resource: "ServiceDefinition",
-			Name:     "derived-from",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
-			},
-			Targets: []string{
-				"Any",
-			},
-		},
-		"description": SearchParamInfo{
-			Resource: "ServiceDefinition",
-			Name:     "description",
-			Type:     "string",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "description", Type: "markdown"},
-			},
-		},
-		"effective": SearchParamInfo{
-			Resource: "ServiceDefinition",
-			Name:     "effective",
-			Type:     "date",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "effectivePeriod", Type: "Period"},
-			},
-		},
-		"identifier": SearchParamInfo{
-			Resource: "ServiceDefinition",
-			Name:     "identifier",
+		"performer-type": SearchParamInfo{
+			Resource: "ServiceRequest",
+			Name:     "performer-type",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+				SearchParamPath{Path: "performerType", Type: "CodeableConcept"},
 			},
 		},
-		"jurisdiction": SearchParamInfo{
-			Resource: "ServiceDefinition",
-			Name:     "jurisdiction",
+		"priority": SearchParamInfo{
+			Resource: "ServiceRequest",
+			Name:     "priority",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]jurisdiction", Type: "CodeableConcept"},
+				SearchParamPath{Path: "priority", Type: "code"},
 			},
 		},
-		"name": SearchParamInfo{
-			Resource: "ServiceDefinition",
-			Name:     "name",
-			Type:     "string",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "name", Type: "string"},
-			},
-		},
-		"predecessor": SearchParamInfo{
-			Resource: "ServiceDefinition",
-			Name:     "predecessor",
+		"replaces": SearchParamInfo{
+			Resource: "ServiceRequest",
+			Name:     "replaces",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
+				SearchParamPath{Path: "[]replaces", Type: "Reference"},
 			},
 			Targets: []string{
-				"Any",
+				"ServiceRequest",
 			},
 		},
-		"publisher": SearchParamInfo{
-			Resource: "ServiceDefinition",
-			Name:     "publisher",
-			Type:     "string",
+		"requester": SearchParamInfo{
+			Resource: "ServiceRequest",
+			Name:     "requester",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "publisher", Type: "string"},
+				SearchParamPath{Path: "requester", Type: "Reference"},
+			},
+			Targets: []string{
+				"Device",
+				"Organization",
+				"Patient",
+				"Practitioner",
+				"PractitionerRole",
+				"RelatedPerson",
+			},
+		},
+		"requisition": SearchParamInfo{
+			Resource: "ServiceRequest",
+			Name:     "requisition",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "requisition", Type: "Identifier"},
+			},
+		},
+		"specimen": SearchParamInfo{
+			Resource: "ServiceRequest",
+			Name:     "specimen",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]specimen", Type: "Reference"},
+			},
+			Targets: []string{
+				"Specimen",
 			},
 		},
 		"status": SearchParamInfo{
-			Resource: "ServiceDefinition",
+			Resource: "ServiceRequest",
 			Name:     "status",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "status", Type: "code"},
 			},
 		},
-		"successor": SearchParamInfo{
-			Resource: "ServiceDefinition",
-			Name:     "successor",
+		"subject": SearchParamInfo{
+			Resource: "ServiceRequest",
+			Name:     "subject",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]relatedArtifact.resource", Type: "Reference"},
+				SearchParamPath{Path: "subject", Type: "Reference"},
 			},
 			Targets: []string{
-				"Any",
-			},
-		},
-		"title": SearchParamInfo{
-			Resource: "ServiceDefinition",
-			Name:     "title",
-			Type:     "string",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "title", Type: "string"},
-			},
-		},
-		"topic": SearchParamInfo{
-			Resource: "ServiceDefinition",
-			Name:     "topic",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]topic", Type: "CodeableConcept"},
-			},
-		},
-		"url": SearchParamInfo{
-			Resource: "ServiceDefinition",
-			Name:     "url",
-			Type:     "uri",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "url", Type: "uri"},
-			},
-		},
-		"version": SearchParamInfo{
-			Resource: "ServiceDefinition",
-			Name:     "version",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "version", Type: "string"},
+				"Device",
+				"Group",
+				"Location",
+				"Patient",
 			},
 		},
 	},
@@ -15729,9 +20143,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Slot",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -15742,12 +20156,28 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "Slot",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
 			Resource: "Slot",
 			Name:     "_tag",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"appointment-type": SearchParamInfo{
+			Resource: "Slot",
+			Name:     "appointment-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "appointmentType", Type: "CodeableConcept"},
 			},
 		},
 		"identifier": SearchParamInfo{
@@ -15769,12 +20199,28 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				"Schedule",
 			},
 		},
-		"slot-type": SearchParamInfo{
+		"service-category": SearchParamInfo{
 			Resource: "Slot",
-			Name:     "slot-type",
+			Name:     "service-category",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]serviceCategory", Type: "CodeableConcept"},
+			},
+		},
+		"service-type": SearchParamInfo{
+			Resource: "Slot",
+			Name:     "service-type",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "[]serviceType", Type: "CodeableConcept"},
+			},
+		},
+		"specialty": SearchParamInfo{
+			Resource: "Slot",
+			Name:     "specialty",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]specialty", Type: "CodeableConcept"},
 			},
 		},
 		"start": SearchParamInfo{
@@ -15814,9 +20260,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Specimen",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -15825,6 +20271,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Specimen",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -15869,6 +20323,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"container": SearchParamInfo{
@@ -15935,6 +20390,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Targets: []string{
 				"Device",
 				"Group",
+				"Location",
 				"Patient",
 				"Substance",
 			},
@@ -15945,6 +20401,250 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "type", Type: "CodeableConcept"},
+			},
+		},
+	},
+	"SpecimenDefinition": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "SpecimenDefinition",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "SpecimenDefinition",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "SpecimenDefinition",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "SpecimenDefinition",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "SpecimenDefinition",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "SpecimenDefinition",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"container": SearchParamInfo{
+			Resource: "SpecimenDefinition",
+			Name:     "container",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]typeTested.container.type", Type: "CodeableConcept"},
+			},
+		},
+		"experimental": SearchParamInfo{
+			Resource: "SpecimenDefinition",
+			Name:     "experimental",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "experimental", Type: "boolean"},
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "SpecimenDefinition",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "identifier", Type: "Identifier"},
+			},
+		},
+		"is-derived": SearchParamInfo{
+			Resource: "SpecimenDefinition",
+			Name:     "is-derived",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]typeTested.isDerived", Type: "boolean"},
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "SpecimenDefinition",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"title": SearchParamInfo{
+			Resource: "SpecimenDefinition",
+			Name:     "title",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "title", Type: "string"},
+			},
+		},
+		"type": SearchParamInfo{
+			Resource: "SpecimenDefinition",
+			Name:     "type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "typeCollected", Type: "CodeableConcept"},
+			},
+		},
+		"type-tested": SearchParamInfo{
+			Resource: "SpecimenDefinition",
+			Name:     "type-tested",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]typeTested.type", Type: "CodeableConcept"},
+			},
+		},
+	},
+	"Statistic": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "Statistic",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "Statistic",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "Statistic",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "Statistic",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Statistic",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "Statistic",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "Statistic",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "Statistic",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "Statistic",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
+			},
+		},
+		"date": SearchParamInfo{
+			Resource: "Statistic",
+			Name:     "date",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "date", Type: "dateTime"},
+			},
+		},
+		"description": SearchParamInfo{
+			Resource: "Statistic",
+			Name:     "description",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "description", Type: "markdown"},
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "Statistic",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "Statistic",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"title": SearchParamInfo{
+			Resource: "Statistic",
+			Name:     "title",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "title", Type: "string"},
+			},
+		},
+		"url": SearchParamInfo{
+			Resource: "Statistic",
+			Name:     "url",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "url", Type: "uri"},
+			},
+		},
+		"version": SearchParamInfo{
+			Resource: "Statistic",
+			Name:     "version",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "version", Type: "string"},
 			},
 		},
 	},
@@ -15968,9 +20668,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "StructureDefinition",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -15979,6 +20679,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "StructureDefinition",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -16000,9 +20708,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"base": SearchParamInfo{
 			Resource: "StructureDefinition",
 			Name:     "base",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "baseDefinition", Type: "uri"},
+				SearchParamPath{Path: "baseDefinition", Type: "canonical"},
+			},
+			Targets: []string{
+				"StructureDefinition",
 			},
 		},
 		"base-path": SearchParamInfo{
@@ -16014,12 +20725,28 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "snapshot.[]element.base.path", Type: "string"},
 			},
 		},
+		"context": SearchParamInfo{
+			Resource: "StructureDefinition",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "StructureDefinition",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
 		"context-type": SearchParamInfo{
 			Resource: "StructureDefinition",
 			Name:     "context-type",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "contextType", Type: "code"},
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
 			},
 		},
 		"date": SearchParamInfo{
@@ -16057,10 +20784,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"ext-context": SearchParamInfo{
 			Resource: "StructureDefinition",
 			Name:     "ext-context",
-			Type:     "string",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]context", Type: "string"},
-			},
+			Type:     "token",
 		},
 		"identifier": SearchParamInfo{
 			Resource: "StructureDefinition",
@@ -16138,9 +20862,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"type": SearchParamInfo{
 			Resource: "StructureDefinition",
 			Name:     "type",
-			Type:     "token",
+			Type:     "uri",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "type", Type: "code"},
+				SearchParamPath{Path: "type", Type: "uri"},
 			},
 		},
 		"url": SearchParamInfo{
@@ -16156,7 +20880,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "valueset",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "snapshot.[]element.binding.valueSetReference", Type: "Reference"},
+				SearchParamPath{Path: "snapshot.[]element.binding.valueSet", Type: "canonical"},
 			},
 			Targets: []string{
 				"ValueSet",
@@ -16191,9 +20915,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "StructureMap",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -16204,12 +20928,44 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "StructureMap",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
 			Resource: "StructureMap",
 			Name:     "_tag",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "StructureMap",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "StructureMap",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "StructureMap",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
 			},
 		},
 		"date": SearchParamInfo{
@@ -16313,9 +21069,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Subscription",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -16326,20 +21082,20 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "Subscription",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
 			Resource: "Subscription",
 			Name:     "_tag",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
-			},
-		},
-		"add-tag": SearchParamInfo{
-			Resource: "Subscription",
-			Name:     "add-tag",
-			Type:     "token",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "[]tag", Type: "Coding"},
 			},
 		},
 		"contact": SearchParamInfo{
@@ -16350,20 +21106,12 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]contact", Type: "ContactPoint"},
 			},
 		},
-		"criteria": SearchParamInfo{
-			Resource: "Subscription",
-			Name:     "criteria",
-			Type:     "string",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "criteria", Type: "string"},
-			},
-		},
 		"payload": SearchParamInfo{
 			Resource: "Subscription",
 			Name:     "payload",
-			Type:     "string",
+			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "channel.payload", Type: "string"},
+				SearchParamPath{Path: "channel.payload.contentType", Type: "code"},
 			},
 		},
 		"status": SearchParamInfo{
@@ -16379,7 +21127,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "type",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "channel.type", Type: "code"},
+				SearchParamPath{Path: "channel.type", Type: "CodeableConcept"},
 			},
 		},
 		"url": SearchParamInfo{
@@ -16387,7 +21135,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "url",
 			Type:     "uri",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "channel.endpoint", Type: "uri"},
+				SearchParamPath{Path: "channel.endpoint", Type: "url"},
 			},
 		},
 	},
@@ -16411,9 +21159,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Substance",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -16422,6 +21170,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Substance",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -16501,6 +21257,322 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 	},
+	"SubstanceDefinition": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "SubstanceDefinition",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "SubstanceDefinition",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "SubstanceDefinition",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "SubstanceDefinition",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "SubstanceDefinition",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "SubstanceDefinition",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"code": SearchParamInfo{
+			Resource: "SubstanceDefinition",
+			Name:     "code",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]code.code", Type: "CodeableConcept"},
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "SubstanceDefinition",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "identifier", Type: "Identifier"},
+			},
+		},
+	},
+	"SubstanceNucleicAcid": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "SubstanceNucleicAcid",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "SubstanceNucleicAcid",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "SubstanceNucleicAcid",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "SubstanceNucleicAcid",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "SubstanceNucleicAcid",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "SubstanceNucleicAcid",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+	},
+	"SubstancePolymer": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "SubstancePolymer",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "SubstancePolymer",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "SubstancePolymer",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "SubstancePolymer",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "SubstancePolymer",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "SubstancePolymer",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+	},
+	"SubstanceProtein": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "SubstanceProtein",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "SubstanceProtein",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "SubstanceProtein",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "SubstanceProtein",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "SubstanceProtein",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "SubstanceProtein",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+	},
+	"SubstanceReferenceInformation": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "SubstanceReferenceInformation",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "SubstanceReferenceInformation",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "SubstanceReferenceInformation",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "SubstanceReferenceInformation",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "SubstanceReferenceInformation",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "SubstanceReferenceInformation",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+	},
+	"SubstanceSourceMaterial": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "SubstanceSourceMaterial",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "SubstanceSourceMaterial",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "SubstanceSourceMaterial",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "SubstanceSourceMaterial",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "SubstanceSourceMaterial",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "SubstanceSourceMaterial",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+	},
 	"SupplyDelivery": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
 			Resource: "SupplyDelivery",
@@ -16521,9 +21593,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "SupplyDelivery",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -16532,6 +21604,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "SupplyDelivery",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -16547,7 +21627,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "identifier", Type: "Identifier"},
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
 		"patient": SearchParamInfo{
@@ -16570,6 +21650,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 		"status": SearchParamInfo{
@@ -16590,6 +21671,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Targets: []string{
 				"Organization",
 				"Practitioner",
+				"PractitionerRole",
 			},
 		},
 	},
@@ -16613,9 +21695,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "SupplyRequest",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -16624,6 +21706,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "SupplyRequest",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -16655,7 +21745,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "identifier",
 			Type:     "token",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "identifier", Type: "Identifier"},
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
 			},
 		},
 		"requester": SearchParamInfo{
@@ -16663,13 +21753,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "requester",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "requester.agent", Type: "Reference"},
+				SearchParamPath{Path: "requester", Type: "Reference"},
 			},
 			Targets: []string{
 				"Device",
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -16681,6 +21772,19 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "status", Type: "code"},
 			},
 		},
+		"subject": SearchParamInfo{
+			Resource: "SupplyRequest",
+			Name:     "subject",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "deliverTo", Type: "Reference"},
+			},
+			Targets: []string{
+				"Location",
+				"Organization",
+				"Patient",
+			},
+		},
 		"supplier": SearchParamInfo{
 			Resource: "SupplyRequest",
 			Name:     "supplier",
@@ -16689,6 +21793,7 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "[]supplier", Type: "Reference"},
 			},
 			Targets: []string{
+				"HealthcareService",
 				"Organization",
 			},
 		},
@@ -16713,9 +21818,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "Task",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -16724,6 +21829,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Task",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -16769,16 +21882,15 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "code", Type: "CodeableConcept"},
 			},
 		},
-		"context": SearchParamInfo{
+		"encounter": SearchParamInfo{
 			Resource: "Task",
-			Name:     "context",
+			Name:     "encounter",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "context", Type: "Reference"},
+				SearchParamPath{Path: "encounter", Type: "Reference"},
 			},
 			Targets: []string{
 				"Encounter",
-				"EpisodeOfCare",
 			},
 		},
 		"focus": SearchParamInfo{
@@ -16824,17 +21936,6 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "lastModified", Type: "dateTime"},
 			},
 		},
-		"organization": SearchParamInfo{
-			Resource: "Task",
-			Name:     "organization",
-			Type:     "reference",
-			Paths: []SearchParamPath{
-				SearchParamPath{Path: "requester.onBehalfOf", Type: "Reference"},
-			},
-			Targets: []string{
-				"Organization",
-			},
-		},
 		"owner": SearchParamInfo{
 			Resource: "Task",
 			Name:     "owner",
@@ -16843,10 +21944,13 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "owner", Type: "Reference"},
 			},
 			Targets: []string{
+				"CareTeam",
 				"Device",
+				"HealthcareService",
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -16901,13 +22005,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Name:     "requester",
 			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "requester.agent", Type: "Reference"},
+				SearchParamPath{Path: "requester", Type: "Reference"},
 			},
 			Targets: []string{
 				"Device",
 				"Organization",
 				"Patient",
 				"Practitioner",
+				"PractitionerRole",
 				"RelatedPerson",
 			},
 		},
@@ -16931,6 +22036,152 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 	},
+	"TerminologyCapabilities": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "TerminologyCapabilities",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "TerminologyCapabilities",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "TerminologyCapabilities",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "TerminologyCapabilities",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "TerminologyCapabilities",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "TerminologyCapabilities",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "TerminologyCapabilities",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "TerminologyCapabilities",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "TerminologyCapabilities",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
+			},
+		},
+		"date": SearchParamInfo{
+			Resource: "TerminologyCapabilities",
+			Name:     "date",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "date", Type: "dateTime"},
+			},
+		},
+		"description": SearchParamInfo{
+			Resource: "TerminologyCapabilities",
+			Name:     "description",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "description", Type: "markdown"},
+			},
+		},
+		"jurisdiction": SearchParamInfo{
+			Resource: "TerminologyCapabilities",
+			Name:     "jurisdiction",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]jurisdiction", Type: "CodeableConcept"},
+			},
+		},
+		"name": SearchParamInfo{
+			Resource: "TerminologyCapabilities",
+			Name:     "name",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "name", Type: "string"},
+			},
+		},
+		"publisher": SearchParamInfo{
+			Resource: "TerminologyCapabilities",
+			Name:     "publisher",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "publisher", Type: "string"},
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "TerminologyCapabilities",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"title": SearchParamInfo{
+			Resource: "TerminologyCapabilities",
+			Name:     "title",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "title", Type: "string"},
+			},
+		},
+		"url": SearchParamInfo{
+			Resource: "TerminologyCapabilities",
+			Name:     "url",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "url", Type: "uri"},
+			},
+		},
+		"version": SearchParamInfo{
+			Resource: "TerminologyCapabilities",
+			Name:     "version",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "version", Type: "string"},
+			},
+		},
+	},
 	"TestReport": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
 			Resource: "TestReport",
@@ -16951,9 +22202,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "TestReport",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -16962,6 +22213,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "TestReport",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -17044,9 +22303,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "TestScript",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -17057,12 +22316,44 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "TestScript",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
 			Resource: "TestScript",
 			Name:     "_tag",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "TestScript",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "TestScript",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "TestScript",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
 			},
 		},
 		"date": SearchParamInfo{
@@ -17154,6 +22445,133 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 	},
+	"Topic": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "Topic",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "Topic",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "Topic",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "Topic",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "Topic",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "Topic",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"date": SearchParamInfo{
+			Resource: "Topic",
+			Name:     "date",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "date", Type: "dateTime"},
+			},
+		},
+		"identifier": SearchParamInfo{
+			Resource: "Topic",
+			Name:     "identifier",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]identifier", Type: "Identifier"},
+			},
+		},
+		"publisher": SearchParamInfo{
+			Resource: "Topic",
+			Name:     "publisher",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "publisher", Type: "Reference"},
+			},
+			Targets: []string{
+				"Organization",
+				"Practitioner",
+				"PractitionerRole",
+			},
+		},
+		"resource-type": SearchParamInfo{
+			Resource: "Topic",
+			Name:     "resource-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "resourceTrigger.[]resourceType", Type: "code"},
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "Topic",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
+			},
+		},
+		"title": SearchParamInfo{
+			Resource: "Topic",
+			Name:     "title",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "title", Type: "string"},
+			},
+		},
+		"trigger-description": SearchParamInfo{
+			Resource: "Topic",
+			Name:     "trigger-description",
+			Type:     "string",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "resourceTrigger.description", Type: "string"},
+			},
+		},
+		"url": SearchParamInfo{
+			Resource: "Topic",
+			Name:     "url",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "url", Type: "uri"},
+			},
+		},
+		"version": SearchParamInfo{
+			Resource: "Topic",
+			Name:     "version",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "version", Type: "string"},
+			},
+		},
+	},
 	"ValueSet": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
 			Resource: "ValueSet",
@@ -17174,9 +22592,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "ValueSet",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -17187,12 +22605,53 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
 			},
 		},
+		"_source": SearchParamInfo{
+			Resource: "ValueSet",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
 		"_tag": SearchParamInfo{
 			Resource: "ValueSet",
 			Name:     "_tag",
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"code": SearchParamInfo{
+			Resource: "ValueSet",
+			Name:     "code",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "compose.[]include.[]concept.code", Type: "code"},
+				SearchParamPath{Path: "expansion.[]contains.code", Type: "code"},
+			},
+		},
+		"context": SearchParamInfo{
+			Resource: "ValueSet",
+			Name:     "context",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueCodeableConcept", Type: "CodeableConcept"},
+			},
+		},
+		"context-quantity": SearchParamInfo{
+			Resource: "ValueSet",
+			Name:     "context-quantity",
+			Type:     "quantity",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.valueQuantity", Type: "Quantity"},
+			},
+		},
+		"context-type": SearchParamInfo{
+			Resource: "ValueSet",
+			Name:     "context-type",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]useContext.code", Type: "Coding"},
 			},
 		},
 		"date": SearchParamInfo{
@@ -17292,6 +22751,67 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 		},
 	},
+	"VerificationResult": map[string]SearchParamInfo{
+		"_id": SearchParamInfo{
+			Resource: "VerificationResult",
+			Name:     "_id",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "_id", Type: "id"},
+			},
+		},
+		"_lastUpdated": SearchParamInfo{
+			Resource: "VerificationResult",
+			Name:     "_lastUpdated",
+			Type:     "date",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.lastUpdated", Type: "instant"},
+			},
+		},
+		"_profile": SearchParamInfo{
+			Resource: "VerificationResult",
+			Name:     "_profile",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
+			},
+		},
+		"_security": SearchParamInfo{
+			Resource: "VerificationResult",
+			Name:     "_security",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "VerificationResult",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
+			},
+		},
+		"_tag": SearchParamInfo{
+			Resource: "VerificationResult",
+			Name:     "_tag",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.[]tag", Type: "Coding"},
+			},
+		},
+		"target": SearchParamInfo{
+			Resource: "VerificationResult",
+			Name:     "target",
+			Type:     "reference",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "[]target", Type: "Reference"},
+			},
+			Targets: []string{
+				"Any",
+			},
+		},
+	},
 	"VisionPrescription": map[string]SearchParamInfo{
 		"_id": SearchParamInfo{
 			Resource: "VisionPrescription",
@@ -17312,9 +22832,9 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 		"_profile": SearchParamInfo{
 			Resource: "VisionPrescription",
 			Name:     "_profile",
-			Type:     "uri",
+			Type:     "reference",
 			Paths: []SearchParamPath{
-				SearchParamPath{Path: "meta.[]profile", Type: "uri"},
+				SearchParamPath{Path: "meta.[]profile", Type: "canonical"},
 			},
 		},
 		"_security": SearchParamInfo{
@@ -17323,6 +22843,14 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			Type:     "token",
 			Paths: []SearchParamPath{
 				SearchParamPath{Path: "meta.[]security", Type: "Coding"},
+			},
+		},
+		"_source": SearchParamInfo{
+			Resource: "VisionPrescription",
+			Name:     "_source",
+			Type:     "uri",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "meta.source", Type: "uri"},
 			},
 		},
 		"_tag": SearchParamInfo{
@@ -17380,6 +22908,15 @@ var SearchParameterDictionary = map[string]map[string]SearchParamInfo{
 			},
 			Targets: []string{
 				"Practitioner",
+				"PractitionerRole",
+			},
+		},
+		"status": SearchParamInfo{
+			Resource: "VisionPrescription",
+			Name:     "status",
+			Type:     "token",
+			Paths: []SearchParamPath{
+				SearchParamPath{Path: "status", Type: "code"},
 			},
 		},
 	},

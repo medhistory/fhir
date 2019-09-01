@@ -27,11 +27,9 @@
 package models
 
 type Reference struct {
-	Reference    string      `bson:"reference,omitempty" json:"reference,omitempty"`
-	Identifier   *Identifier `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Display      string      `bson:"display,omitempty" json:"display,omitempty"`
-
-	Type         string      `bson:"reference__type,omitempty" json:"reference__type,omitempty"`
-	ReferencedID string      `bson:"reference__id,omitempty" json:"reference__id,omitempty"`
-	External     *bool       `bson:"reference__external,omitempty" json:"reference__external,omitempty"`
+	Reference    string `bson:"reference,omitempty" json:"reference,omitempty"`
+	Display      string `bson:"display,omitempty" json:"display,omitempty"`
+	Type         string `bson:"type,omitempty" json:"type,omitempty"`
+	ReferencedID string `bson:"referenceid,omitempty" json:"referenceid,omitempty"`
+	External     *bool  `bson:"external,omitempty" json:"external,omitempty"`
 }

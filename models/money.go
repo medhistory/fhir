@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2017, HL7, Inc & The MITRE Corporation
+// Copyright (c) 2011-2015, HL7, Inc & The MITRE Corporation
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -27,5 +27,6 @@
 package models
 
 type Money struct {
-	Quantity `bson:",inline"`
+	Value    *float64 `bson:"value,omitempty" json:"value,omitempty"`
+	Currency string   `bson:"currency,omitempty" json:"currency,omitempty"`
 }

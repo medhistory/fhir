@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2017, HL7, Inc & The MITRE Corporation
+// Copyright (c) 2011-2015, HL7, Inc & The MITRE Corporation
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -27,11 +27,12 @@
 package models
 
 type TriggerDefinition struct {
-	Type                 string           `bson:"type,omitempty" json:"type,omitempty"`
-	EventName            string           `bson:"eventName,omitempty" json:"eventName,omitempty"`
-	EventTimingTiming    *Timing          `bson:"eventTimingTiming,omitempty" json:"eventTimingTiming,omitempty"`
-	EventTimingReference *Reference       `bson:"eventTimingReference,omitempty" json:"eventTimingReference,omitempty"`
-	EventTimingDate      *FHIRDateTime    `bson:"eventTimingDate,omitempty" json:"eventTimingDate,omitempty"`
-	EventTimingDateTime  *FHIRDateTime    `bson:"eventTimingDateTime,omitempty" json:"eventTimingDateTime,omitempty"`
-	EventData            *DataRequirement `bson:"eventData,omitempty" json:"eventData,omitempty"`
+	Type            string            `bson:"type,omitempty" json:"type,omitempty"`
+	Name            string            `bson:"name,omitempty" json:"name,omitempty"`
+	TimingTiming    *Timing           `bson:"timingTiming,omitempty" json:"timingTiming,omitempty"`
+	TimingReference *Reference        `bson:"timingReference,omitempty" json:"timingReference,omitempty"`
+	TimingDate      *FHIRDateTime     `bson:"timingDate,omitempty" json:"timingDate,omitempty"`
+	TimingDateTime  *FHIRDateTime     `bson:"timingDateTime,omitempty" json:"timingDateTime,omitempty"`
+	Data            []DataRequirement `bson:"data,omitempty" json:"data,omitempty"`
+	Condition       *Expression       `bson:"condition,omitempty" json:"condition,omitempty"`
 }

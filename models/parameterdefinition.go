@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2017, HL7, Inc & The MITRE Corporation
+// Copyright (c) 2011-2015, HL7, Inc & The MITRE Corporation
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -27,11 +27,11 @@
 package models
 
 type ParameterDefinition struct {
-	Name          string     `bson:"name,omitempty" json:"name,omitempty"`
-	Use           string     `bson:"use,omitempty" json:"use,omitempty"`
-	Min           *int32     `bson:"min,omitempty" json:"min,omitempty"`
-	Max           string     `bson:"max,omitempty" json:"max,omitempty"`
-	Documentation string     `bson:"documentation,omitempty" json:"documentation,omitempty"`
-	Type          string     `bson:"type,omitempty" json:"type,omitempty"`
-	Profile       *Reference `bson:"profile,omitempty" json:"profile,omitempty"`
+	Name          string `bson:"name,omitempty" json:"name,omitempty"`
+	Use           string `bson:"use,omitempty" json:"use,omitempty"`
+	Min           *int32 `bson:"min,omitempty" json:"min,omitempty"`
+	Max           string `bson:"max,omitempty" json:"max,omitempty"`
+	Documentation string `bson:"documentation,omitempty" json:"documentation,omitempty"`
+	Type          string `bson:"type,omitempty" json:"type,omitempty"`
+	Profile       string `bson:"profile,omitempty" json:"profile,omitempty"`
 }

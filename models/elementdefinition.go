@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2017, HL7, Inc & The MITRE Corporation
+// Copyright (c) 2011-2015, HL7, Inc & The MITRE Corporation
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -27,9 +27,11 @@
 package models
 
 type ElementDefinition struct {
+	BackboneElement             `bson:",inline"`
 	Path                        string                                 `bson:"path,omitempty" json:"path,omitempty"`
 	Representation              []string                               `bson:"representation,omitempty" json:"representation,omitempty"`
 	SliceName                   string                                 `bson:"sliceName,omitempty" json:"sliceName,omitempty"`
+	SliceIsConstraining         *bool                                  `bson:"sliceIsConstraining,omitempty" json:"sliceIsConstraining,omitempty"`
 	Label                       string                                 `bson:"label,omitempty" json:"label,omitempty"`
 	Code                        []Coding                               `bson:"code,omitempty" json:"code,omitempty"`
 	Slicing                     *ElementDefinitionSlicingComponent     `bson:"slicing,omitempty" json:"slicing,omitempty"`
@@ -48,6 +50,7 @@ type ElementDefinition struct {
 	DefaultValueAttachment      *Attachment                            `bson:"defaultValueAttachment,omitempty" json:"defaultValueAttachment,omitempty"`
 	DefaultValueBase64Binary    string                                 `bson:"defaultValueBase64Binary,omitempty" json:"defaultValueBase64Binary,omitempty"`
 	DefaultValueBoolean         *bool                                  `bson:"defaultValueBoolean,omitempty" json:"defaultValueBoolean,omitempty"`
+	DefaultValueCanonical       string                                 `bson:"defaultValueCanonical,omitempty" json:"defaultValueCanonical,omitempty"`
 	DefaultValueCode            string                                 `bson:"defaultValueCode,omitempty" json:"defaultValueCode,omitempty"`
 	DefaultValueCodeableConcept *CodeableConcept                       `bson:"defaultValueCodeableConcept,omitempty" json:"defaultValueCodeableConcept,omitempty"`
 	DefaultValueCoding          *Coding                                `bson:"defaultValueCoding,omitempty" json:"defaultValueCoding,omitempty"`
@@ -76,6 +79,7 @@ type ElementDefinition struct {
 	DefaultValueTiming          *Timing                                `bson:"defaultValueTiming,omitempty" json:"defaultValueTiming,omitempty"`
 	DefaultValueUnsignedInt     *uint32                                `bson:"defaultValueUnsignedInt,omitempty" json:"defaultValueUnsignedInt,omitempty"`
 	DefaultValueUri             string                                 `bson:"defaultValueUri,omitempty" json:"defaultValueUri,omitempty"`
+	DefaultValueUrl             string                                 `bson:"defaultValueUrl,omitempty" json:"defaultValueUrl,omitempty"`
 	MeaningWhenMissing          string                                 `bson:"meaningWhenMissing,omitempty" json:"meaningWhenMissing,omitempty"`
 	OrderMeaning                string                                 `bson:"orderMeaning,omitempty" json:"orderMeaning,omitempty"`
 	FixedAddress                *Address                               `bson:"fixedAddress,omitempty" json:"fixedAddress,omitempty"`
@@ -83,6 +87,7 @@ type ElementDefinition struct {
 	FixedAttachment             *Attachment                            `bson:"fixedAttachment,omitempty" json:"fixedAttachment,omitempty"`
 	FixedBase64Binary           string                                 `bson:"fixedBase64Binary,omitempty" json:"fixedBase64Binary,omitempty"`
 	FixedBoolean                *bool                                  `bson:"fixedBoolean,omitempty" json:"fixedBoolean,omitempty"`
+	FixedCanonical              string                                 `bson:"fixedCanonical,omitempty" json:"fixedCanonical,omitempty"`
 	FixedCode                   string                                 `bson:"fixedCode,omitempty" json:"fixedCode,omitempty"`
 	FixedCodeableConcept        *CodeableConcept                       `bson:"fixedCodeableConcept,omitempty" json:"fixedCodeableConcept,omitempty"`
 	FixedCoding                 *Coding                                `bson:"fixedCoding,omitempty" json:"fixedCoding,omitempty"`
@@ -111,11 +116,13 @@ type ElementDefinition struct {
 	FixedTiming                 *Timing                                `bson:"fixedTiming,omitempty" json:"fixedTiming,omitempty"`
 	FixedUnsignedInt            *uint32                                `bson:"fixedUnsignedInt,omitempty" json:"fixedUnsignedInt,omitempty"`
 	FixedUri                    string                                 `bson:"fixedUri,omitempty" json:"fixedUri,omitempty"`
+	FixedUrl                    string                                 `bson:"fixedUrl,omitempty" json:"fixedUrl,omitempty"`
 	PatternAddress              *Address                               `bson:"patternAddress,omitempty" json:"patternAddress,omitempty"`
 	PatternAnnotation           *Annotation                            `bson:"patternAnnotation,omitempty" json:"patternAnnotation,omitempty"`
 	PatternAttachment           *Attachment                            `bson:"patternAttachment,omitempty" json:"patternAttachment,omitempty"`
 	PatternBase64Binary         string                                 `bson:"patternBase64Binary,omitempty" json:"patternBase64Binary,omitempty"`
 	PatternBoolean              *bool                                  `bson:"patternBoolean,omitempty" json:"patternBoolean,omitempty"`
+	PatternCanonical            string                                 `bson:"patternCanonical,omitempty" json:"patternCanonical,omitempty"`
 	PatternCode                 string                                 `bson:"patternCode,omitempty" json:"patternCode,omitempty"`
 	PatternCodeableConcept      *CodeableConcept                       `bson:"patternCodeableConcept,omitempty" json:"patternCodeableConcept,omitempty"`
 	PatternCoding               *Coding                                `bson:"patternCoding,omitempty" json:"patternCoding,omitempty"`
@@ -144,6 +151,7 @@ type ElementDefinition struct {
 	PatternTiming               *Timing                                `bson:"patternTiming,omitempty" json:"patternTiming,omitempty"`
 	PatternUnsignedInt          *uint32                                `bson:"patternUnsignedInt,omitempty" json:"patternUnsignedInt,omitempty"`
 	PatternUri                  string                                 `bson:"patternUri,omitempty" json:"patternUri,omitempty"`
+	PatternUrl                  string                                 `bson:"patternUrl,omitempty" json:"patternUrl,omitempty"`
 	Example                     []ElementDefinitionExampleComponent    `bson:"example,omitempty" json:"example,omitempty"`
 	MinValueDate                *FHIRDateTime                          `bson:"minValueDate,omitempty" json:"minValueDate,omitempty"`
 	MinValueDateTime            *FHIRDateTime                          `bson:"minValueDateTime,omitempty" json:"minValueDateTime,omitempty"`
@@ -168,6 +176,7 @@ type ElementDefinition struct {
 	Constraint                  []ElementDefinitionConstraintComponent `bson:"constraint,omitempty" json:"constraint,omitempty"`
 	MustSupport                 *bool                                  `bson:"mustSupport,omitempty" json:"mustSupport,omitempty"`
 	IsModifier                  *bool                                  `bson:"isModifier,omitempty" json:"isModifier,omitempty"`
+	IsModifierReason            string                                 `bson:"isModifierReason,omitempty" json:"isModifierReason,omitempty"`
 	IsSummary                   *bool                                  `bson:"isSummary,omitempty" json:"isSummary,omitempty"`
 	Binding                     *ElementDefinitionBindingComponent     `bson:"binding,omitempty" json:"binding,omitempty"`
 	Mapping                     []ElementDefinitionMappingComponent    `bson:"mapping,omitempty" json:"mapping,omitempty"`
@@ -197,8 +206,8 @@ type ElementDefinitionBaseComponent struct {
 type ElementDefinitionTypeRefComponent struct {
 	BackboneElement `bson:",inline"`
 	Code            string   `bson:"code,omitempty" json:"code,omitempty"`
-	Profile         string   `bson:"profile,omitempty" json:"profile,omitempty"`
-	TargetProfile   string   `bson:"targetProfile,omitempty" json:"targetProfile,omitempty"`
+	Profile         []string `bson:"profile,omitempty" json:"profile,omitempty"`
+	TargetProfile   []string `bson:"targetProfile,omitempty" json:"targetProfile,omitempty"`
 	Aggregation     []string `bson:"aggregation,omitempty" json:"aggregation,omitempty"`
 	Versioning      string   `bson:"versioning,omitempty" json:"versioning,omitempty"`
 }
@@ -211,6 +220,7 @@ type ElementDefinitionExampleComponent struct {
 	ValueAttachment      *Attachment      `bson:"valueAttachment,omitempty" json:"valueAttachment,omitempty"`
 	ValueBase64Binary    string           `bson:"valueBase64Binary,omitempty" json:"valueBase64Binary,omitempty"`
 	ValueBoolean         *bool            `bson:"valueBoolean,omitempty" json:"valueBoolean,omitempty"`
+	ValueCanonical       string           `bson:"valueCanonical,omitempty" json:"valueCanonical,omitempty"`
 	ValueCode            string           `bson:"valueCode,omitempty" json:"valueCode,omitempty"`
 	ValueCodeableConcept *CodeableConcept `bson:"valueCodeableConcept,omitempty" json:"valueCodeableConcept,omitempty"`
 	ValueCoding          *Coding          `bson:"valueCoding,omitempty" json:"valueCoding,omitempty"`
@@ -239,6 +249,7 @@ type ElementDefinitionExampleComponent struct {
 	ValueTiming          *Timing          `bson:"valueTiming,omitempty" json:"valueTiming,omitempty"`
 	ValueUnsignedInt     *uint32          `bson:"valueUnsignedInt,omitempty" json:"valueUnsignedInt,omitempty"`
 	ValueUri             string           `bson:"valueUri,omitempty" json:"valueUri,omitempty"`
+	ValueUrl             string           `bson:"valueUrl,omitempty" json:"valueUrl,omitempty"`
 }
 
 type ElementDefinitionConstraintComponent struct {
@@ -253,11 +264,10 @@ type ElementDefinitionConstraintComponent struct {
 }
 
 type ElementDefinitionBindingComponent struct {
-	BackboneElement   `bson:",inline"`
-	Strength          string     `bson:"strength,omitempty" json:"strength,omitempty"`
-	Description       string     `bson:"description,omitempty" json:"description,omitempty"`
-	ValueSetUri       string     `bson:"valueSetUri,omitempty" json:"valueSetUri,omitempty"`
-	ValueSetReference *Reference `bson:"valueSetReference,omitempty" json:"valueSetReference,omitempty"`
+	BackboneElement `bson:",inline"`
+	Strength        string `bson:"strength,omitempty" json:"strength,omitempty"`
+	Description     string `bson:"description,omitempty" json:"description,omitempty"`
+	ValueSet        string `bson:"valueSet,omitempty" json:"valueSet,omitempty"`
 }
 
 type ElementDefinitionMappingComponent struct {

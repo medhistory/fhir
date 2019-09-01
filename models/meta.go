@@ -1,4 +1,4 @@
-// Copyright (c) 2011-2017, HL7, Inc & The MITRE Corporation
+// Copyright (c) 2011-2015, HL7, Inc & The MITRE Corporation
 // All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -30,6 +30,7 @@ type Meta struct {
 	Element     `bson:",inline"`
 	VersionId   string        `bson:"versionId,omitempty" json:"versionId,omitempty"`
 	LastUpdated *FHIRDateTime `bson:"lastUpdated,omitempty" json:"lastUpdated,omitempty"`
+	Source      string        `bson:"source,omitempty" json:"source,omitempty"`
 	Profile     []string      `bson:"profile,omitempty" json:"profile,omitempty"`
 	Security    []Coding      `bson:"security,omitempty" json:"security,omitempty"`
 	Tag         []Coding      `bson:"tag,omitempty" json:"tag,omitempty"`
